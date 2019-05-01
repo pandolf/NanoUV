@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "NanoUVCommon.h"
+
 #include "TCanvas.h"
 #include "TFile.h"
 #include "TH2D.h"
@@ -14,7 +16,7 @@
 
 void fillGraphs( TGraph* gr_iv, TGraph* gr_gain, float volt, float idark_10V, float iopen_10V, float idark, float iopen );
 void drawGraphs( const std::string& name, const std::string& yTitle, TGraph* gr0, TGraph* gr1, TGraph* gr2, TGraph* gr3 );
-float findGain50( TGraph* gr );
+float findV( TGraph* gr, float gain=50. );
 void setStyle();
 
 
@@ -129,10 +131,10 @@ void drawGraphs( const std::string& name, const std::string& yTitle, TGraph* gr0
   gr2->Draw("P same");
   gr3->Draw("P same");
 
-  float v50_0 = (name=="gain") ? findGain50( gr0 ) : -1.;
-  float v50_1 = (name=="gain") ? findGain50( gr1 ) : -1.;
-  float v50_2 = (name=="gain") ? findGain50( gr2 ) : -1.;
-  float v50_3 = (name=="gain") ? findGain50( gr3 ) : -1.;
+  float v50_0 = (name=="gain") ? findV( gr0, 50. ) : -1.;
+  float v50_1 = (name=="gain") ? findV( gr1, 50. ) : -1.;
+  float v50_2 = (name=="gain") ? findV( gr2, 50. ) : -1.;
+  float v50_3 = (name=="gain") ? findV( gr3, 50. ) : -1.;
 
   std::string suffix_0 = (v50_0>0.) ? std::string(Form(" (V_{50} = %.1f V)", v50_0)) : "";
   std::string suffix_1 = (v50_1>0.) ? std::string(Form(" (V_{50} = %.1f V)", v50_1)) : "";
@@ -149,7 +151,7 @@ void drawGraphs( const std::string& name, const std::string& yTitle, TGraph* gr0
   legend->AddEntry( gr3, Form("APD 3%s", suffix_3.c_str()), "P" );
   legend->Draw("same");
 
-  gPad->RedrawAxis();
+  NanoUVCommon::addNanoUVLabel( c1 );
 
   c1->SaveAs( Form( "%s.pdf", name.c_str() ) );
 
@@ -160,7 +162,7 @@ void drawGraphs( const std::string& name, const std::string& yTitle, TGraph* gr0
 
 
 
-float findGain50( TGraph* gr ) {
+float findV( TGraph* gr, float gain ) {
 
   float v50 = -1.;
 
@@ -172,7 +174,7 @@ float findGain50( TGraph* gr ) {
     double nextx, nexty;
     gr->GetPoint( iPoint+1, nextx, nexty );
 
-    if( thisy<=50. && nexty>50. ) { // linear interpolation
+    if( thisy<=gain && nexty>gain ) { // linear interpolation
 
       // f(x) = mx + q
       float m = (nexty-thisy)/(nextx-thisx);
