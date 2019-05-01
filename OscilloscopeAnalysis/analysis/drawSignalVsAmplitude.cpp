@@ -19,13 +19,19 @@ float integrateSignal( TGraphErrors* graph, float pedestal );
 
 
 
-int main() {
+int main( int argc, char* argv[] ) {
+
+  std::string prodName = "May1_v2";
+  if( argc > 1 ) {
+    prodName = (std::string)(argv[1]);
+  }
+
 
   NanoUVCommon::setStyle();
 
 
-  std::string datadir = "data/LED_driver/May1/";
-  std::string prefix = "C1211215up20000";
+  std::string datadir = "data/LED_driver/" + prodName;
+  std::string prefix = "C1211215up2000";
   std::string plotsdir = "plots";
   system( Form("mkdir -p %s", plotsdir.c_str()) );
 
@@ -36,34 +42,91 @@ int main() {
   amplitudes.push_back(7);
   amplitudes.push_back(6);
   amplitudes.push_back(5);
+  amplitudes.push_back(4);
+  amplitudes.push_back(3);
+  amplitudes.push_back(2);
   amplitudes.push_back(1);
+  amplitudes.push_back(0);
 
 
   int nFiles = 50;
+
+  float calibrationConst = 1000.;
+
+  TFile* file_signal = TFile::Open( Form("signalHistos_%s.root", prodName.c_str()), "recreate" );
 
   TGraphErrors* gr_signal_vs_ampl = new TGraphErrors(0);
 
   for( unsigned i=0; i<amplitudes.size(); ++i ) {
 
-    TH1D* h1_signal = new TH1D( Form("signal_%d", i), "", 100, -2000., 0. );
+    TH1D* h1_signal = new TH1D( Form("signal_%d", amplitudes[i]), "", 1000, -10000., 1000. );
 
     for( unsigned iFile=0; iFile<nFiles; ++iFile ) {
 
-      float thisSignal = getSignalFromFile( Form( "%s/%d/%s%d.txt", datadir.c_str(), amplitudes[i], prefix.c_str(), iFile ) );
-      h1_signal->Fill( thisSignal );
+      std::string additionalZero = (iFile<10) ? "0" : "";
+      float thisSignal = getSignalFromFile( Form( "%s/%d/%s%s%d.txt", datadir.c_str(), amplitudes[i], prefix.c_str(), additionalZero.c_str(), iFile ) );
+      h1_signal->Fill( thisSignal/calibrationConst );
 
     } // for files
 
+    file_signal->cd();
+    h1_signal->Write();
+
+    float xValue = amplitudes[i]*300.; // number of photons (see LED driver data sheet)
+
     int iPoint = gr_signal_vs_ampl->GetN();
-    gr_signal_vs_ampl->SetPoint     ( iPoint, amplitudes[i], h1_signal->GetMean()      );
+    gr_signal_vs_ampl->SetPoint     ( iPoint, xValue, h1_signal->GetMean() );
+    //gr_signal_vs_ampl->SetPointError( iPoint,            0., h1_signal->GetRMS () );
     gr_signal_vs_ampl->SetPointError( iPoint,            0., h1_signal->GetMeanError() );
 
   } // for amplitudes
 
-  TFile* file = TFile::Open( "test.root", "recreate" );
-  file->cd();
+
+  file_signal->cd();
   gr_signal_vs_ampl->Write();
-  file->Close();
+  file_signal->Close();
+
+  TCanvas* c1 = new TCanvas( "c1c1", "", 600, 600 );
+  c1->cd();
+
+  float xMin = 0.;
+  float xMax = 11.*300;
+  float yMin = -5000./calibrationConst;
+  float yMax = 500./calibrationConst;
+
+  TH2D* h2_axes = new TH2D("axes", "", 10, xMin, xMax, 10, yMin, yMax );
+  h2_axes->SetYTitle("Integrated Signal [a.u.]"); 
+  h2_axes->SetXTitle("Number of Photons");
+  h2_axes->Draw();
+
+  TLine* line_zero = new TLine( xMin, 0., xMax, 0. );
+  line_zero->Draw("same");
+
+  gr_signal_vs_ampl->SetMarkerStyle(20);
+  gr_signal_vs_ampl->SetMarkerSize(1.6);
+  gr_signal_vs_ampl->SetMarkerColor(46);
+  gr_signal_vs_ampl->Draw("PL same");
+
+  TPaveText* label_led = new TPaveText( 0.23, 0.55, 0.6, 0.62, "brNDC" );
+  label_led->SetFillColor(0);
+  label_led->SetTextSize(0.035);
+  label_led->SetTextAlign(11);
+  label_led->SetTextFont(62);
+  label_led->AddText("LED pulse (1 ns)");
+  label_led->Draw("same");
+
+  TPaveText* label_gamma = new TPaveText( 0.23, 0.45, 0.6, 0.55, "brNDC" );
+  label_gamma->SetFillColor(0);
+  label_gamma->SetTextSize(0.035);
+  label_gamma->SetTextAlign(11);
+  label_gamma->SetTextFont(42);
+  label_gamma->AddText("380 < #lambda < 420 nm");
+  label_gamma->AddText("2.9 < E_{#gamma} < 3.3 eV");
+  label_gamma->Draw("same");
+
+  NanoUVCommon::addNanoUVLabel(c1, 3);
+
+  c1->SaveAs(Form("sigVsAmp_%s.pdf", prodName.c_str()));
 
   return 0;
 
