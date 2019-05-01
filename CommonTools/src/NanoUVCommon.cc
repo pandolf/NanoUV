@@ -31,6 +31,10 @@ void NanoUVCommon::addNanoUVLabel( TCanvas* c1, int quadrant ) {
 
   if( quadrant==4 )
     NanoUVCommon::addNanoUVLabel( c1, 0.7, 0.2, 0.9, 0.25 );
+  else if( quadrant==3 )
+    NanoUVCommon::addNanoUVLabel( c1, 0.22, 0.2, 0.42, 0.25 );
+  else 
+    std::cout << "[NanoUVCommon::addNanoUVLabel] Quadrant '" << quadrant << "' not implemented yet!" << std::endl;
 
 }
 
