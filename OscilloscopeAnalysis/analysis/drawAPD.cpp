@@ -24,7 +24,7 @@ void setStyle();
 
 int main() {
 
-  setStyle();
+  NanoUVCommon::setStyle();
 
   std::string fileName = "data_APD_IV_2019_03_22.txt";
 
@@ -83,11 +83,18 @@ int main() {
 
 void fillGraphs( TGraph* gr_iv, TGraph* gr_gain, float volt, float idark_10V, float iopen_10V, float idark, float iopen ) {
 
+  float r = 10000.; // R = 10 kOhm
+
   if( iopen>0. ) {
-    gr_iv  ->SetPoint( gr_iv  ->GetN(), volt, iopen );
+
+    // first correct for resistance (actual potential on APD is smaller):
+
+    float v_corr = volt - r*iopen*1E-6; // need to convert current into Amperes
+
+    gr_iv  ->SetPoint( gr_iv  ->GetN(), v_corr, iopen );
     float gain = (iopen-idark)/(iopen_10V-idark_10V);
-    gr_gain->SetPoint( gr_gain->GetN(), volt, gain );
-    std::cout << "    gain: " << gain << std::endl;
+    gr_gain->SetPoint( gr_gain->GetN(), v_corr, gain );
+    std::cout << "Vcorr: " << v_corr << "  gain: " << gain << std::endl;
   }
 
 }
@@ -195,86 +202,3 @@ float findV( TGraph* gr, float gain ) {
 
 
 
-void setStyle() {
-
-  // set the TStyle
-  TStyle* style = new TStyle("DrawBaseStyle", "");
-  style->SetCanvasColor(0);
-  style->SetPadColor(0);
-  style->SetFrameFillColor(0);
-  style->SetStatColor(0);
-  style->SetOptStat(0);
-  style->SetOptFit(0);
-  style->SetTitleFillColor(0);
-  style->SetCanvasBorderMode(0);
-  style->SetPadBorderMode(0);
-  style->SetFrameBorderMode(0);
-  style->SetPadBottomMargin(0.12);
-  style->SetPadLeftMargin(0.12);
-  style->cd();
-  // For the canvas:
-  style->SetCanvasBorderMode(0);
-  style->SetCanvasColor(kWhite);
-  style->SetCanvasDefH(600); //Height of canvas
-  style->SetCanvasDefW(600); //Width of canvas
-  style->SetCanvasDefX(0); //POsition on screen
-  style->SetCanvasDefY(0);
-  // For the Pad:
-  style->SetPadBorderMode(0);
-  style->SetPadColor(kWhite);
-  style->SetPadGridX(false);
-  style->SetPadGridY(false);
-  style->SetGridColor(0);
-  style->SetGridStyle(3);
-  style->SetGridWidth(1);
-  // For the frame:
-  style->SetFrameBorderMode(0);
-  style->SetFrameBorderSize(1);
-  style->SetFrameFillColor(0);
-  style->SetFrameFillStyle(0);
-  style->SetFrameLineColor(1);
-  style->SetFrameLineStyle(1);
-  style->SetFrameLineWidth(1);
-  // Margins:
-  style->SetPadTopMargin(0.06);
-  style->SetPadBottomMargin(0.14);//0.13);
-  style->SetPadLeftMargin(0.16);//0.16);
-  style->SetPadRightMargin(0.04);//0.02);
-  // For the Global title:
-  style->SetOptTitle(0);
-  style->SetTitleFont(42);
-  style->SetTitleColor(1);
-  style->SetTitleTextColor(1);
-  style->SetTitleFillColor(10);
-  style->SetTitleFontSize(0.05);
-  // For the axis titles:
-  style->SetTitleColor(1, "XYZ");
-  style->SetTitleFont(42, "XYZ");
-  style->SetTitleSize(0.05, "XYZ");
-  style->SetTitleXOffset(1.15);//0.9);
-  style->SetTitleYOffset(1.5); // => 1.15 if exponents
-  // For the axis labels:
-  style->SetLabelColor(1, "XYZ");
-  style->SetLabelFont(42, "XYZ");
-  style->SetLabelOffset(0.007, "XYZ");
-  style->SetLabelSize(0.045, "XYZ");
-  // For the axis:
-  style->SetAxisColor(1, "XYZ");
-  style->SetStripDecimals(kTRUE);
-  style->SetTickLength(0.03, "XYZ");
-  style->SetNdivisions(510, "XYZ");
-  style->SetPadTickX(1); // To get tick marks on the opposite side of the frame
-  style->SetPadTickY(1);
-  // for histograms:
-  style->SetHistLineColor(1);
-  // for the pallete
-  Double_t stops[5] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
-  Double_t red  [5] = { 0.00, 0.00, 0.87, 1.00, 0.51 };
-  Double_t green[5] = { 0.00, 0.81, 1.00, 0.20, 0.00 };
-  Double_t blue [5] = { 0.51, 1.00, 0.12, 0.00, 0.00 };
-  TColor::CreateGradientColorTable(5, stops, red, green, blue, 100);
-  style->SetNumberContours(100);
-
-  style->cd();
-
-}
