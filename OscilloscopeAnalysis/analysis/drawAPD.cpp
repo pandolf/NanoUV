@@ -14,8 +14,8 @@
 
 
 
-void fillGraphs( TGraph* gr_iv, TGraph* gr_gain, float volt, float idark_10V, float iopen_10V, float idark, float iopen );
-void drawGraphs( const std::string& name, const std::string& yTitle, TGraph* gr0, TGraph* gr1, TGraph* gr2, TGraph* gr3 );
+void fillGraphs( TGraph* gr_iv, TGraph* gr_gain, TGraph* gr_iv_corr, TGraph* gr_gain_corr, float volt, float idark_10V, float iopen_10V, float idark, float iopen );
+void drawGraphs( const std::string& name, const std::string& yTitle, const std::string& xTitle, TGraph* gr0, TGraph* gr1, TGraph* gr2, TGraph* gr3 );
 float findV( TGraph* gr, float gain=50. );
 void writeToFile( TGraph* graph, const std::string& fileName );
 
@@ -41,13 +41,25 @@ int main() {
   TGraph* gr_iv3   = new TGraph(0);
   TGraph* gr_gain3 = new TGraph(0);
 
+  TGraph* gr_iv0_corr   = new TGraph(0);
+  TGraph* gr_gain0_corr = new TGraph(0);
+  TGraph* gr_iv1_corr   = new TGraph(0);
+  TGraph* gr_gain1_corr = new TGraph(0);
+  TGraph* gr_iv2_corr   = new TGraph(0);
+  TGraph* gr_gain2_corr = new TGraph(0);
+  TGraph* gr_iv3_corr   = new TGraph(0);
+  TGraph* gr_gain3_corr = new TGraph(0);
+
   float i0dark_10V(0.), i1dark_10V(0.), i2dark_10V(0.), i3dark_10V(0.);
   float i0open_10V(0.), i1open_10V(0.), i2open_10V(0.), i3open_10V(0.);
 
+  std::vector<float> volts;
 
   while( !ifs.eof() ) {
 
     ifs >> volt >> i0dark >> i0open >> i1dark >> i1open >> i2dark >> i2open >> i3dark >> i3open;
+
+    volts.push_back( volt );
 
     if( volt==10. ) {
 
@@ -65,15 +77,17 @@ int main() {
 
     std::cout << "V = " << volt << std::endl;
 
-    fillGraphs( gr_iv0, gr_gain0, volt, i0dark_10V, i0open_10V, i0dark, i0open );
-    fillGraphs( gr_iv1, gr_gain1, volt, i1dark_10V, i1open_10V, i1dark, i1open );
-    fillGraphs( gr_iv2, gr_gain2, volt, i2dark_10V, i2open_10V, i2dark, i2open );
-    fillGraphs( gr_iv3, gr_gain3, volt, i3dark_10V, i3open_10V, i3dark, i3open );
+    fillGraphs( gr_iv0, gr_gain0, gr_iv0_corr, gr_gain0_corr, volt, i0dark_10V, i0open_10V, i0dark, i0open );
+    fillGraphs( gr_iv1, gr_gain1, gr_iv1_corr, gr_gain1_corr, volt, i1dark_10V, i1open_10V, i1dark, i1open );
+    fillGraphs( gr_iv2, gr_gain2, gr_iv2_corr, gr_gain2_corr, volt, i2dark_10V, i2open_10V, i2dark, i2open );
+    fillGraphs( gr_iv3, gr_gain3, gr_iv3_corr, gr_gain3_corr, volt, i3dark_10V, i3open_10V, i3dark, i3open );
 
   } // while good
 
-  drawGraphs( "iv"  , "I [#muA]", gr_iv0  , gr_iv1  , gr_iv2  , gr_iv3   );
-  drawGraphs( "gain", "Gain"     , gr_gain0, gr_gain1, gr_gain2, gr_gain3 );
+  drawGraphs( "iv"       , "I [#muA]", "V [V]"          , gr_iv0       , gr_iv1       , gr_iv2       , gr_iv3        );
+  drawGraphs( "gain"     , "Gain"    , "V [V]"          , gr_gain0     , gr_gain1     , gr_gain2     , gr_gain3      );
+  drawGraphs( "iv_corr"  , "I [#muA]", "Effective V [V]", gr_iv0_corr  , gr_iv1_corr  , gr_iv2_corr  , gr_iv3_corr   );
+  drawGraphs( "gain_corr", "Gain"    , "Effective V [V]", gr_gain0_corr, gr_gain1_corr, gr_gain2_corr, gr_gain3_corr );
 
   writeToFile( gr_gain0, "gain_APD0.txt" );
   writeToFile( gr_gain1, "gain_APD1.txt" );
@@ -85,7 +99,7 @@ int main() {
 }
 
 
-void fillGraphs( TGraph* gr_iv, TGraph* gr_gain, float volt, float idark_10V, float iopen_10V, float idark, float iopen ) {
+void fillGraphs( TGraph* gr_iv, TGraph* gr_gain, TGraph* gr_iv_corr, TGraph* gr_gain_corr, float volt, float idark_10V, float iopen_10V, float idark, float iopen ) {
 
   float r = 10000.; // R = 10 kOhm
 
@@ -94,28 +108,30 @@ void fillGraphs( TGraph* gr_iv, TGraph* gr_gain, float volt, float idark_10V, fl
     // first correct for resistance (actual potential on APD is smaller):
 
     float v_corr = volt - r*iopen*1E-6; // need to convert current into Amperes
-
-    gr_iv  ->SetPoint( gr_iv  ->GetN(), v_corr, iopen );
     float gain = (iopen-idark)/(iopen_10V-idark_10V);
-    gr_gain->SetPoint( gr_gain->GetN(), v_corr, gain );
+
+    gr_iv       ->SetPoint( gr_iv       ->GetN(), volt  , iopen );
+    gr_iv_corr  ->SetPoint( gr_iv_corr  ->GetN(), v_corr, iopen );
+    gr_gain     ->SetPoint( gr_gain     ->GetN(), volt  , gain  );
+    gr_gain_corr->SetPoint( gr_gain_corr->GetN(), v_corr, gain  );
     std::cout << "Vcorr: " << v_corr << "  gain: " << gain << std::endl;
   }
 
 }
 
 
-void drawGraphs( const std::string& name, const std::string& yTitle, TGraph* gr0, TGraph* gr1, TGraph* gr2, TGraph* gr3 ) {
+void drawGraphs( const std::string& name, const std::string& yTitle, const std::string& xTitle, TGraph* gr0, TGraph* gr1, TGraph* gr2, TGraph* gr3 ) {
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
   c1->SetLogy();
 
-  float yMin = (name=="iv") ? 1.   : 0.3;
-  float yMax = (name=="iv") ? 500. : 250.;
+  float yMin = (name=="iv" || name=="iv_corr") ? 1.   : 0.3;
+  float yMax = (name=="iv" || name=="iv_corr") ? 500. : 250.;
 
-  TH2D* h2_axes = new TH2D( Form("axes_%s", name.c_str()), "", 10, 10., 460., 10, yMin, yMax );  
-  h2_axes->SetXTitle( "V [V]" );
+  TH2D* h2_axes = new TH2D( Form("axes_%s", name.c_str()), "", 10, 0., 460., 10, yMin, yMax );  
+  h2_axes->SetXTitle( xTitle.c_str() );
   h2_axes->SetYTitle( yTitle.c_str() );
   h2_axes->GetYaxis()->SetNoExponent();
   h2_axes->GetYaxis()->SetMoreLogLabels();
