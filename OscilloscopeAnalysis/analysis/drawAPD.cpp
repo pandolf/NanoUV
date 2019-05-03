@@ -17,7 +17,7 @@
 void fillGraphs( TGraph* gr_iv, TGraph* gr_gain, float volt, float idark_10V, float iopen_10V, float idark, float iopen );
 void drawGraphs( const std::string& name, const std::string& yTitle, TGraph* gr0, TGraph* gr1, TGraph* gr2, TGraph* gr3 );
 float findV( TGraph* gr, float gain=50. );
-void setStyle();
+void writeToFile( TGraph* graph, const std::string& fileName );
 
 
 
@@ -75,6 +75,10 @@ int main() {
   drawGraphs( "iv"  , "I [#muA]", gr_iv0  , gr_iv1  , gr_iv2  , gr_iv3   );
   drawGraphs( "gain", "Gain"     , gr_gain0, gr_gain1, gr_gain2, gr_gain3 );
 
+  writeToFile( gr_gain0, "gain_APD0.txt" );
+  writeToFile( gr_gain1, "gain_APD1.txt" );
+  writeToFile( gr_gain2, "gain_APD2.txt" );
+  writeToFile( gr_gain3, "gain_APD3.txt" );
 
   return 0;
 
@@ -201,4 +205,18 @@ float findV( TGraph* gr, float gain ) {
 
 
 
+void writeToFile( TGraph* graph, const std::string& fileName ) {
 
+  std::ofstream ofs(fileName.c_str());
+
+  for( int i=0; i<graph->GetN(); ++i ) {
+
+    double x, y;
+    graph->GetPoint( i, x, y );
+    ofs << x << " " << y << std::endl;
+
+  }
+
+  ofs.close();
+
+}
