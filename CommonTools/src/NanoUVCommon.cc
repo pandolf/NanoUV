@@ -1,10 +1,13 @@
 #include "../interface/NanoUVCommon.h"
 
 #include <iostream>
+#include <fstream>
 #include <math.h>
  
 #include "TStyle.h"
 #include "TColor.h"
+#include "TCanvas.h"
+#include "TH2D.h"
 
 
 
@@ -68,6 +71,174 @@ TPaveText* NanoUVCommon::getNanoUVLabel( float xmin, float ymin, float xmax, flo
   return label_top;
 
 }
+
+
+
+float NanoUVCommon::integrateSignal( TGraph* graph ) {
+
+  float pedestal = NanoUVCommon::getPedestal( graph, 100 );
+
+  float signal = 0.;
+
+  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+
+    double x, y;
+    graph->GetPoint( iPoint, x, y );
+
+    signal = signal + (y-pedestal);
+
+  }
+
+  return signal;
+
+}
+
+
+float NanoUVCommon::ampMaxSignal( TGraph* graph ) {
+
+  float pedestal = NanoUVCommon::getPedestal( graph, 100 );
+
+  float ampMax = 0.;
+
+  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+
+    double x, y;
+    graph->GetPoint( iPoint, x, y );
+
+    float thisPoint = (y-pedestal);
+    if( thisPoint < ampMax ) ampMax = thisPoint;
+
+  }
+
+  return ampMax;
+
+}
+
+
+
+TGraph* NanoUVCommon::getGraphFromFile( const std::string& fileName ) {
+
+  std::ifstream ifs( fileName.c_str() );
+
+  std::string line;
+  bool read = false;
+  TGraph* graph = new TGraph(0);
+  graph->SetName(Form("wf_%s", fileName.c_str()));
+
+  if( ifs.good() ) {
+
+    while( getline(ifs,line) ) {
+
+      std::string delimiter = ",";
+      size_t pos = 0;
+      std::vector<std::string> words;
+      std::string word;
+      while ((pos = line.find(delimiter)) != std::string::npos) {
+        word = line.substr(0, pos);
+        line.erase(0, pos + delimiter.length());
+        words.push_back(word);
+      }
+      line.erase( line.size()-1, line.size() ); // chopping off trailing char
+      words.push_back(line); // last part
+
+      if( read ) {
+
+        double x(atof(words[0].c_str()));
+        double y(atof(words[1].c_str()));
+
+        graph->SetPoint( graph->GetN(), x*1E9, y*1E3 ); // ns and mV
+
+      }
+
+      if( words[0]=="Time" && words[1]=="Ampl" ) {
+
+        read = true;
+
+      }
+
+    }  // while get line
+
+  } // if ifs good
+
+  NanoUVCommon::removeTimeOffset( graph );
+
+
+  return graph;
+
+}
+
+
+void NanoUVCommon::plotWaveformGraph( TGraph* graph, const std::string& saveName ) {
+
+  TCanvas* c1 = new TCanvas( Form("c1_%s", graph->GetName()), "", 600, 600 );
+  c1->cd();
+
+  double x0, y0;
+  graph->GetPoint( 0, x0, y0 );
+
+  double xmax, ymax;
+  graph->GetPoint( graph->GetN()-1, xmax, ymax );
+
+  float pedestal = NanoUVCommon::getPedestal( graph, 100 );
+
+  TH2D* h2_axes = new TH2D( Form("axes_%s", graph->GetName()), "", 10, x0, xmax, 10, pedestal-150., pedestal+15. );
+  h2_axes->SetXTitle( "Time [ns]" );
+  h2_axes->SetYTitle( "Amplitude [mV]" );
+  h2_axes->Draw();
+
+  TLine* line_pedestal = new TLine( x0, pedestal, xmax, pedestal );
+  line_pedestal->SetLineColor(46);
+  line_pedestal->SetLineStyle(2);
+  line_pedestal->SetLineWidth(2);
+  line_pedestal->Draw("same");
+
+  graph->Draw("L same");
+
+  gPad->RedrawAxis();
+
+  c1->SaveAs( saveName.c_str() );
+  
+  delete c1;
+  delete h2_axes;
+  delete line_pedestal;
+
+}
+
+
+void NanoUVCommon::removeTimeOffset( TGraph* graph ) {
+
+  double x0, y0;
+  graph->GetPoint( 0, x0, y0 );
+
+  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+
+    double x, y;
+    graph->GetPoint( iPoint, x, y );
+    graph->SetPoint( iPoint, x-x0, y );
+
+  }
+
+}
+
+
+
+
+float NanoUVCommon::getPedestal( TGraph* graph, int nPoints ) {
+
+  float sum = 0.;
+
+  for( unsigned iPoint=0; iPoint<nPoints; ++iPoint ) {
+
+    double x, y;
+    graph->GetPoint( iPoint, x, y );
+    sum += y;
+
+  }
+
+  return sum/((float)nPoints);
+
+}
+
 
 
 

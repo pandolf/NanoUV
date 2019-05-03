@@ -3,6 +3,7 @@
 
 #include "TCanvas.h"
 #include "TPaveText.h"
+#include "TGraph.h"
 
 
 #include <vector>
@@ -24,6 +25,13 @@ class NanoUVCommon {
 
   static TPaveText* getNanoUVLabel( float xmin, float ymin, float xmax, float ymax );
 
+  static float integrateSignal( TGraph* graph );
+  static float ampMaxSignal( TGraph* graph );
+
+  static float getPedestal( TGraph* graph, int nPoints );
+  static void removeTimeOffset( TGraph* graph );
+  static void plotWaveformGraph( TGraph* graph, const std::string& saveName );
+  static TGraph* getGraphFromFile( const std::string& fileName );
 
 };
 
