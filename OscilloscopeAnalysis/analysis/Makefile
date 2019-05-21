@@ -19,6 +19,9 @@ drawAPD: drawAPD.cpp NanoUVCommon.o
 drawSignalVsAmplitude: drawSignalVsAmplitude.cpp NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawSignalVsAmplitude drawSignalVsAmplitude.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawSignalVsGain: drawSignalVsGain.cpp NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawSignalVsGain drawSignalVsGain.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+
 drawWaveform: drawWaveform.cpp NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawWaveform drawWaveform.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
