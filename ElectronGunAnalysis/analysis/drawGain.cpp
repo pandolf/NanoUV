@@ -40,11 +40,6 @@ int main() {
 
   std::vector<TGraphErrors*> scans = getScansFromFile("data/2019_05_17/iv_scan.txt");
 
-  TFile* file = TFile::Open( "test.root", "recreate" );
-  for( unsigned i=0; i<scans.size(); i++ ) {
-    scans[i]->Write();
-  }
-  file->Close();
 
   std::vector<TGraphErrors*> goodScans;
   goodScans.push_back( scans[0] );
@@ -55,9 +50,18 @@ int main() {
   std::vector<TGraphErrors*> darkScans = getScansFromFile("data/2019_05_17/iv_scan_dark.txt");
   TGraphErrors* darkScan = darkScans[0];
 
+  TCanvas* c0 = new TCanvas( "c0", "", 600, 600 );
+  c0->SetLogy();
+  c0->cd();
+
+  TH2D* h2_axes0 = new TH2D( "axes0", "", 10, 10., 420., 10, 0.01, 60. );
+  h2_axes0->SetXTitle( "APD Voltage [V]" );
+  h2_axes0->SetYTitle( "APD Current [#muA]" );
+  h2_axes0->Draw();
+
+
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->SetLogy();
-  //c1->SetLogx();
   c1->cd();
 
   TH2D* h2_axes = new TH2D( "axes", "", 10, 10., 420., 10, 0.5, 1000. );
@@ -68,7 +72,6 @@ int main() {
 
   TCanvas* c1_rel = new TCanvas( "c1_rel", "", 600, 600 );
   c1_rel->SetLogy();
-  //c1->SetLogx();
   c1_rel->cd();
 
   TH2D* h2_axes_rel = new TH2D( "axes_rel", "", 10, 10., 420., 10, 0.5, 1000. );
@@ -85,6 +88,15 @@ int main() {
 
     std::pair<float,float> gun = getGunEnergyCurrent( goodScans[i]->GetTitle() );
 
+    goodScans[i]->SetMarkerColor( colors[i] );
+    goodScans[i]->SetLineColor( colors[i] );
+    goodScans[i]->SetMarkerStyle( 20+i );
+    goodScans[i]->SetMarkerSize( 1.3 );
+    
+    c0->cd();
+    goodScans[i]->Draw("P same");
+
+
     TGraphErrors* gain = getGain( goodScans[i], darkScan );  
     gain->SetMarkerColor( colors[i] );
     gain->SetLineColor( colors[i] );
@@ -93,6 +105,7 @@ int main() {
 
     c1->cd();
     gain->Draw("P same");
+
 
     c1_rel->cd();
    
@@ -115,6 +128,14 @@ int main() {
 
   TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
 
+  c0->cd();
+
+  legend->Draw("same");
+  gPad->RedrawAxis();
+  label->Draw("same");
+
+  c0->SaveAs( "iv.pdf" );
+
   c1->cd();
 
   legend->Draw("same");
@@ -130,6 +151,46 @@ int main() {
   label->Draw("same");
 
   c1_rel->SaveAs( "gain_rel.pdf" );
+
+
+
+  std::vector<TGraphErrors*> scans_2 = getScansFromFile("data/2019_05_17/iv_scan_2.txt");
+
+  TCanvas* c1_2 = new TCanvas( "c1_2", "", 600, 600 );
+  c1_2->SetLogy();
+  c1_2->cd();
+
+  TH2D* h2_axes_2 = new TH2D( "axes_2", "", 10, 10., 420., 10, 0.5, 1000. );
+  h2_axes_2->SetXTitle( "APD Voltage [V]" );
+  h2_axes_2->SetYTitle( "Gain" );
+  h2_axes_2->Draw();
+
+  TLegend* legend_2 = new TLegend( 0.2, 0.51, 0.55, 0.76 );
+  legend_2->SetFillColor(0);
+  legend_2->SetTextSize(0.035);
+  
+  for( unsigned i=0; i<scans_2.size(); ++i ) {
+
+    std::pair<float,float> gun = getGunEnergyCurrent( scans_2[i]->GetTitle() );
+
+    TGraphErrors* gain = getGain( scans_2[i], darkScan );  
+    gain->SetMarkerColor( colors[i] );
+    gain->SetLineColor( colors[i] );
+    gain->SetMarkerStyle( 20+i );
+    gain->SetMarkerSize( 1.3 );
+
+    gain->Draw("P same");
+
+    legend->AddEntry( gain, Form("E = %.0f eV (I = %.1f nA)", gun.first, gun.second ), "P" );
+
+  }
+
+  legend_2->Draw("same");
+  gPad->RedrawAxis();
+  label->Draw("same");
+
+  c1_2->SaveAs( "gain_2.pdf" );
+
 
 
   return 0;
