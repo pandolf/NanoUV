@@ -156,6 +156,16 @@ int main() {
 
   std::vector<TGraphErrors*> scans_2 = getScansFromFile("data/2019_05_17/iv_scan_2.txt");
 
+  TCanvas* c0_2 = new TCanvas( "c0_2", "", 600, 600 );
+  c0_2->SetLogy();
+  c0_2->cd();
+
+  TH2D* h2_axes0_2 = new TH2D( "axes0_2", "", 10, 10., 420., 10, 0.0025, 30. );
+  h2_axes0_2->SetXTitle( "APD Voltage [V]" );
+  h2_axes0_2->SetYTitle( "APD Current [#muA]" );
+  h2_axes0_2->Draw();
+
+
   TCanvas* c1_2 = new TCanvas( "c1_2", "", 600, 600 );
   c1_2->SetLogy();
   c1_2->cd();
@@ -165,13 +175,25 @@ int main() {
   h2_axes_2->SetYTitle( "Gain" );
   h2_axes_2->Draw();
 
-  TLegend* legend_2 = new TLegend( 0.2, 0.51, 0.55, 0.76 );
+  TLegend* legend_2 = new TLegend( 0.2, 0.56, 0.55, 0.76 );
   legend_2->SetFillColor(0);
   legend_2->SetTextSize(0.035);
   
   for( unsigned i=0; i<scans_2.size(); ++i ) {
 
     std::pair<float,float> gun = getGunEnergyCurrent( scans_2[i]->GetTitle() );
+
+    c0_2->cd();
+
+    scans_2[i]->SetMarkerColor( colors[i] );
+    scans_2[i]->SetLineColor( colors[i] );
+    scans_2[i]->SetMarkerStyle( 20+i );
+    scans_2[i]->SetMarkerSize( 1.3 );
+
+    scans_2[i]->Draw("P same");
+
+
+    c1_2->cd();
 
     TGraphErrors* gain = getGain( scans_2[i], darkScan );  
     gain->SetMarkerColor( colors[i] );
@@ -181,15 +203,17 @@ int main() {
 
     gain->Draw("P same");
 
-    legend->AddEntry( gain, Form("E = %.0f eV (I = %.1f nA)", gun.first, gun.second ), "P" );
+    if( scans_2[i]->GetN()>0 ) legend_2->AddEntry( gain, Form("E = %.0f eV (I = %.1f nA)", gun.first, gun.second ), "P" );
 
   }
+
+  c0_2->cd();
 
   legend_2->Draw("same");
   gPad->RedrawAxis();
   label->Draw("same");
 
-  c1_2->SaveAs( "gain_2.pdf" );
+  c0_2->SaveAs( "iv_2.pdf" );
 
 
 
@@ -222,7 +246,7 @@ std::vector<TGraphErrors*> getScansFromFile( const std::string& fileName ) {
         line.erase(0, pos + delimiter.length());
         words.push_back(word);
       }
-      words.push_back(line); // last bit
+      if( line.size()>0 ) words.push_back(line); // last bit
 
       if( theScans.size()==0 ) {
         for( unsigned i=0; i<words.size(); ++i ) {
@@ -253,6 +277,7 @@ std::vector<TGraphErrors*> getScansFromFile( const std::string& fileName ) {
           theScans[i-1]->SetPoint( iPoint, x, y );
           float erry = 0.;
           if( (y==7.) || (y==8.) || (y==9.) || (y==10.) || (y==11.) ) erry = 3.;
+          else if( y==0. ) erry = 0.;
           else if( y<=9.1 ) erry = 0.005;
           else erry = 0.5;
           theScans[i-1]->SetPointError( iPoint, 1., erry );
