@@ -43,6 +43,7 @@ int main() {
 
   std::vector<TGraphErrors*> goodScans;
   goodScans.push_back( scans[0] );
+  //goodScans.push_back( scans[1] );
   goodScans.push_back( scans[2] );
   goodScans.push_back( scans[4] );
   goodScans.push_back( scans[7] );
@@ -160,10 +161,21 @@ int main() {
   c0_2->SetLogy();
   c0_2->cd();
 
-  TH2D* h2_axes0_2 = new TH2D( "axes0_2", "", 10, 10., 420., 10, 0.0025, 30. );
+  TH2D* h2_axes0_2 = new TH2D( "axes0_2", "", 10, 10., 420., 10, 0.0025, 60. );
   h2_axes0_2->SetXTitle( "APD Voltage [V]" );
   h2_axes0_2->SetYTitle( "APD Current [#muA]" );
   h2_axes0_2->Draw();
+
+
+  TCanvas* c0_2_rel = new TCanvas( "c0_2_rel", "", 600, 600 );
+  c0_2_rel->SetLogy();
+  c0_2_rel->cd();
+
+  TH2D* h2_axes0_2_rel = new TH2D( "axes0_2_rel", "", 10, 10., 420., 10, 0.01, 60. );
+  h2_axes0_2_rel->SetXTitle( "APD Voltage [V]" );
+  h2_axes0_2_rel->SetYTitle( "APD Current (Normalized to 38 nA) [#muA]" );
+  h2_axes0_2_rel->Draw();
+
 
 
   TCanvas* c1_2 = new TCanvas( "c1_2", "", 600, 600 );
@@ -175,27 +187,47 @@ int main() {
   h2_axes_2->SetYTitle( "Gain" );
   h2_axes_2->Draw();
 
-  TLegend* legend_2 = new TLegend( 0.2, 0.56, 0.55, 0.76 );
+  TLegend* legend_2 = new TLegend( 0.2, 0.56, 0.55, 0.8 );
   legend_2->SetFillColor(0);
   legend_2->SetTextSize(0.035);
-  
-  for( unsigned i=0; i<scans_2.size(); ++i ) {
 
-    std::pair<float,float> gun = getGunEnergyCurrent( scans_2[i]->GetTitle() );
+
+  std::vector<TGraphErrors*> goodScans_2;
+  goodScans_2.push_back( goodScans[0] );
+  for( unsigned i=0; i<scans_2.size(); ++i ) goodScans_2.push_back( scans_2[i] );
+
+  
+  for( unsigned i=0; i<goodScans_2.size(); ++i ) {
+
+    std::pair<float,float> gun = getGunEnergyCurrent( goodScans_2[i]->GetTitle() );
 
     c0_2->cd();
 
-    scans_2[i]->SetMarkerColor( colors[i] );
-    scans_2[i]->SetLineColor( colors[i] );
-    scans_2[i]->SetMarkerStyle( 20+i );
-    scans_2[i]->SetMarkerSize( 1.3 );
+    goodScans_2[i]->SetMarkerColor( colors[i] );
+    goodScans_2[i]->SetLineColor( colors[i] );
+    goodScans_2[i]->SetMarkerStyle( 20+i );
+    goodScans_2[i]->SetMarkerSize( 1.3 );
 
-    scans_2[i]->Draw("P same");
+    goodScans_2[i]->Draw("P same");
 
+    c0_2_rel->cd();
+   
+    TGraphErrors* scan_rel = new TGraphErrors(0);
+    for( unsigned iPoint=0; iPoint<goodScans_2[i]->GetN(); ++iPoint ) {
+      double x,y;
+      goodScans_2[i]->GetPoint( iPoint, x, y );
+      scan_rel->SetPoint ( iPoint, x, y*(500./gun.first)*(38./gun.second) );
+      scan_rel->SetPointError( iPoint, goodScans_2[i]->GetErrorX(iPoint), goodScans_2[i]->GetErrorY(iPoint) );
+    }
+    scan_rel->SetMarkerColor( colors[i] );
+    scan_rel->SetLineColor( colors[i] );
+    scan_rel->SetMarkerStyle( 20+i );
+    scan_rel->SetMarkerSize( 1.3 );
+    scan_rel->Draw("P same");
 
     c1_2->cd();
 
-    TGraphErrors* gain = getGain( scans_2[i], darkScan );  
+    TGraphErrors* gain = getGain( goodScans_2[i], darkScan );  
     gain->SetMarkerColor( colors[i] );
     gain->SetLineColor( colors[i] );
     gain->SetMarkerStyle( 20+i );
@@ -203,9 +235,19 @@ int main() {
 
     gain->Draw("P same");
 
-    if( scans_2[i]->GetN()>0 ) legend_2->AddEntry( gain, Form("E = %.0f eV (I = %.1f nA)", gun.first, gun.second ), "P" );
+    if( goodScans_2[i]->GetN()>0 ) legend_2->AddEntry( gain, Form("E = %.0f eV (I = %.1f nA)", gun.first, gun.second ), "P" );
 
   }
+
+
+  c0_2_rel->cd();
+
+  legend_2->Draw("same");
+  gPad->RedrawAxis();
+  label->Draw("same");
+
+  c0_2_rel->SaveAs( "iv_2_rel.pdf" );
+
 
   c0_2->cd();
 
