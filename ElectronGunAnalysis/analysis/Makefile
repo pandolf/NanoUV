@@ -16,6 +16,9 @@ EXTRALIBS := -L$(ROOTSYS)/lib -lHtml -lMathCore -lGenVector -lMinuit -lTreePlaye
 drawGain: drawGain.cpp NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawGain drawGain.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawCurrent: drawCurrent.cpp NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawCurrent drawCurrent.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 NanoUVCommon.o: ../../CommonTools/src/NanoUVCommon.cc 
