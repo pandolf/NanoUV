@@ -23,6 +23,7 @@ class NanoUVCommon {
   static void addNanoUVLabel( TCanvas* c1, int quadrant=4 );
   static void addNanoUVLabel( TCanvas* c1, float xmin, float ymin, float xmax, float ymax );
 
+  static TPaveText* getNanoUVLabel( int quadrant );
   static TPaveText* getNanoUVLabel( float xmin, float ymin, float xmax, float ymax );
 
   static float integrateSignal( TGraph* graph );

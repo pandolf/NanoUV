@@ -30,16 +30,30 @@ std::vector<int> NanoUVCommon::colors() {
 }
 
 
+//void NanoUVCommon::addNanoUVLabel( TCanvas* c1, int quadrant ) {
+//
+//  if( quadrant==4 )
+//    NanoUVCommon::addNanoUVLabel( c1, 0.7, 0.2, 0.9, 0.25 );
+//  else if( quadrant==3 )
+//    NanoUVCommon::addNanoUVLabel( c1, 0.22, 0.2, 0.42, 0.25 );
+//  else 
+//    std::cout << "[NanoUVCommon::addNanoUVLabel] Quadrant '" << quadrant << "' not implemented yet!" << std::endl;
+//
+//}
+
+
 void NanoUVCommon::addNanoUVLabel( TCanvas* c1, int quadrant ) {
 
-  if( quadrant==4 )
-    NanoUVCommon::addNanoUVLabel( c1, 0.7, 0.2, 0.9, 0.25 );
-  else if( quadrant==3 )
-    NanoUVCommon::addNanoUVLabel( c1, 0.22, 0.2, 0.42, 0.25 );
-  else 
-    std::cout << "[NanoUVCommon::addNanoUVLabel] Quadrant '" << quadrant << "' not implemented yet!" << std::endl;
+  TPaveText* label = NanoUVCommon::getNanoUVLabel( quadrant );
+
+  c1->cd();
+
+  label->Draw();
+
+  gPad->RedrawAxis();
 
 }
+
 
 
 void NanoUVCommon::addNanoUVLabel( TCanvas* c1, float xmin, float ymin, float xmax, float ymax ) {
@@ -54,6 +68,22 @@ void NanoUVCommon::addNanoUVLabel( TCanvas* c1, float xmin, float ymin, float xm
 
 }
 
+
+
+TPaveText* NanoUVCommon::getNanoUVLabel( int quadrant ) {
+
+  if( quadrant==4 )
+    return NanoUVCommon::getNanoUVLabel( 0.7 , 0.2, 0.9 , 0.25 );
+  else if( quadrant==2 )
+    return NanoUVCommon::getNanoUVLabel( 0.22, 0.83, 0.42, 0.88 );
+  else if( quadrant==3 )
+    return NanoUVCommon::getNanoUVLabel( 0.22, 0.2, 0.42, 0.25 );
+  else {
+    std::cout << "[NanoUVCommon::addNanoUVLabel] Quadrant '" << quadrant << "' not implemented yet!" << std::endl;
+    return 0;
+  }
+
+}
 
 
 TPaveText* NanoUVCommon::getNanoUVLabel( float xmin, float ymin, float xmax, float ymax ) {
