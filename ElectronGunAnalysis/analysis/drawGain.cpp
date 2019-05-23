@@ -65,31 +65,72 @@ int main() {
   h2_axes->SetYTitle( "Gain" );
   h2_axes->Draw();
 
+
+  TCanvas* c1_rel = new TCanvas( "c1_rel", "", 600, 600 );
+  c1_rel->SetLogy();
+  //c1->SetLogx();
+  c1_rel->cd();
+
+  TH2D* h2_axes_rel = new TH2D( "axes_rel", "", 10, 10., 420., 10, 0.5, 1000. );
+  h2_axes_rel->SetXTitle( "APD Voltage [V]" );
+  h2_axes_rel->SetYTitle( "Gain (Normalized to 500 eV / 38 nA)" );
+  h2_axes_rel->Draw();
+
+
   TLegend* legend = new TLegend( 0.2, 0.51, 0.55, 0.76 );
   legend->SetFillColor(0);
   legend->SetTextSize(0.035);
   
   for( unsigned i=0; i<goodScans.size(); ++i ) {
 
+    std::pair<float,float> gun = getGunEnergyCurrent( goodScans[i]->GetTitle() );
+
     TGraphErrors* gain = getGain( goodScans[i], darkScan );  
     gain->SetMarkerColor( colors[i] );
     gain->SetLineColor( colors[i] );
     gain->SetMarkerStyle( 20+i );
     gain->SetMarkerSize( 1.3 );
+
+    c1->cd();
     gain->Draw("P same");
 
-    legend->AddEntry( gain, goodScans[i]->GetTitle(), "P" );
+    c1_rel->cd();
+   
+    TGraphErrors* gain_rel = new TGraphErrors(0);
+    for( unsigned iPoint=0; iPoint<gain->GetN(); ++iPoint ) {
+      double x,y;
+      gain->GetPoint( iPoint, x, y );
+      gain_rel->SetPoint ( iPoint, x, y*(500./gun.first)*(38./gun.second) );
+      gain_rel->SetPointError( iPoint, gain->GetErrorX(iPoint), gain->GetErrorY(iPoint) );
+    }
+    gain_rel->SetMarkerColor( colors[i] );
+    gain_rel->SetLineColor( colors[i] );
+    gain_rel->SetMarkerStyle( 20+i );
+    gain_rel->SetMarkerSize( 1.3 );
+    gain_rel->Draw("P same");
+
+    legend->AddEntry( gain, Form("E = %.0f eV (I = %.1f nA)", gun.first, gun.second ), "P" );
 
   }
 
-  legend->Draw("same");
-
-  gPad->RedrawAxis();
-
   TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
+
+  c1->cd();
+
+  legend->Draw("same");
+  gPad->RedrawAxis();
   label->Draw("same");
 
   c1->SaveAs( "gain.pdf" );
+
+  c1_rel->cd();
+
+  legend->Draw("same");
+  gPad->RedrawAxis();
+  label->Draw("same");
+
+  c1_rel->SaveAs( "gain_rel.pdf" );
+
 
   return 0;
 
@@ -134,8 +175,7 @@ std::vector<TGraphErrors*> getScansFromFile( const std::string& fileName ) {
 
         for( unsigned i=1; i<words.size(); ++i ) { // first column is common to all
      
-          std::pair<float,float> energy_current = getGunEnergyCurrent( words[i] );
-          theScans[i-1]->SetTitle( Form("E = %.0f eV (I = %.1f nA)", energy_current.first, energy_current.second ) );
+          theScans[i-1]->SetTitle( words[i].c_str() );
      
         }
 
