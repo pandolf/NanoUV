@@ -5,6 +5,7 @@
 #include "TH2D.h"
 #include "TH1D.h"
 #include "TFile.h"
+#include "TF1.h"
 #include "TCanvas.h"
 #include "TGraphErrors.h"
 #include "TLegend.h"
@@ -12,15 +13,6 @@
 #include "../../CommonTools/interface/NanoUVCommon.h"
 
 
-
-//struct NanoUVIVScan {
-//
-//  float eGun;
-//  float iGun;
-//
-//  std::vector< std::pair<float,float> > iv;
-//
-//};
 
 
 
@@ -35,11 +27,64 @@ TGraphErrors* getGain( TGraphErrors* scan, TGraphErrors* darkScan, float ref=40.
 int main() {
 
   NanoUVCommon::setStyle();
+  TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
 
   std::vector<int> colors = NanoUVCommon::colors();
 
-  std::vector<TGraphErrors*> scans = getScansFromFile("data/2019_05_17/iv_scan.txt");
 
+
+  // $$$ LIGHT
+
+  std::vector<TGraphErrors*> lightScans =  getScansFromFile("data/2019_05_15/iv_scan_light.txt");
+
+
+  TCanvas* c0light = new TCanvas( "c0light", "", 600, 600 );
+  c0light->SetLogy();
+  c0light->cd();
+
+  TH2D* h2_axes0light = new TH2D( "axes0light", "", 10, 10., 420., 10, 0.1, 200. );
+  h2_axes0light->SetXTitle( "APD Voltage [V]" );
+  h2_axes0light->SetYTitle( "APD Current [#muA]" );
+  h2_axes0light->Draw();
+
+  TCanvas* c1light = new TCanvas( "c1light", "", 600, 600 );
+  c1light->SetLogy();
+  c1light->cd();
+
+  TH2D* h2_axes1light = new TH2D( "axes1light", "", 10, 10., 420., 10, 0.5, 1000. );
+  h2_axes1light->SetXTitle( "APD Voltage [V]" );
+  h2_axes1light->SetYTitle( "Gain" );
+  h2_axes1light->Draw();
+
+
+  lightScans[1]->SetMarkerColor( 46 );
+  lightScans[1]->SetLineColor( 46 );
+  lightScans[1]->SetMarkerStyle( 20 );
+  lightScans[1]->SetMarkerSize( 1.3 );
+  
+  c0light->cd();
+  lightScans[1]->Draw("P same");
+  label->Draw("same");
+  gPad->RedrawAxis();
+  c0light->SaveAs("iv_light.pdf");
+
+  TGraphErrors* gain = getGain( lightScans[1], lightScans[0] );  
+  gain->SetMarkerColor( 46 );
+  gain->SetLineColor( 46 );
+  gain->SetMarkerStyle( 20 );
+  gain->SetMarkerSize( 1.3 );
+
+  c1light->cd();
+  gain->Draw("P same");
+  label->Draw("same");
+  gPad->RedrawAxis();
+  c1light->SaveAs("gain_light.pdf");
+
+
+
+  // $$$ ELECTRON GUN
+
+  std::vector<TGraphErrors*> scans = getScansFromFile("data/2019_05_17/iv_scan.txt");
 
   std::vector<TGraphErrors*> goodScans;
   goodScans.push_back( scans[0] );
@@ -127,7 +172,6 @@ int main() {
 
   }
 
-  TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
 
   c0->cd();
 
@@ -153,6 +197,86 @@ int main() {
 
   c1_rel->SaveAs( "gain_rel.pdf" );
 
+
+  std::vector<float> voltages;
+  voltages.push_back( 250. );
+  voltages.push_back( 300. );
+  voltages.push_back( 355. );
+  voltages.push_back( 385. );
+
+  c1->Clear();
+  c1->SetLogy();
+
+  TH2D* axes_fixedV = new TH2D( "axes_fixedV", "", 10, 0., 600., 10, 0.01, 800. );
+  axes_fixedV->SetXTitle( "Electron Gun Energy [eV]" ); 
+  axes_fixedV->SetYTitle( "I_{APD}" );
+  axes_fixedV->Draw();
+
+  TLegend* legend_fixedV = new TLegend( 0.2, 0.65, 0.55, 0.9 );
+  legend_fixedV->SetFillColor(0);
+  legend_fixedV->SetTextSize( 0.035 );
+
+  for( unsigned j=0; j<voltages.size(); ++j ) {
+
+    int iVolt = voltages.size()-j-1;
+
+    TGraphErrors* scan_fixedV = new TGraphErrors(0);
+    scan_fixedV->SetName( Form("scan_fixedV%.0f", voltages[iVolt]) );
+
+    for( unsigned i=0; i<goodScans.size(); ++i ) {
+
+      std::pair<float,float> gun = getGunEnergyCurrent( goodScans[i]->GetTitle() );
+
+      for( unsigned iPoint=0; iPoint<goodScans[i]->GetN(); ++iPoint ) {
+    
+        double v, curr;
+        goodScans[i]->GetPoint(iPoint, v, curr);
+
+        if( v==voltages[iVolt] ) {
+          int n = scan_fixedV->GetN();
+          scan_fixedV->SetPoint( n, gun.first, curr );
+          scan_fixedV->SetPointError( n, gun.first*0.01, goodScans[i]->GetErrorY(iPoint) );
+        }
+
+      }  // for points
+
+    } // for goodscans
+
+    scan_fixedV->SetMarkerColor( colors[j] );
+    scan_fixedV->SetLineColor( colors[j] );
+    scan_fixedV->SetMarkerStyle( 20 );
+    scan_fixedV->SetMarkerSize( 1.3 );
+
+    //TF1* f1_exp = new TF1("exp", "expo", 100., 600.);
+    //f1_exp->SetLineColor(kGray+3);
+    //f1_exp->SetLineWidth(2);
+    //scan_fixedV->Fit( f1_exp, "R" );
+
+    scan_fixedV->Draw("P same");
+
+    legend_fixedV->AddEntry( scan_fixedV, Form("V(APD) = %.0f V", voltages[iVolt]), "P" );
+
+  } // for voltages
+
+  legend_fixedV->Draw("same");
+
+
+  //TPaveText* label_gun = new TPaveText( 0.75, 0.15, 0.85, 0.2, "brNDC" );
+  //label_gun->SetFillColor(0);
+  //label_gun->SetTextSize(0.035);
+  //label_gun->AddText( "I(gun) = 32-38 nA" );
+  //label_gun->Draw("same");
+
+  TPaveText* label1 = NanoUVCommon::getNanoUVLabel(1);
+  label1->Draw("same");
+
+  gPad->RedrawAxis();
+
+  c1->SaveAs( "i_fixedV.pdf" );
+  
+
+
+  // $$$ ELECTRON GUN CURRENT SCANS
 
 
   std::vector<TGraphErrors*> scans_2 = getScansFromFile("data/2019_05_17/iv_scan_2.txt");
@@ -298,6 +422,10 @@ std::vector<TGraphErrors*> getScansFromFile( const std::string& fileName ) {
         }
       }
 
+      if( words.size()<1 ) continue;
+
+      if( words[0][0]=='#' ) continue;
+
       if( words[0]=="gun:" ) {
 
         for( unsigned i=1; i<words.size(); ++i ) { // first column is common to all
@@ -386,7 +514,7 @@ TGraphErrors* getGain( TGraphErrors* scan, TGraphErrors* darkScan, float ref ) {
     //float gain_err = sqrt( i_err*i_err/(i_open_ref*i_open_ref) + i_open*i_open*0.01*0.01/(i_open_ref*i_open_ref*i_open_ref*i_open_ref) );
 
     float r = 10000.;  // 10 kOhm
-    float volt_corr = volt - r*i_open*1E-6; // put current in Amperes
+    float volt_corr = volt - r*i_open*1E-6; // put current in Ampers
 
     //gr_gain->SetPoint( i, volt, gain );
     gr_gain->SetPoint( i, volt_corr, gain );
