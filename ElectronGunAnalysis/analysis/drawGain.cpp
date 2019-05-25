@@ -207,9 +207,9 @@ int main() {
   c1->Clear();
   c1->SetLogy();
 
-  TH2D* axes_fixedV = new TH2D( "axes_fixedV", "", 10, 0., 600., 10, 0.01, 800. );
+  TH2D* axes_fixedV = new TH2D( "axes_fixedV", "", 10, 0., 599., 10, 0.01, 800. );
   axes_fixedV->SetXTitle( "Electron Gun Energy [eV]" ); 
-  axes_fixedV->SetYTitle( "I_{APD}" );
+  axes_fixedV->SetYTitle( "I_{APD} [#muA]" );
   axes_fixedV->Draw();
 
   TLegend* legend_fixedV = new TLegend( 0.2, 0.65, 0.55, 0.9 );
