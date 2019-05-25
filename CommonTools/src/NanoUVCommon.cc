@@ -78,6 +78,8 @@ TPaveText* NanoUVCommon::getNanoUVLabel( int quadrant ) {
     return NanoUVCommon::getNanoUVLabel( 0.22, 0.83, 0.42, 0.88 );
   else if( quadrant==3 )
     return NanoUVCommon::getNanoUVLabel( 0.22, 0.2, 0.42, 0.25 );
+  else if( quadrant==1 )
+    return NanoUVCommon::getNanoUVLabel( 0.7 , 0.83, 0.9 , 0.88 );
   else {
     std::cout << "[NanoUVCommon::addNanoUVLabel] Quadrant '" << quadrant << "' not implemented yet!" << std::endl;
     return 0;
