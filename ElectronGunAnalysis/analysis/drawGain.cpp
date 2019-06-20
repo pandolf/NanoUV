@@ -28,6 +28,8 @@ int main() {
 
   NanoUVCommon::setStyle();
   TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
+  TPaveText* label1 = NanoUVCommon::getNanoUVLabel(1);
+  TPaveText* label3 = NanoUVCommon::getNanoUVLabel(3);
 
   std::vector<int> colors = NanoUVCommon::colors();
 
@@ -198,6 +200,101 @@ int main() {
   c1_rel->SaveAs( "gain_rel.pdf" );
 
 
+  
+  TCanvas* c1_gainMax = new TCanvas( "c1_gainMax", "", 600, 600 );
+  c1_gainMax->cd();
+  c1_gainMax->SetLogy();
+
+  TH2D* h2_axes_gainMax = new TH2D( "axes_gainMax", "", 10, 40., 400., 10, 0.1, 1000. );
+  h2_axes_gainMax->SetXTitle( "Reference APD Voltage [V]" );
+  h2_axes_gainMax->SetYTitle( "Gain @ 386 V (Compared to Reference)" );
+  h2_axes_gainMax->Draw();
+
+  TCanvas* c1_gainMax_relTo500 = new TCanvas( "c1_gainMax_relTo500", "", 600, 600 );
+  c1_gainMax_relTo500->cd();
+  c1_gainMax_relTo500->SetLogy();
+
+  TH2D* h2_axes_gainMax_relTo500 = new TH2D( "axes_gainMax_relTo500", "", 10, 40., 400., 10, 0.001, 1.7 );
+  h2_axes_gainMax_relTo500->SetXTitle( "Reference APD Voltage [V]" );
+  h2_axes_gainMax_relTo500->SetYTitle( "Gain @ 386 V (Normalized to 500 eV)" );
+  h2_axes_gainMax_relTo500->Draw();
+
+  TLegend* legend_bottomLeft = new TLegend( 0.2, 0.18, 0.55, 0.43 );
+  legend_bottomLeft->SetFillColor(0);
+  legend_bottomLeft->SetTextSize(0.035);
+
+  TLegend* legend_bottomRight = new TLegend( 0.48, 0.18, 0.83, 0.43 );
+  legend_bottomRight->SetFillColor(0);
+  legend_bottomRight->SetTextSize(0.035);
+
+  TGraph* gr_gainMaxRef = new TGraph(0);
+
+  for( unsigned i=0; i<goodScans.size(); ++i ) {
+
+    std::pair<float,float> gun = getGunEnergyCurrent( goodScans[i]->GetTitle() );
+
+    TGraph* gr_gainMax = new TGraph(0);
+    TGraph* gr_gainMax_relTo500 = new TGraph(0);
+
+    if( i==0 ) gr_gainMaxRef = gr_gainMax;
+
+    for( unsigned iPoint=0; iPoint<goodScans[i]->GetN(); ++iPoint ) {
+
+      double ref,y;
+      goodScans[i]->GetPoint(iPoint, ref, y);
+ 
+      TGraphErrors* gain = getGain( goodScans[i], darkScan, ref ); // gain wrt given HV
+
+      double max_x, maxGain;
+      gain->GetPoint( gain->GetN()-1, max_x, maxGain );
+
+      gr_gainMax->SetPoint( gr_gainMax->GetN(), ref, maxGain );
+
+      double refx, refy;
+      gr_gainMaxRef->GetPoint( iPoint, refx, refy );
+      gr_gainMax_relTo500->SetPoint( gr_gainMax_relTo500->GetN(), ref, maxGain/refy );
+
+    } // for points
+
+    gr_gainMax->SetMarkerColor( colors[i] );
+    gr_gainMax->SetLineColor( colors[i] );
+    gr_gainMax->SetMarkerStyle( 20+i );
+    gr_gainMax->SetMarkerSize( 1.3 );
+
+    c1_gainMax->cd();
+    gr_gainMax->Draw("Psame");
+
+    gr_gainMax_relTo500->SetMarkerColor( colors[i] );
+    gr_gainMax_relTo500->SetLineColor( colors[i] );
+    gr_gainMax_relTo500->SetMarkerStyle( 20+i );
+    gr_gainMax_relTo500->SetMarkerSize( 1.3 );
+
+    c1_gainMax_relTo500->cd();
+    gr_gainMax_relTo500->Draw("Psame");
+
+    legend_bottomLeft ->AddEntry( gr_gainMax, Form("E = %.0f eV (I = %.1f nA)", gun.first, gun.second ), "P" );
+    legend_bottomRight->AddEntry( gr_gainMax, Form("E = %.0f eV (I = %.1f nA)", gun.first, gun.second ), "P" );
+
+  } // for goodScans
+
+  c1_gainMax->cd();
+
+  legend_bottomLeft->Draw("same");
+  gPad->RedrawAxis();
+  label1->Draw("same");
+
+  c1_gainMax->SaveAs( "gainMax.pdf" );
+  
+
+  c1_gainMax_relTo500->cd();
+
+  legend_bottomRight->Draw("same");
+  gPad->RedrawAxis();
+  label3->Draw("same");
+
+  c1_gainMax_relTo500->SaveAs( "gainMax_relTo500.pdf" );
+  
+
   std::vector<float> voltages;
   voltages.push_back( 250. );
   voltages.push_back( 300. );
@@ -215,6 +312,10 @@ int main() {
   TLegend* legend_fixedV = new TLegend( 0.2, 0.65, 0.55, 0.9 );
   legend_fixedV->SetFillColor(0);
   legend_fixedV->SetTextSize( 0.035 );
+
+  TF1* f1_expoRef;
+  double lastXref, lastYref;
+  
 
   for( unsigned j=0; j<voltages.size(); ++j ) {
 
@@ -247,10 +348,29 @@ int main() {
     scan_fixedV->SetMarkerStyle( 20 );
     scan_fixedV->SetMarkerSize( 1.3 );
 
-    //TF1* f1_exp = new TF1("exp", "expo", 100., 600.);
-    //f1_exp->SetLineColor(kGray+3);
-    //f1_exp->SetLineWidth(2);
-    //scan_fixedV->Fit( f1_exp, "R" );
+    if( voltages[iVolt]==385. ) {
+      f1_expoRef = new TF1("expoRef", "[0]*exp([1]*x)", 0., 599.);
+      f1_expoRef->SetLineWidth(2);
+      f1_expoRef->SetLineColor( colors[j] );
+      f1_expoRef->SetParameter(1, 0.01);
+      scan_fixedV->Fit( f1_expoRef, "R" );
+      scan_fixedV->GetPoint( scan_fixedV->GetN()-1, lastXref, lastYref );
+
+    } else {
+
+      TF1* f1_expo = new TF1( "thisExpo", "[0]*exp([1]*x)", 0., 599.);
+      f1_expo->SetLineWidth(2);
+      f1_expo->SetLineStyle(2);
+      f1_expo->SetLineColor( colors[j] );
+      f1_expo->SetParameter( 1, f1_expoRef->GetParameter(1) );
+      double lastX, lastY;
+      scan_fixedV->GetPoint( 0, lastX, lastY );
+      //scan_fixedV->GetPoint( scan_fixedV->GetN()-1, lastX, lastY );
+      //f1_expo->SetParameter( 0, f1_expoRef->GetParameter(0)*lastY/lastYref );
+      f1_expo->SetParameter( 0, f1_expoRef->GetParameter(0)*lastY/f1_expoRef->Eval(lastX) );
+      f1_expo->Draw("L same");
+
+    }
 
     scan_fixedV->Draw("P same");
 
@@ -267,7 +387,6 @@ int main() {
   //label_gun->AddText( "I(gun) = 32-38 nA" );
   //label_gun->Draw("same");
 
-  TPaveText* label1 = NanoUVCommon::getNanoUVLabel(1);
   label1->Draw("same");
 
   gPad->RedrawAxis();
