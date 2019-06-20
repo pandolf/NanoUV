@@ -14,42 +14,69 @@
 
 
 
+void drawGraph( const std::string& name, TGraphErrors* graph, const std::string& axisName );
 
 int main() {
 
   NanoUVCommon::setStyle();
+
+  TGraphErrors* graph = new TGraphErrors(0);
+ 
+  // numbers taken from data/2019_05_17/current_scan.txt 
+  graph->SetPoint( graph->GetN(), 3.5, 0.16*1000 );  // in nA
+  graph->SetPointError( graph->GetN()-1, 0.05, 0.01*1000. );
+
+  graph->SetPoint( graph->GetN(), 9.9, 0.48*1000. );  // in nA
+  graph->SetPointError( graph->GetN()-1, 0.05, 0.01*1000. );
+
+  graph->SetPoint( graph->GetN(), 14.5, 0.71*1000. );  // in nA
+  graph->SetPointError( graph->GetN()-1, 0.1, 0.01*1000. );
+
+  graph->SetPoint( graph->GetN(), 21.9, 1.06*1000. );  // in nA
+  graph->SetPointError( graph->GetN()-1, 0.1, 0.01*1000. );
+
+  graph->SetPoint( graph->GetN(), 29.3, 1.43*1000. );  // in nA
+  graph->SetPointError( graph->GetN()-1, 0.1, 0.01*1000. );
+
+  graph->SetPoint( graph->GetN(), 38, 1.82*1000. );  // in nA
+  graph->SetPointError( graph->GetN()-1, 0.1, 0.01*1000. );
+
+
+  TGraphErrors* graph_noGain = new TGraphErrors(0);
+
+  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+
+    double x, y;
+    graph->GetPoint( iPoint, x, y );
+
+    graph_noGain->SetPoint( iPoint, x, y/55. ); // gain @ 355 V is 55, then put in nA
+    graph_noGain->SetPointError( iPoint, graph->GetErrorX(iPoint), graph->GetErrorY(iPoint)/55. );
+
+  } 
+
+  drawGraph( "currentScan", graph, "I(APD) [nA]" );
+  drawGraph( "currentScan_noGain", graph_noGain, "I(APD) / Gain [nA]" );
+
+  return 0;
+
+}
+
+
+
+
+void drawGraph( const std::string& name, TGraphErrors* graph, const std::string& axisName ) {
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
   float xMin = 0.;
   float xMax = 40.;
+  float yMax = (name=="currentScan") ? 2000. : 40.;
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., 2. );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., yMax );
   h2_axes->SetXTitle( "I(gun) [nA]" );
-  h2_axes->SetYTitle( "I(APD) [#muA]" );
+  h2_axes->SetYTitle( axisName.c_str() );
   h2_axes->Draw();
-
-  TGraphErrors* graph = new TGraphErrors(0);
- 
-  // numbers taken from data/2019_05_17/current_scan.txt 
-  graph->SetPoint( graph->GetN(), 3.5, 0.16 );
-  graph->SetPointError( graph->GetN()-1, 0.05, 0.01 );
-
-  graph->SetPoint( graph->GetN(), 9.9, 0.48 );
-  graph->SetPointError( graph->GetN()-1, 0.05, 0.01 );
-
-  graph->SetPoint( graph->GetN(), 14.5, 0.71 );
-  graph->SetPointError( graph->GetN()-1, 0.1, 0.01 );
-
-  graph->SetPoint( graph->GetN(), 21.9, 1.06 );
-  graph->SetPointError( graph->GetN()-1, 0.1, 0.01 );
-
-  graph->SetPoint( graph->GetN(), 29.3, 1.43 );
-  graph->SetPointError( graph->GetN()-1, 0.1, 0.01 );
-
-  graph->SetPoint( graph->GetN(), 38, 1.82 );
-  graph->SetPointError( graph->GetN()-1, 0.1, 0.01 );
 
 
   graph->SetMarkerColor( kGray+3 );
@@ -78,8 +105,10 @@ int main() {
   labelFit->SetTextAlign(31);
   labelFit->AddText( Form("Linear Fit (mx + q)"));
   labelFit->AddText( Form("#chi^{2}/NDF = %.1f/%d", f1->GetChisquare(), f1->GetNDF()) );
-  labelFit->AddText( Form("m = (%.1f #pm %.1f)#times10^{-3}", f1->GetParameter(1)*1000., f1->GetParError(1)*1000.) );
-  labelFit->AddText( Form("q = %.3f #pm %.3f #muA", f1->GetParameter(0), f1->GetParError(0)) );
+  //labelFit->AddText( Form("m = (%.1f #pm %.1f)#times10^{-3}", f1->GetParameter(1)*1000., f1->GetParError(1)*1000.) );
+  //labelFit->AddText( Form("q = %.3f #pm %.3f #muA", f1->GetParameter(0), f1->GetParError(0)) );
+  labelFit->AddText( Form("m = %.1f #pm %.1f", f1->GetParameter(1), f1->GetParError(1)) );
+  labelFit->AddText( Form("q = %.1f #pm %.1f nA", f1->GetParameter(0), f1->GetParError(0)) );
   labelFit->Draw("same");
 
   graph->Draw("P same");
@@ -88,8 +117,14 @@ int main() {
   gPad->RedrawAxis();
   label->Draw("same");
   
-  c1->SaveAs( "currentScan.pdf" );
+  c1->SaveAs( Form( "%s.pdf", name.c_str()) );
 
-  return 0;
+  delete h2_axes;
+  delete c1;
+  delete f1;
+  delete labelGun;
+  delete labelFit;
 
 }
+
+
