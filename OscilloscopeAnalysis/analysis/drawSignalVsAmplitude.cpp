@@ -14,8 +14,7 @@
 
 
 bool use_ampMax = true;
-
-
+bool invertPolarity = true;
 
 
 int main( int argc, char* argv[] ) {
@@ -31,6 +30,11 @@ int main( int argc, char* argv[] ) {
 
   std::string datadir = "data/LED_driver/" + prodName;
   std::string prefix = "C1211215up2000";
+
+  if( prodName=="Jul17_new_v1" ) {
+    prefix = "C2211215up2000";
+    invertPolarity = false;
+  }
   std::string plotsdir = "plots";
   system( Form("mkdir -p %s", plotsdir.c_str()) );
 
@@ -45,7 +49,7 @@ int main( int argc, char* argv[] ) {
   amplitudes.push_back(3);
   amplitudes.push_back(2);
   amplitudes.push_back(1);
-  amplitudes.push_back(0);
+  //amplitudes.push_back(0);
 
 
   int nFiles = 50;
@@ -60,15 +64,21 @@ int main( int argc, char* argv[] ) {
 
   for( unsigned i=0; i<amplitudes.size(); ++i ) {
 
-    TH1D* h1_signal = new TH1D( Form("signal_%d", amplitudes[i]), "", 1000, -10000., 1000. );
+    TH1D* h1_signal = new TH1D( Form("signal_%d", amplitudes[i]), "", 1000, -1000., 10000. );
 
     for( unsigned iFile=0; iFile<nFiles; ++iFile ) {
 
       std::string additionalZero = (iFile<10) ? "0" : "";
       std::string thisFileName( Form( "%s/%d/%s%s%d.txt", datadir.c_str(), amplitudes[i], prefix.c_str(), additionalZero.c_str(), iFile ) );
       TGraph* thisGraph = NanoUVCommon::getGraphFromFile( thisFileName.c_str() );
+//TFile* file = TFile::Open("test.root", "recreate" );
+//file->cd();
+//thisGraph->SetName("graph");
+//thisGraph->Write();
+//file->Close();
+//exit(1);
       NanoUVCommon::plotWaveformGraph( thisGraph, Form("%s.pdf", thisFileName.c_str()) ); 
-      float thisSignal = NanoUVCommon::ampMaxSignal( thisGraph );
+      float thisSignal = (use_ampMax) ? NanoUVCommon::ampMaxSignal( thisGraph, invertPolarity ) : NanoUVCommon::integrateSignal( thisGraph, invertPolarity );
       h1_signal->Fill( thisSignal/calibrationConst );
       delete thisGraph;
 
@@ -77,7 +87,7 @@ int main( int argc, char* argv[] ) {
     file_signal->cd();
     h1_signal->Write();
 
-    float xValue = amplitudes[i]*300.; // number of photons (see LED driver data sheet)
+    float xValue = amplitudes[i]; //n*300.; // number of photons (see LED driver data sheet)
 
     int iPoint = gr_signal_vs_ampl->GetN();
     gr_signal_vs_ampl        ->SetPoint( iPoint, xValue, h1_signal->GetMean() );
@@ -96,16 +106,21 @@ int main( int argc, char* argv[] ) {
   c1->cd();
 
   float xMin = 0.;
-  float xMax = 10.*300;
-  float yMin = (use_ampMax) ? -180. : -5.;
-  float yMax = (use_ampMax) ? 0. : 0.5;
+  float xMax = 10.001; //*300;
+  float yMin = (use_ampMax) ? 0. : -0.5;
+  float yMax = (use_ampMax) ? 150. : 5.;
+  //float yMin = (use_ampMax) ? -180. : -5.;
+  //float yMax = (use_ampMax) ? 0. : 0.5;
 
   TH2D* h2_axes = new TH2D("axes", "", 10, xMin, xMax, 10, yMin, yMax );
   if( use_ampMax ) 
-    h2_axes->SetYTitle("AmpMax Signal (Gain = 150) [a.u.]"); 
+    h2_axes->SetYTitle("AmpMax Signal [a.u.]"); 
+    //h2_axes->SetYTitle("AmpMax Signal (Gain = 150) [a.u.]"); 
   else
-    h2_axes->SetYTitle("Integrated Signal (Gain = 150) [a.u.]"); 
-  h2_axes->SetXTitle("Number of Photons");
+    h2_axes->SetYTitle("Integrated Signal [a.u.]"); 
+    //h2_axes->SetYTitle("Integrated Signal (Gain = 150) [a.u.]"); 
+  h2_axes->SetXTitle("LED Amplitude");
+  //h2_axes->SetXTitle("Number of Photons");
   h2_axes->Draw();
 
 
@@ -149,14 +164,14 @@ int main( int argc, char* argv[] ) {
   label_gamma->AddText("2.9 < E_{#gamma} < 3.3 eV");
   label_gamma->Draw("same");
 
-  TLegend* legend = new TLegend( 0.6, 0.3, 0.88, 0.4 );
+  TLegend* legend = new TLegend( 0.6, 0.7, 0.88, 0.9 );
   legend->SetFillColor(0);
   legend->SetTextSize(0.035);
   legend->SetTextFont(42);
   legend->AddEntry( gr_signal_vs_ampl_sigmaDn, "68% band", "L" );
   legend->Draw("same");
 
-  NanoUVCommon::addNanoUVLabel(c1, 3);
+  NanoUVCommon::addNanoUVLabel(c1, 2);
 
   c1->SaveAs(Form("sigVsAmp_%s.pdf", prodName.c_str()));
 
