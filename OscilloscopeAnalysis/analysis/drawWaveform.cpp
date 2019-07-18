@@ -9,7 +9,7 @@
 #include "TH2D.h"
 #include "TLine.h"
 
-#include "Common.h"
+#include "NanoUVCommon.h"
 
 
 void removeTimeOffset( TGraph* graph );
@@ -20,7 +20,7 @@ float integrateSignal( TGraph* graph, float pedestal );
 
 int main() {
 
-  Common::setStyle();
+  NanoUVCommon::setStyle();
 
   std::string datadir = "data_oscill";
   std::string plotsdir = "plots";
