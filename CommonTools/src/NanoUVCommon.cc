@@ -106,7 +106,7 @@ TPaveText* NanoUVCommon::getNanoUVLabel( float xmin, float ymin, float xmax, flo
 
 
 
-float NanoUVCommon::integrateSignal( TGraph* graph ) {
+float NanoUVCommon::integrateSignal( TGraph* graph, bool invertPolarity ) {
 
   float pedestal = NanoUVCommon::getPedestal( graph, 100 );
 
@@ -117,7 +117,10 @@ float NanoUVCommon::integrateSignal( TGraph* graph ) {
     double x, y;
     graph->GetPoint( iPoint, x, y );
 
-    signal = signal + (y-pedestal);
+    if( invertPolarity )
+      signal = signal - (y-pedestal);
+    else
+      signal = signal + (y-pedestal);
 
   }
 
@@ -126,7 +129,7 @@ float NanoUVCommon::integrateSignal( TGraph* graph ) {
 }
 
 
-float NanoUVCommon::ampMaxSignal( TGraph* graph ) {
+float NanoUVCommon::ampMaxSignal( TGraph* graph, bool invertPolarity ) {
 
   float pedestal = NanoUVCommon::getPedestal( graph, 100 );
 
@@ -138,7 +141,8 @@ float NanoUVCommon::ampMaxSignal( TGraph* graph ) {
     graph->GetPoint( iPoint, x, y );
 
     float thisPoint = (y-pedestal);
-    if( thisPoint < ampMax ) ampMax = thisPoint;
+    if( invertPolarity ) thisPoint = -1.*thisPoint;
+    if( thisPoint > ampMax ) ampMax = thisPoint;
 
   }
 

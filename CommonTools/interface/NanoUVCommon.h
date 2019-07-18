@@ -26,8 +26,8 @@ class NanoUVCommon {
   static TPaveText* getNanoUVLabel( int quadrant );
   static TPaveText* getNanoUVLabel( float xmin, float ymin, float xmax, float ymax );
 
-  static float integrateSignal( TGraph* graph );
-  static float ampMaxSignal( TGraph* graph );
+  static float integrateSignal( TGraph* graph, bool invertPolarity=false );
+  static float ampMaxSignal( TGraph* graph, bool invertPolarity=false );
 
   static float getPedestal( TGraph* graph, int nPoints );
   static void removeTimeOffset( TGraph* graph );
