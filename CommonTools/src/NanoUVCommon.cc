@@ -156,6 +156,8 @@ TGraph* NanoUVCommon::getGraphFromFile( const std::string& fileName ) {
 
   std::ifstream ifs( fileName.c_str() );
 
+  if( !ifs.good() ) return 0;
+
   std::string line;
   bool read = false;
   TGraph* graph = new TGraph(0);
