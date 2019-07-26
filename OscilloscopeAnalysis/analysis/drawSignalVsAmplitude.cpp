@@ -14,7 +14,7 @@
 
 
 bool use_ampMax = true;
-bool invertPolarity = true;
+bool invertPolarity = false;
 
 
 TGraphErrors* getSignalVsAmplitude( const std::string& prodName );
@@ -43,7 +43,72 @@ int main( int argc, char* argv[] ) {
 
   if( graphs.size()==2 ) {
 
+    TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
+    c2->cd();
 
+    double xmax0, ymax0;
+    graphs[0]->GetPoint(0, xmax0, ymax0 );
+    double xmax1, ymax1;
+    graphs[1]->GetPoint(0, xmax1, ymax1 );
+    float yMax = (ymax0>ymax1) ? ymax0 : ymax1;
+
+    float xMin = 0.;
+    float xMax = 10.9;
+
+    TH2D* h2_axes = new TH2D( "axes2", "", 10, xMin, xMax, 10, 0., yMax*1.1 );
+    h2_axes->SetYTitle("Signal / Noise" );
+    h2_axes->SetXTitle("LED Amplitude");
+    h2_axes->Draw();
+
+    TLine* lineOne = new TLine( xMin, 1., xMax, 1. );
+    lineOne->SetLineColor(46);
+    lineOne->SetLineStyle(2);
+    lineOne->SetLineWidth(2);
+    lineOne->Draw("same");
+
+    graphs[0]->SetMarkerStyle(24);
+    graphs[0]->SetMarkerColor(kGray+3);
+    graphs[0]->SetLineColor(kGray+3);
+
+    graphs[1]->SetMarkerStyle(20);
+    graphs[1]->SetMarkerColor(kGray+3);
+    graphs[1]->SetLineColor(kGray+3);
+
+    TLegend* legend = new TLegend( 0.5, 0.7, 0.85, 0.81 );
+    legend->SetFillColor(0);
+    legend->SetTextSize(0.035);
+    legend->SetTextFont(42);
+    legend->AddEntry( graphs[1], "S11625-30N", "P" );
+    legend->AddEntry( graphs[0], "S8664-55", "P" );
+    legend->Draw("same");
+
+    graphs[0]->Draw("PLsame");
+    graphs[1]->Draw("PLsame");
+
+
+    TPaveText* label_led = new TPaveText( 0.23, 0.52, 0.6, 0.59, "brNDC" );
+    label_led->SetFillColor(0);
+    label_led->SetTextSize(0.035);
+    label_led->SetTextAlign(11);
+    label_led->SetTextFont(62);
+    label_led->AddText("LED pulse (1 ns)");
+    label_led->Draw("same");
+
+    TPaveText* label_gamma = new TPaveText( 0.23, 0.42, 0.6, 0.52, "brNDC" );
+    label_gamma->SetFillColor(0);
+    label_gamma->SetTextSize(0.035);
+    label_gamma->SetTextAlign(11);
+    label_gamma->SetTextFont(42);
+    label_gamma->AddText("380 < #lambda < 420 nm");
+    label_gamma->AddText("2.9 < E_{#gamma} < 3.3 eV");
+    label_gamma->Draw("same");
+
+    NanoUVCommon::addNanoUVLabel(c2, 2);
+
+    c2->SaveAs(Form("sigalVsAmplitude_%s_vs_%s.pdf", prodNames[0].c_str(), prodNames[1].c_str()));
+
+    delete c2;
+    delete h2_axes;
 
   }
 
@@ -56,12 +121,16 @@ int main( int argc, char* argv[] ) {
 TGraphErrors* getSignalVsAmplitude( const std::string& prodName ) {
 
   std::string datadir = "data/LED_driver/" + prodName;
-  std::string prefix = "C1211215up2000";
+  std::vector<std::string> prefixes;
+  prefixes.push_back("C1211215up2000");
+  prefixes.push_back("C2211215up2000");
+  prefixes.push_back("C3211215up2000");
+  prefixes.push_back("C4211215up2000");
 
-  if( prodName=="Jul17_new_v1" ) {
-    prefix = "C2211215up2000";
-    invertPolarity = false;
-  }
+  //if( prodName=="Jul17_new_v1" || prodName=="Jul17_new_v1" ) {
+  //  prefix = "C2211215up2000";
+  //  invertPolarity = false;
+  //}
   //std::string plotsdir = "plots";
   //system( Form("mkdir -p %s", plotsdir.c_str()) );
 
@@ -89,6 +158,10 @@ TGraphErrors* getSignalVsAmplitude( const std::string& prodName ) {
   TGraphErrors* gr_signal_vs_ampl_sigmaUp = new TGraphErrors(0);
   TGraphErrors* gr_signal_vs_ampl_sigmaDn = new TGraphErrors(0);
 
+  gr_signal_vs_ampl        ->SetName( Form( "gr_%s"        , prodName.c_str()) );
+  gr_signal_vs_ampl_sigmaUp->SetName( Form( "gr_%s_sigmaUp", prodName.c_str()) );
+  gr_signal_vs_ampl_sigmaDn->SetName( Form( "gr_%s_sigmaDn", prodName.c_str()) );
+
   for( unsigned i=0; i<amplitudes.size(); ++i ) {
 
     TH1D* h1_signal = new TH1D( Form("signal_%d", amplitudes[i]), "", 1000, -1000., 10000. );
@@ -96,8 +169,18 @@ TGraphErrors* getSignalVsAmplitude( const std::string& prodName ) {
     for( unsigned iFile=0; iFile<nFiles; ++iFile ) {
 
       std::string additionalZero = (iFile<10) ? "0" : "";
-      std::string thisFileName( Form( "%s/%d/%s%s%d.txt", datadir.c_str(), amplitudes[i], prefix.c_str(), additionalZero.c_str(), iFile ) );
-      TGraph* thisGraph = NanoUVCommon::getGraphFromFile( thisFileName.c_str() );
+      TGraph* thisGraph = 0;
+      std::string thisFileName;
+
+      for( unsigned iPrefix=0; iPrefix<prefixes.size(); ++iPrefix ) {
+        std::string thisFileName_tmp( Form( "%s/%d/%s%s%d.txt", datadir.c_str(), amplitudes[i], prefixes[iPrefix].c_str(), additionalZero.c_str(), iFile ) );
+        TGraph* thisGraph_tmp = NanoUVCommon::getGraphFromFile( thisFileName_tmp );
+        if( thisGraph_tmp!=0 ) {
+          thisFileName = thisFileName_tmp;
+          thisGraph = thisGraph_tmp;
+          break;
+        } // if ifs good
+      } // for prefixes
 //TFile* file = TFile::Open("test.root", "recreate" );
 //file->cd();
 //thisGraph->SetName("graph");
@@ -207,6 +290,12 @@ TGraphErrors* getSignalVsAmplitude( const std::string& prodName ) {
   NanoUVCommon::addNanoUVLabel(c1, 2);
 
   c1->SaveAs(Form("sigVsAmp_%s.pdf", prodName.c_str()));
+
+  delete c1;
+  delete h2_axes;
+  delete label_gamma;
+  delete legend;
+  delete label_led;
 
   return gr_signal_vs_ampl;
 
