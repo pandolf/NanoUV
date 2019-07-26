@@ -17,16 +17,43 @@ bool use_ampMax = true;
 bool invertPolarity = true;
 
 
+TGraphErrors* getSignalVsAmplitude( const std::string& prodName );
+void divideGraph( TGraphErrors* graph, float factor );
+
+
 int main( int argc, char* argv[] ) {
+
+  std::vector<std::string> prodNames;
 
   std::string prodName = "May1_v2";
   if( argc > 1 ) {
     prodName = (std::string)(argv[1]);
   }
+  prodNames.push_back(prodName);
+
+  if( argc > 2 ) {
+    prodNames.push_back((std::string)(argv[2]));
+  }
 
 
   NanoUVCommon::setStyle();
 
+  std::vector<TGraphErrors*> graphs;
+  for( unsigned i=0; i<prodNames.size(); ++i ) graphs.push_back( getSignalVsAmplitude( prodNames[i] ) );
+
+  if( graphs.size()==2 ) {
+
+
+
+  }
+
+  return 0;
+
+}
+
+
+
+TGraphErrors* getSignalVsAmplitude( const std::string& prodName ) {
 
   std::string datadir = "data/LED_driver/" + prodName;
   std::string prefix = "C1211215up2000";
@@ -35,8 +62,8 @@ int main( int argc, char* argv[] ) {
     prefix = "C2211215up2000";
     invertPolarity = false;
   }
-  std::string plotsdir = "plots";
-  system( Form("mkdir -p %s", plotsdir.c_str()) );
+  //std::string plotsdir = "plots";
+  //system( Form("mkdir -p %s", plotsdir.c_str()) );
 
   std::vector<int> amplitudes;
   amplitudes.push_back(10);
@@ -97,6 +124,14 @@ int main( int argc, char* argv[] ) {
 
   } // for amplitudes
 
+  // rescale:
+  double x0, y0;
+  gr_signal_vs_ampl->GetPoint( gr_signal_vs_ampl->GetN()-1, x0, y0 );
+
+  divideGraph( gr_signal_vs_ampl_sigmaUp, y0 );
+  divideGraph( gr_signal_vs_ampl_sigmaDn, y0 );
+  divideGraph( gr_signal_vs_ampl        , y0 );
+
 
   file_signal->cd();
   gr_signal_vs_ampl->Write();
@@ -108,25 +143,23 @@ int main( int argc, char* argv[] ) {
   float xMin = 0.;
   float xMax = 10.001; //*300;
   float yMin = (use_ampMax) ? 0. : -0.5;
-  float yMax = (use_ampMax) ? 150. : 5.;
+  float yMax = (use_ampMax) ? 150./y0 : 5./y0;
   //float yMin = (use_ampMax) ? -180. : -5.;
   //float yMax = (use_ampMax) ? 0. : 0.5;
 
   TH2D* h2_axes = new TH2D("axes", "", 10, xMin, xMax, 10, yMin, yMax );
-  if( use_ampMax ) 
-    h2_axes->SetYTitle("AmpMax Signal [a.u.]"); 
-    //h2_axes->SetYTitle("AmpMax Signal (Gain = 150) [a.u.]"); 
-  else
-    h2_axes->SetYTitle("Integrated Signal [a.u.]"); 
-    //h2_axes->SetYTitle("Integrated Signal (Gain = 150) [a.u.]"); 
+  h2_axes->SetYTitle("Signal / Noise" );
+  //if( use_ampMax ) 
+  //  h2_axes->SetYTitle("AmpMax Signal [a.u.]"); 
+  //else
+  //  h2_axes->SetYTitle("Integrated Signal [a.u.]"); 
   h2_axes->SetXTitle("LED Amplitude");
   //h2_axes->SetXTitle("Number of Photons");
   h2_axes->Draw();
 
 
-  double x0, y0;
-  gr_signal_vs_ampl->GetPoint( gr_signal_vs_ampl->GetN()-1, x0, y0 );
-  float lineY = (use_ampMax) ? y0 : 0.;
+
+  float lineY = 1.;
 
   TLine* line_zero = new TLine( xMin, lineY, xMax, lineY );
   line_zero->Draw("same");
@@ -175,8 +208,25 @@ int main( int argc, char* argv[] ) {
 
   c1->SaveAs(Form("sigVsAmp_%s.pdf", prodName.c_str()));
 
-  return 0;
+  return gr_signal_vs_ampl;
 
 }
 
+
+
+
+
+void divideGraph( TGraphErrors* graph, float factor ) {
+
+  int nPoints = graph->GetN();
+
+  for( unsigned iPoint=0; iPoint<nPoints; ++iPoint ) {
+
+    double x, y;
+    graph->GetPoint( iPoint, x, y );
+    graph->SetPoint( iPoint, x, y/factor );
+
+  } // for points
+
+}
 
