@@ -17,6 +17,7 @@
 TGraph* getScanFromFile( const std::string& fileName );
 TF1* fitDrift( TGraph* graph, int firstN=10, int lastN=5 );
 TGraph* getCorrectedGraph( TGraph* graph, TF1* baseline );
+double getYmax( TGraph* graph );
 
 
 
@@ -52,12 +53,7 @@ int main( int argc, char* argv[] ) {
   gr_scan->GetPoint( gr_scan->GetN()-1, xMax, yMin );
 
   // find max by hand
-  double yMax = 0.;
-  for( unsigned iPoint=0; iPoint<gr_scan->GetN(); ++iPoint ) {
-    double this_x, this_y;
-    gr_scan->GetPoint( iPoint, this_x, this_y );
-    if( this_y>=yMax ) yMax = this_y;
-  }
+  double yMax = getYmax( gr_scan );
 
   yMin *= 0.98;
   yMax *= 1.10;
@@ -87,10 +83,16 @@ int main( int argc, char* argv[] ) {
 
   c1->Clear();
 
-  TH2D* h2_axes_corr = new TH2D( "axes_corr", "", 10, xMin, xMax, 10, 0., yMax-yMin );
+  TH2D* h2_axes_corr = new TH2D( "axes_corr", "", 10, xMin, xMax, 10, -2., yMax-yMin );
   h2_axes_corr->SetXTitle("Gun position");
   h2_axes_corr->SetYTitle("Corrected APD Current [nA]");
   h2_axes_corr->Draw();
+
+  TLine* line_zero = new TLine( xMin, 0., xMax, 0. );
+  line_zero->SetLineWidth(2);
+  line_zero->SetLineColor(46);
+  line_zero->SetLineStyle(2);
+  line_zero->Draw("L same");
 
   gr_scan_corr->SetMarkerStyle(20);
   gr_scan_corr->SetMarkerSize(1.6);
@@ -103,6 +105,10 @@ int main( int argc, char* argv[] ) {
 
   c1->SaveAs("testscanCorr.pdf");
   c1->SaveAs("testscanCorr.eps");
+
+  double i_max = getYmax( gr_scan_corr );
+  std::cout << "For this configuration the max APD current was: " << i_max << " nA" << std::endl;
+
 
   delete c1;
   delete h2_axes;
@@ -184,5 +190,20 @@ TGraph* getCorrectedGraph( TGraph* graph, TF1* baseline ) {
   }
 
   return graph_corr;
+
+}
+
+
+double getYmax( TGraph* graph ) {
+
+  double yMax;
+
+  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+    double this_x, this_y;
+    graph->GetPoint( iPoint, this_x, this_y );
+    if( this_y>=yMax ) yMax = this_y;
+  }
+
+  return yMax;
 
 }
