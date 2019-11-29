@@ -59,8 +59,8 @@ int main( int argc, char* argv[] ) {
     if( this_y>=yMax ) yMax = this_y;
   }
 
-  yMin *= 0.95;
-  yMax *= 1.15;
+  yMin *= 0.98;
+  yMax *= 1.10;
 
   TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, yMin, yMax );
   h2_axes->SetXTitle("Gun position"); 
@@ -84,6 +84,25 @@ int main( int argc, char* argv[] ) {
 
   c1->SaveAs("testscan.pdf");
   c1->SaveAs("testscan.eps");
+
+  c1->Clear();
+
+  TH2D* h2_axes_corr = new TH2D( "axes_corr", "", 10, xMin, xMax, 10, 0., yMax-yMin );
+  h2_axes_corr->SetXTitle("Gun position");
+  h2_axes_corr->SetYTitle("Corrected APD Current [nA]");
+  h2_axes_corr->Draw();
+
+  gr_scan_corr->SetMarkerStyle(20);
+  gr_scan_corr->SetMarkerSize(1.6);
+  gr_scan_corr->SetMarkerColor(kGray+3);
+  gr_scan_corr->SetLineColor(kGray+3);
+  gr_scan_corr->Draw("P same");
+
+  label->Draw("same");  
+  gPad->RedrawAxis();
+
+  c1->SaveAs("testscanCorr.pdf");
+  c1->SaveAs("testscanCorr.eps");
 
   delete c1;
   delete h2_axes;
