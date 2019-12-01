@@ -42,18 +42,18 @@ int main( int argc, char* argv[] ) {
 
   TGraph* gr_iapd_vs_igun = new TGraph(0);
 
-  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 0.75, get_iAPD("Ek_500_750fA_dfh_APD__28nov19_07_M_.dat", 500) );
-  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 3.6 , get_iAPD("Ek_500_3.6pA_dfh_APD__28nov19_06_M_.dat", 500) );
-  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 26. , get_iAPD("Ek_500_26pA_dfh_APD__28nov19_05_M_.dat" , 500) );
+  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 0.75, 1000.*get_iAPD("Ek_500_750fA_dfh_APD__28nov19_07_M_.dat", 500) );
+  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 3.6 , 1000.*get_iAPD("Ek_500_3.6pA_dfh_APD__28nov19_06_M_.dat", 500) );
+  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 26. , 1000.*get_iAPD("Ek_500_26pA_dfh_APD__28nov19_05_M_.dat" , 500) );
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
   float xMax = 30.;
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, 0., xMax, 10, 0., 13. );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, 0., xMax, 10, 0., 13000. );
   h2_axes->SetXTitle( "Gun Current [pA]" );
-  h2_axes->SetYTitle( "APD Current [nA]" );
+  h2_axes->SetYTitle( "APD Current [pA]" );
   h2_axes->Draw();
 
   TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0., xMax );
@@ -71,14 +71,22 @@ int main( int argc, char* argv[] ) {
   gr_iapd_vs_igun->Draw("P same");
 
 
-  TPaveText* fitResults = new TPaveText( 0.6, 0.15, 0.9, 0.4, "brNDC" );
+  TPaveText* fitResults = new TPaveText( 0.6, 0.23, 0.9, 0.44, "brNDC" );
   fitResults->SetTextSize( 0.035 );
   fitResults->SetFillColor(0);
   fitResults->SetTextColor(46);
   fitResults->AddText( "f(x) = q + m*x" );
-  fitResults->AddText( Form("q = %.3f #pm %.3f", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
-  fitResults->AddText( Form("q = %.3f #pm %.3f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
+  fitResults->AddText( Form("q = %.1f #pm %.1f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
+  fitResults->AddText( Form("m = %.1f #pm %.1f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
   fitResults->Draw("same");
+
+  TPaveText* label_settings = new TPaveText( 0.23, 0.6, 0.5, 0.72, "brNDC" );
+  label_settings->SetTextSize( 0.035 );
+  label_settings->SetFillColor(0);
+  label_settings->AddText( "E_{gun} = 500 eV" );
+  label_settings->AddText( "I_{APD} = 380 V" );
+  label_settings->SetTextAlign(11);
+  label_settings->Draw("same");
 
   TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
   label->Draw("same");  
