@@ -14,7 +14,7 @@
 
 
 
-float get_iAPD( const std::string& fileName, float gunEnergy );
+float get_iAPD( const std::string& fileName, float gunEnergy, float gunCurrent );
 TGraph* getScanFromFile( const std::string& fileName );
 TF1* fitDrift( TGraph* graph, int firstN=7, int lastN=5 );
 TGraph* getCorrectedGraph( TGraph* graph, TF1* baseline );
@@ -51,18 +51,18 @@ int main( int argc, char* argv[] ) {
 
   if( gunEnergy == 500. ) {
 
-    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 0.75, 1000.*get_iAPD("Ek_500_750fA_dfh_APD__28nov19_07_M_.dat", 500) );
-    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 3.6 , 1000.*get_iAPD("Ek_500_3.6pA_dfh_APD__28nov19_06_M_.dat", 500) );
-    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 26. , 1000.*get_iAPD("Ek_500_26pA_dfh_APD__28nov19_05_M_.dat" , 500) );
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 0.75, 1000.*get_iAPD("Ek_500_750fA_dfh_APD__28nov19_07_M_.dat", 500, 0.75) );
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 3.6 , 1000.*get_iAPD("Ek_500_3.6pA_dfh_APD__28nov19_06_M_.dat", 500, 3.6) );
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 26. , 1000.*get_iAPD("Ek_500_26pA_dfh_APD__28nov19_05_M_.dat" , 500, 26.) );
 
     xMax = 30.;
     yMax = 13000.;
 
   } else if( gunEnergy == 900. ) {
 
-    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 0.45, 1000.*get_iAPD("Ek_900_450fA_dfv.txt", 900) );
-    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 3.3 , 1000.*get_iAPD("Ek_900_3.3pA_dfv_28nov19_01_M_.dat", 500) );
-    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 15. , 1000.*get_iAPD("Ek_900_15pA_dfv.txt" , 500) );
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 0.45, 1000.*get_iAPD("Ek_900_450fA_dfv.txt", 900, 0.45) );
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 3.3 , 1000.*get_iAPD("Ek_900_3.3pA_dfv_28nov19_01_M_.dat", 900, 3.3) );
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 15. , 1000.*get_iAPD("Ek_900_15pA_dfv.txt" , 900, 15) );
 
     xMax = 10.;
     yMax = 8000.;
@@ -122,7 +122,7 @@ int main( int argc, char* argv[] ) {
 }
 
 
-float get_iAPD( const std::string& fileName, float gunEnergy ) {
+float get_iAPD( const std::string& fileName, float gunEnergy, float gunCurrent ) {
 
   TGraph* gr_scan = getScanFromFile( fileName );
 
@@ -164,6 +164,20 @@ float get_iAPD( const std::string& fileName, float gunEnergy ) {
   label->Draw("same");  
   gPad->RedrawAxis();
 
+  TPaveText* label_settings = new TPaveText( 0.21, 0.6, 0.48, 0.77, "brNDC" );
+  label_settings->SetTextSize( 0.035 );
+  label_settings->SetTextColor( 46 );
+  label_settings->SetFillColor(0);
+  label_settings->AddText( Form("E_{gun} = %.0f eV", gunEnergy) );
+  if( gunCurrent < 1. )
+    label_settings->AddText( Form("I_{gun} = %.0f fA", gunCurrent*1000.) );
+  else
+    label_settings->AddText( Form("I_{gun} = %.1f pA", gunCurrent) );
+  label_settings->AddText( "I_{APD} = 380 V" );
+  label_settings->SetTextAlign(11);
+  label_settings->Draw("same");
+  
+
   c1->SaveAs(Form("plots/APDscans/%s/scan_%s.pdf", data.c_str(), fileName.c_str()));
   c1->SaveAs(Form("plots/APDscans/%s/scan_%s.eps", data.c_str(), fileName.c_str()));
 
@@ -182,6 +196,8 @@ float get_iAPD( const std::string& fileName, float gunEnergy ) {
   line_zero->SetLineColor(46);
   line_zero->SetLineStyle(2);
   line_zero->Draw("L same");
+
+  label_settings->Draw("same");
 
   gr_scan_corr->SetMarkerStyle(20);
   gr_scan_corr->SetMarkerSize(1.6);
