@@ -16,42 +16,64 @@
 
 float get_iAPD( const std::string& fileName, float gunEnergy );
 TGraph* getScanFromFile( const std::string& fileName );
-TF1* fitDrift( TGraph* graph, int firstN=10, int lastN=5 );
+TF1* fitDrift( TGraph* graph, int firstN=7, int lastN=5 );
 TGraph* getCorrectedGraph( TGraph* graph, TF1* baseline );
 double getYmax( TGraph* graph );
 
 
+std::string data = "2019_11_28";
+
 
 int main( int argc, char* argv[] ) {
 
-  //std::string fileName;
+  float gunEnergy;
 
-  //if( argc == 1 ) {
+  if( argc == 1 ) {
 
-  //  std::cout << "USAGE: ./drawAPDGunScan [scanFileName]" << std::endl;
-  //  exit(1);
+    std::cout << "USAGE: ./drawAPDGunScan [gunEnergy]" << std::endl;
+    exit(1);
 
-  //} else {
+  } else {
 
-  //  fileName = std::string(argv[1]);
+    gunEnergy = atof(argv[1]);
 
-  //}
+  }
 
   NanoUVCommon::setStyle();
 
+  std::string outdir( Form("plots/APDscans/%s/", data.c_str() ) );
+  system( Form("mkdir -p %s", outdir.c_str()) );
 
   TGraph* gr_iapd_vs_igun = new TGraph(0);
 
-  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 0.75, 1000.*get_iAPD("Ek_500_750fA_dfh_APD__28nov19_07_M_.dat", 500) );
-  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 3.6 , 1000.*get_iAPD("Ek_500_3.6pA_dfh_APD__28nov19_06_M_.dat", 500) );
-  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 26. , 1000.*get_iAPD("Ek_500_26pA_dfh_APD__28nov19_05_M_.dat" , 500) );
+  float xMax;
+  float yMax;
+
+  if( gunEnergy == 500. ) {
+
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 0.75, 1000.*get_iAPD("Ek_500_750fA_dfh_APD__28nov19_07_M_.dat", 500) );
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 3.6 , 1000.*get_iAPD("Ek_500_3.6pA_dfh_APD__28nov19_06_M_.dat", 500) );
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 26. , 1000.*get_iAPD("Ek_500_26pA_dfh_APD__28nov19_05_M_.dat" , 500) );
+
+    xMax = 30.;
+    yMax = 13000.;
+
+  } else if( gunEnergy == 900. ) {
+
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 0.45, 1000.*get_iAPD("Ek_900_450fA_dfv.txt", 900) );
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 3.3 , 1000.*get_iAPD("Ek_900_3.3pA_dfv_28nov19_01_M_.dat", 500) );
+    gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 15. , 1000.*get_iAPD("Ek_900_15pA_dfv.txt" , 500) );
+
+    xMax = 10.;
+    yMax = 8000.;
+
+  }
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
-  float xMax = 30.;
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, 0., xMax, 10, 0., 13000. );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, 0., xMax, 10, 0., yMax );
   h2_axes->SetXTitle( "Gun Current [pA]" );
   h2_axes->SetYTitle( "APD Current [pA]" );
   h2_axes->Draw();
@@ -83,7 +105,7 @@ int main( int argc, char* argv[] ) {
   TPaveText* label_settings = new TPaveText( 0.23, 0.6, 0.5, 0.72, "brNDC" );
   label_settings->SetTextSize( 0.035 );
   label_settings->SetFillColor(0);
-  label_settings->AddText( "E_{gun} = 500 eV" );
+  label_settings->AddText( Form("E_{gun} = %.0f eV", gunEnergy) );
   label_settings->AddText( "I_{APD} = 380 V" );
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
@@ -92,8 +114,8 @@ int main( int argc, char* argv[] ) {
   label->Draw("same");  
   gPad->RedrawAxis();
 
-  c1->SaveAs("iapd_vs_igun.pdf");
-  c1->SaveAs("iapd_vs_igun.eps");
+  c1->SaveAs( Form("plots/APDscans/%s/iapd_vs_igun_E%.0f.pdf", data.c_str(), gunEnergy) );
+  c1->SaveAs( Form("plots/APDscans/%s/iapd_vs_igun_E%.0f.eps", data.c_str(), gunEnergy) );
   
   return 0;
 
@@ -115,14 +137,14 @@ float get_iAPD( const std::string& fileName, float gunEnergy ) {
   double xMin, xMax, yMin, y;
   gr_scan->GetPoint( 0, xMin, y );
   gr_scan->GetPoint( gr_scan->GetN()-1, xMax, yMin );
+  //yMin *= 0.98;
+  yMin = 100.;
 
   // find max by hand
   double yMax = getYmax( gr_scan );
 
-  yMin *= 0.98;
-  yMax *= 1.10;
 
-  TH2D* h2_axes = new TH2D( Form("axes_%s", fileName.c_str()), "", 10, xMin, xMax, 10, yMin, yMax );
+  TH2D* h2_axes = new TH2D( Form("axes_%s", fileName.c_str()), "", 10, xMin, xMax, 10, yMin, yMin + 2.*(yMax-yMin) );
   h2_axes->SetXTitle("Gun position"); 
   h2_axes->SetYTitle("APD Current [nA]");
   h2_axes->Draw();
@@ -142,13 +164,16 @@ float get_iAPD( const std::string& fileName, float gunEnergy ) {
   label->Draw("same");  
   gPad->RedrawAxis();
 
-  c1->SaveAs(Form("scan_%s.pdf", fileName.c_str()));
-  c1->SaveAs(Form("scan_%s.eps", fileName.c_str()));
+  c1->SaveAs(Form("plots/APDscans/%s/scan_%s.pdf", data.c_str(), fileName.c_str()));
+  c1->SaveAs(Form("plots/APDscans/%s/scan_%s.eps", data.c_str(), fileName.c_str()));
 
   c1->Clear();
 
-  TH2D* h2_axes_corr = new TH2D( Form("axes_corr_%s", fileName.c_str()), "", 10, xMin, xMax, 10, -2., yMax-yMin );
-  h2_axes_corr->SetXTitle("Gun position");
+  double yMax_corr = getYmax( gr_scan_corr );
+
+  TH2D* h2_axes_corr = new TH2D( Form("axes_corr_%s", fileName.c_str()), "", 10, xMin, xMax, 10, -1.5, 13. );
+  //TH2D* h2_axes_corr = new TH2D( Form("axes_corr_%s", fileName.c_str()), "", 10, xMin, xMax, 10, -0.2*yMax_corr, 1.2*yMax_corr );
+  h2_axes_corr->SetXTitle("Gun Position");
   h2_axes_corr->SetYTitle("Corrected APD Current [nA]");
   h2_axes_corr->Draw();
 
@@ -167,8 +192,9 @@ float get_iAPD( const std::string& fileName, float gunEnergy ) {
   label->Draw("same");  
   gPad->RedrawAxis();
 
-  c1->SaveAs(Form("scanCorr_%s.pdf", fileName.c_str()));
-  c1->SaveAs(Form("scanCorr_%s.eps", fileName.c_str()));
+  c1->SaveAs(Form("plots/APDscans/%s/scanCorr_%s.pdf", data.c_str(), fileName.c_str()));
+  c1->SaveAs(Form("plots/APDscans/%s/scanCorr_%s.eps", data.c_str(), fileName.c_str()));
+
 
   float iAPD = getYmax( gr_scan_corr ); //getIntegral(gr_scan_corr);
 
