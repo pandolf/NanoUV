@@ -14,6 +14,7 @@
 
 
 
+float get_iAPD( const std::string& fileName, float gunEnergy );
 TGraph* getScanFromFile( const std::string& fileName );
 TF1* fitDrift( TGraph* graph, int firstN=10, int lastN=5 );
 TGraph* getCorrectedGraph( TGraph* graph, TF1* baseline );
@@ -23,20 +24,75 @@ double getYmax( TGraph* graph );
 
 int main( int argc, char* argv[] ) {
 
-  std::string fileName;
+  //std::string fileName;
 
-  if( argc == 1 ) {
+  //if( argc == 1 ) {
 
-    std::cout << "USAGE: ./drawAPDGunScan [scanFileName]" << std::endl;
-    exit(1);
+  //  std::cout << "USAGE: ./drawAPDGunScan [scanFileName]" << std::endl;
+  //  exit(1);
 
-  } else {
+  //} else {
 
-    fileName = std::string(argv[1]);
+  //  fileName = std::string(argv[1]);
 
-  }
+  //}
 
   NanoUVCommon::setStyle();
+
+
+  TGraph* gr_iapd_vs_igun = new TGraph(0);
+
+  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 0.75, get_iAPD("Ek_500_750fA_dfh_APD__28nov19_07_M_.dat", 500) );
+  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 3.6 , get_iAPD("Ek_500_3.6pA_dfh_APD__28nov19_06_M_.dat", 500) );
+  gr_iapd_vs_igun->SetPoint( gr_iapd_vs_igun->GetN(), 26. , get_iAPD("Ek_500_26pA_dfh_APD__28nov19_05_M_.dat" , 500) );
+
+  TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
+  c1->cd();
+
+  float xMax = 30.;
+
+  TH2D* h2_axes = new TH2D( "axes", "", 10, 0., xMax, 10, 0., 13. );
+  h2_axes->SetXTitle( "Gun Current [pA]" );
+  h2_axes->SetYTitle( "APD Current [nA]" );
+  h2_axes->Draw();
+
+  TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0., xMax );
+  gr_iapd_vs_igun->Fit( f1_line, "QR0" );
+
+  f1_line->SetLineWidth(2);
+  f1_line->SetLineColor(46);
+  f1_line->SetLineStyle(2);
+  f1_line->Draw("L same");
+
+  gr_iapd_vs_igun->SetMarkerStyle(20);
+  gr_iapd_vs_igun->SetMarkerSize(1.6);
+  gr_iapd_vs_igun->SetMarkerColor(kGray+3);
+  gr_iapd_vs_igun->SetLineColor(kGray+3);
+  gr_iapd_vs_igun->Draw("P same");
+
+
+  TPaveText* fitResults = new TPaveText( 0.6, 0.15, 0.9, 0.4, "brNDC" );
+  fitResults->SetTextSize( 0.035 );
+  fitResults->SetFillColor(0);
+  fitResults->SetTextColor(46);
+  fitResults->AddText( "f(x) = q + m*x" );
+  fitResults->AddText( Form("q = %.3f #pm %.3f", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
+  fitResults->AddText( Form("q = %.3f #pm %.3f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
+  fitResults->Draw("same");
+
+  TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
+  label->Draw("same");  
+  gPad->RedrawAxis();
+
+  c1->SaveAs("iapd_vs_igun.pdf");
+  c1->SaveAs("iapd_vs_igun.eps");
+  
+  return 0;
+
+}
+
+
+float get_iAPD( const std::string& fileName, float gunEnergy ) {
 
   TGraph* gr_scan = getScanFromFile( fileName );
 
@@ -58,7 +114,7 @@ int main( int argc, char* argv[] ) {
   yMin *= 0.98;
   yMax *= 1.10;
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, yMin, yMax );
+  TH2D* h2_axes = new TH2D( Form("axes_%s", fileName.c_str()), "", 10, xMin, xMax, 10, yMin, yMax );
   h2_axes->SetXTitle("Gun position"); 
   h2_axes->SetYTitle("APD Current [nA]");
   h2_axes->Draw();
@@ -78,12 +134,12 @@ int main( int argc, char* argv[] ) {
   label->Draw("same");  
   gPad->RedrawAxis();
 
-  c1->SaveAs("testscan.pdf");
-  c1->SaveAs("testscan.eps");
+  c1->SaveAs(Form("scan_%s.pdf", fileName.c_str()));
+  c1->SaveAs(Form("scan_%s.eps", fileName.c_str()));
 
   c1->Clear();
 
-  TH2D* h2_axes_corr = new TH2D( "axes_corr", "", 10, xMin, xMax, 10, -2., yMax-yMin );
+  TH2D* h2_axes_corr = new TH2D( Form("axes_corr_%s", fileName.c_str()), "", 10, xMin, xMax, 10, -2., yMax-yMin );
   h2_axes_corr->SetXTitle("Gun position");
   h2_axes_corr->SetYTitle("Corrected APD Current [nA]");
   h2_axes_corr->Draw();
@@ -103,17 +159,17 @@ int main( int argc, char* argv[] ) {
   label->Draw("same");  
   gPad->RedrawAxis();
 
-  c1->SaveAs("testscanCorr.pdf");
-  c1->SaveAs("testscanCorr.eps");
+  c1->SaveAs(Form("scanCorr_%s.pdf", fileName.c_str()));
+  c1->SaveAs(Form("scanCorr_%s.eps", fileName.c_str()));
 
-  double i_max = getYmax( gr_scan_corr );
-  std::cout << "For this configuration the max APD current was: " << i_max << " nA" << std::endl;
+  float iAPD = getYmax( gr_scan_corr ); //getIntegral(gr_scan_corr);
 
+  //std::cout << "For this configuration the max APD current was: " << i_max << " nA" << std::endl;
 
   delete c1;
   delete h2_axes;
 
-  return 0;
+  return iAPD;
 
 }
 
