@@ -19,6 +19,9 @@ drawGain: drawGain.cpp NanoUVCommon.o
 drawCurrent: drawCurrent.cpp NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawCurrent drawCurrent.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawAPDGunScan: drawAPDGunScan.cpp NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawAPDGunScan drawAPDGunScan.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 NanoUVCommon.o: ../../CommonTools/src/NanoUVCommon.cc 
