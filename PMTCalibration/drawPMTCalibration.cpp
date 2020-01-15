@@ -5,6 +5,8 @@
 #include "TCanvas.h"
 #include "TLegend.h"
 #include "TH2D.h"
+#include "TPaveText.h"
+#include "TF1.h"
 
 #include <fstream>
 #include <vector>
@@ -13,6 +15,7 @@
 
 
 TGraphErrors* drawHVscan( const std::string& amp );
+float findLastPoint( TGraph* graph, float threshold );
 
 
 int main() {
@@ -77,9 +80,40 @@ TGraphErrors* drawHVscan( const std::string& amp ) {
   graph->SetMarkerColor(kGray+3);
   graph->SetLineColor(kGray+3);
 
+  float xMaxFit = findLastPoint( graph, 80. );
+
+  TF1* f1_exp = new TF1( Form("f1_%s", graph->GetName()), "exp([0] + [1]*x)", 500., xMaxFit+1.);
+  f1_exp->SetLineColor(46);
+  f1_exp->SetLineWidth(3);
+  graph->Fit( f1_exp, "R0" );
+
+  f1_exp->Draw("same");
+
+  TF1* otherExp = new TF1( Form("otherExp_%s", graph->GetName()), "exp([0] + [1]*x)", 500., 1000. );
+  otherExp->SetParameter( 0, f1_exp->GetParameter(0) );
+  otherExp->SetParameter( 1, f1_exp->GetParameter(1) );
+  otherExp->SetLineColor(46);
+  otherExp->SetLineWidth(3);
+  otherExp->SetLineStyle(2);
+  otherExp->Draw("same");
+
   graph->Draw("P same");
 
+
   NanoUVCommon::addNanoUVLabel(c1, 4);
+
+  TString amp_tstr(amp);
+  amp_tstr.ReplaceAll( "p", "." );
+  std::string amp2(amp_tstr);
+  TPaveText* label_led = new TPaveText( 0.2, 0.74, 0.44, 0.89, "brNDC" );
+  label_led->SetFillColor(0);
+  label_led->SetTextColor(kGray+1);
+  label_led->SetTextSize(0.035);
+  label_led->SetTextAlign( 11 );
+  label_led->AddText( "CAEN UV LED Driver SP5605" );
+  label_led->AddText( "#lambda = 248 nm (E = 5 eV)");
+  label_led->AddText( Form("Amplitude = %s", amp2.c_str()) );
+  label_led->Draw("same");
 
   c1->SaveAs( Form("plots/A%s.pdf", amp.c_str()) );
   c1->SaveAs( Form("plots/A%s.eps", amp.c_str()) );
@@ -90,3 +124,23 @@ TGraphErrors* drawHVscan( const std::string& amp ) {
   return graph;
 
 }
+
+
+float findLastPoint( TGraph* graph, float threshold ) {
+
+  float foundX = 0.;
+
+  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+
+    double x, y;
+    graph->GetPoint( iPoint, x, y) ;
+
+    if( y > threshold ) break;
+
+    foundX = x;
+
+  }
+
+  return foundX;
+
+} 
