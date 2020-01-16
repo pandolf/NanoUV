@@ -19,7 +19,8 @@ void drawAllGraphs( const std::string& name );
 TGraphErrors* drawHVscan( const std::string& name, const std::string& amp );
 int findLastPoint( TGraph* graph, float threshold );
 float convertAmpToFloat( std::string amp );
-void drawNPhotons( const std::string& name, const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, TGraph* gr_gain );
+TGraphErrors* get_N_kPhotons_fixedThresh( const std::string& name, const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, TGraph* gr_gain, float thresh );
+TGraphErrors* get_N_kPhotons_fixedGain( const std::string& name, const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, float hv, float gain );
 
 
 int main() {
@@ -121,30 +122,53 @@ void drawAllGraphs( const std::string& name ) {
   gr_gain->SetPoint( gr_gain->GetN(), 950., 1.3E6 );
   gr_gain->SetPoint( gr_gain->GetN(), 1000., 1.9E6 );
 
-  drawNPhotons( name, amplitudes, graphs, gr_gain );
+  TGraphErrors* gr_N_kPhotons_th100 = get_N_kPhotons_fixedThresh( name, amplitudes, graphs, gr_gain, 100. );
 
-  //gr_gain->SetMarkerStyle(20);
-  //gr_gain->SetMarkerSize(1.6);
-  //gr_gain->SetMarkerColor(kGray+3);
+  TGraphErrors* gr_N_kPhotons_hv600 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 600., 4E4 );
+  TGraphErrors* gr_N_kPhotons_hv650 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 650., 7E4 );
 
-  //TF1* f1_gain = new TF1( "gain", "[0]*exp([1]*x)", 450., 1000. );
-  //f1_gain->SetParameter(0, 0.01 );
-  //f1_gain->SetLineColor(46);
-  //f1_gain->SetLineWidth(3);
-  //gr_gain->Fit( f1_gain, "R" );
+  c1->Clear();
+  c1->SetLogy();
+  c1->SetLogy(kFALSE);
+  c1->SetLeftMargin(0.18);
 
-  //TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
-  //c1->cd();
-  //c1->SetLogy();
-  //
-  //TH2D* h2_axes = new TH2D("axes", "", 10, 451., 999., 10, 5E3, 1E6 );
-  //h2_axes->SetYTitle( "PMT Gain" );
-  //h2_axes->SetXTitle( "PMT Bias [V]" );
-  //h2_axes->Draw();
+  TH2D* h2_axes2 = new TH2D( "axes2", "", 10, 4.5, 10.5, 10, 0., 99999. );
+  //TH2D* h2_axes2 = new TH2D( "axes2", "", 10, 4.5, 10.5, 10, 3000., 99999. );
+  h2_axes2->SetXTitle( "LED Amplitude [a.u.]" );
+  h2_axes2->SetYTitle( "Number of Photons" );
+  h2_axes2->GetYaxis()->SetNoExponent();
+  h2_axes2->GetYaxis()->SetMoreLogLabels();
+  h2_axes2->GetYaxis()->SetTitleOffset(1.9);
+  h2_axes2->Draw();
 
-  //gr_gain->Draw("p same");
+  gr_N_kPhotons_th100->SetMarkerStyle( 21 );
+  gr_N_kPhotons_th100->SetMarkerColor( 46 );
+  gr_N_kPhotons_th100->SetMarkerSize( 1.6 );
+  gr_N_kPhotons_th100->Draw("P same");
 
-  //c1->SaveAs( "plots/gain.pdf" );
+  gr_N_kPhotons_hv600->SetMarkerStyle( 20 );
+  gr_N_kPhotons_hv600->SetMarkerColor( 38 );
+  gr_N_kPhotons_hv600->SetMarkerSize( 1.6 );
+  gr_N_kPhotons_hv600->Draw("P same");
+
+  gr_N_kPhotons_hv650->SetMarkerStyle( 20 );
+  gr_N_kPhotons_hv650->SetMarkerColor( 29 );
+  gr_N_kPhotons_hv650->SetMarkerSize( 1.6 );
+  gr_N_kPhotons_hv650->Draw("P same");
+
+  TLegend* legend2 = new TLegend( 0.2, 0.7, 0.5, 0.9 );
+  legend2->SetFillColor(0);
+  legend2->SetTextSize(0.038);
+  legend2->AddEntry( gr_N_kPhotons_hv600, "HV = 600 V", "P" );
+  legend2->AddEntry( gr_N_kPhotons_hv650, "HV = 650 V", "P" );
+  legend2->AddEntry( gr_N_kPhotons_th100, "Ch_{max} = 100 pC", "P" );
+  legend2->Draw("same");
+
+  NanoUVCommon::addNanoUVLabel( c1, 4 );
+
+  c1->SaveAs( "NPhotons_vs_ampl.eps" );
+  c1->SaveAs( "NPhotons_vs_ampl.pdf" );
+
 }
 
 
@@ -241,22 +265,17 @@ int findLastPoint( TGraph* graph, float threshold ) {
 
   int foundPoint = -1;
 
-std::cout << std::endl;
-std::cout << graph->GetName() << std::endl;
-std::cout << "threshold: " << threshold << std::endl;
   for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
 
     double x, y;
     graph->GetPoint( iPoint, x, y) ;
 
-std::cout << "point: " << x << " " << y << std::endl;
     if( y > threshold ) break;
 
     foundPoint = iPoint;
 
   }
 
-std::cout << "found: " << foundPoint << std::endl;
   return foundPoint;
 
 } 
@@ -285,22 +304,19 @@ float convertAmpToFloat( std::string amp ) {
 
 
 
-void drawNPhotons( const std::string& name, const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, TGraph* gr_gain ) {
+TGraphErrors* get_N_kPhotons_fixedThresh( const std::string& name, const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, TGraph* gr_gain, float thresh ) {
 
   float qeff = 0.2; // at 248 nm
 
-  TGraphErrors* gr_ch_vs_amp = new TGraphErrors(0);
   TGraphErrors* gr_Nph_vs_amp = new TGraphErrors(0);
+  gr_Nph_vs_amp->SetName( Form("gr_N_kPhotons_thresh%.0f", thresh) );
 
   for( unsigned i=0; i<graphs.size(); ++i ) {
 
     double hv, charge;
-    int iPoint = findLastPoint( graphs[i], 50. );
+    int iPoint = findLastPoint( graphs[i], thresh );
     graphs[i]->GetPoint( iPoint, hv, charge );
     float chargeErr = graphs[i]->GetErrorY( iPoint );
-
-    std::cout << graphs[i]->GetName() << " ---> HV = " << hv << " V   charge = " << charge << " pC" << std::endl;
-
 
     float gain = -1.;
 
@@ -316,7 +332,41 @@ void drawNPhotons( const std::string& name, const std::vector<std::string>& ampl
     } // for points
 
 
-    gr_ch_vs_amp ->SetPoint( gr_ch_vs_amp->GetN() , convertAmpToFloat(amplitudes[i]), charge );
+    int thisPoint = gr_Nph_vs_amp->GetN();
+    gr_Nph_vs_amp->SetPoint( thisPoint, convertAmpToFloat(amplitudes[i]), charge*1E-12/((1.6E-19)*gain*qeff) );
+    gr_Nph_vs_amp->SetPointError( thisPoint, 0.01, chargeErr*1E-12/((1.6E-19)*gain*qeff) );
+
+  } // for graphs
+
+  return gr_Nph_vs_amp;
+
+}
+
+
+TGraphErrors* get_N_kPhotons_fixedGain( const std::string& name, const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, float hv, float gain ) {
+
+  float qeff = 0.2; // at 248 nm
+
+  TGraphErrors* gr_Nph_vs_amp = new TGraphErrors(0);
+  gr_Nph_vs_amp->SetName( Form("gr_N_kPhotons_hv%.0f", hv) );
+
+  for( unsigned i=0; i<graphs.size(); ++i ) {
+
+    float charge = -1.;
+    float chargeErr = -1.;
+
+    for( unsigned iPoint=0; iPoint<graphs[i]->GetN(); ++iPoint ) {
+ 
+      double x, y;
+      graphs[i]->GetPoint( iPoint, x, y );
+      chargeErr = graphs[i]->GetErrorY( iPoint );
+ 
+      if( x==hv ) {
+        charge = y;
+        break;
+      }
+
+    }
 
     int thisPoint = gr_Nph_vs_amp->GetN();
     gr_Nph_vs_amp->SetPoint( thisPoint, convertAmpToFloat(amplitudes[i]), charge*1E-12/((1.6E-19)*gain*qeff) );
@@ -324,13 +374,6 @@ void drawNPhotons( const std::string& name, const std::vector<std::string>& ampl
 
   } // for graphs
 
-  TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
-  c1->cd();
-
-  //gr_ch_vs_amp->Draw("APE*");
-  gr_Nph_vs_amp->Draw("APE*");
-
-  c1->SaveAs( "gr650.pdf" );
-  c1->SaveAs( "gr650.eps" );
+  return gr_Nph_vs_amp;
 
 }
