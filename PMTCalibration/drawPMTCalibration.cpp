@@ -55,12 +55,14 @@ void drawAllGraphs( const std::string& name ) {
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
-  //c1->SetLogy();
+  c1->SetLogy();
 
   // draw them all on the same plot
-  TH2D* h2_axes = new TH2D( "axes", "", 10, 400., 999., 10, 0., 500. );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, 400., 999., 10, 1.001, 1999. );
   h2_axes->SetXTitle( "PMT HV [V]" );
   h2_axes->SetYTitle( "PMT Charge [pC]" );
+  h2_axes->GetYaxis()->SetMoreLogLabels();
+  h2_axes->GetYaxis()->SetNoExponent();
   h2_axes->Draw();
 
   std::vector<int> colors;
@@ -71,7 +73,7 @@ void drawAllGraphs( const std::string& name ) {
   colors.push_back(kGray+3);
   colors.push_back(40);
 
-  TLegend* legend = new TLegend( 0.185, 0.5, 0.55, 0.8 );
+  TLegend* legend = new TLegend( 0.16, 0.6, 0.6, 0.9 );
   legend->SetTextSize(0.035);
   legend->SetFillColor(0);
 
@@ -89,14 +91,18 @@ void drawAllGraphs( const std::string& name ) {
 
   legend->Draw("same");
 
-  TPaveText* label_led = new TPaveText( 0.185, 0.8, 0.55, 0.89, "brNDC" );
+  for( unsigned i=0; i<graphs.size(); ++i )
+    graphs[i]->Draw("P same");
+
+  TPaveText* label_led = new TPaveText( 0.55, 0.15, 0.95, 0.25, "brNDC" );
   label_led->SetFillColor(0);
-  label_led->SetTextColor(kBlack);
+  label_led->SetTextColor(kGray+2);
   label_led->SetTextSize(0.035);
-  label_led->SetTextAlign( 11 );
+  label_led->SetTextAlign( 31 );
   label_led->AddText( "CAEN UV LED Driver SP5605" );
   label_led->AddText( "#lambda = 248 nm (E = 5 eV)");
   label_led->Draw("same");
+
   NanoUVCommon::addNanoUVLabel( c1, 1 );
 
   c1->SaveAs("all.eps");
@@ -110,6 +116,10 @@ void drawAllGraphs( const std::string& name ) {
   gr_gain->SetPoint( gr_gain->GetN(), 700., 1.3E5 );
   gr_gain->SetPoint( gr_gain->GetN(), 750., 2.1E5 );
   gr_gain->SetPoint( gr_gain->GetN(), 800., 3.6E5 );
+  gr_gain->SetPoint( gr_gain->GetN(), 850., 5.5E5 );
+  gr_gain->SetPoint( gr_gain->GetN(), 900., 8.8E5 );
+  gr_gain->SetPoint( gr_gain->GetN(), 950., 1.3E6 );
+  gr_gain->SetPoint( gr_gain->GetN(), 1000., 1.9E6 );
 
   drawNPhotons( name, amplitudes, graphs, gr_gain );
 
@@ -278,33 +288,39 @@ float convertAmpToFloat( std::string amp ) {
 void drawNPhotons( const std::string& name, const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, TGraph* gr_gain ) {
 
   float qeff = 0.2; // at 248 nm
-  float gain = 7E4; // at 650 V
 
   TGraphErrors* gr_ch_vs_amp = new TGraphErrors(0);
   TGraphErrors* gr_Nph_vs_amp = new TGraphErrors(0);
 
   for( unsigned i=0; i<graphs.size(); ++i ) {
 
-    double x, charge;
-    int iPoint = findLastPoint( graphs[i], 100. );
-    graphs[i]->GetPoint( iPoint, x, charge );
+    double hv, charge;
+    int iPoint = findLastPoint( graphs[i], 50. );
+    graphs[i]->GetPoint( iPoint, hv, charge );
     float chargeErr = graphs[i]->GetErrorY( iPoint );
 
-    std::cout << graphs[i]->GetName() << " ---> HV = " << x << " V   charge = " << charge << " pC" << std::endl;
+    std::cout << graphs[i]->GetName() << " ---> HV = " << hv << " V   charge = " << charge << " pC" << std::endl;
 
-    //for( unsigned iPoint=0; iPoint<graphs[i]->GetN(); ++iPoint ) {
 
-    //  double x, y;
-    //  graphs[i]->GetPoint( iPoint, x, y );
-    //  if( x==hv ) {
-    //    charge = y;
-    //    chargeErr = graphs[i]->GetErrorY( iPoint );
-    //  }
+    float gain = -1.;
 
-    //} // for points
+    for( unsigned iPoint=0; iPoint<gr_gain->GetN(); ++iPoint ) {
+
+      double x, y;
+      gr_gain->GetPoint( iPoint, x, y );
+      if( x==hv ) {
+        gain = y;
+        break;
+      }
+
+    } // for points
+
 
     gr_ch_vs_amp ->SetPoint( gr_ch_vs_amp->GetN() , convertAmpToFloat(amplitudes[i]), charge );
-    gr_Nph_vs_amp->SetPoint( gr_Nph_vs_amp->GetN(), convertAmpToFloat(amplitudes[i]), charge*1E-12/((1.6E-19)*gain*qeff) );
+
+    int thisPoint = gr_Nph_vs_amp->GetN();
+    gr_Nph_vs_amp->SetPoint( thisPoint, convertAmpToFloat(amplitudes[i]), charge*1E-12/((1.6E-19)*gain*qeff) );
+    gr_Nph_vs_amp->SetPointError( thisPoint, 0.01, chargeErr*1E-12/((1.6E-19)*gain*qeff) );
 
   } // for graphs
 
