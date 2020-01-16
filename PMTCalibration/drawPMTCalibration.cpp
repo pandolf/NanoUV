@@ -15,32 +15,92 @@
 
 
 
-TGraphErrors* drawHVscan( const std::string& amp );
-float findLastPoint( TGraph* graph, float threshold );
+void drawAllGraphs( const std::string& name );
+TGraphErrors* drawHVscan( const std::string& name, const std::string& amp );
+int findLastPoint( TGraph* graph, float threshold );
 float convertAmpToFloat( std::string amp );
-void drawNPhotons( const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, TGraph* gr_gain, float hv );
+void drawNPhotons( const std::string& name, const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, TGraph* gr_gain );
 
 
 int main() {
 
   NanoUVCommon::setStyle();
 
-  std::vector<std::string> amplitudes;
-  amplitudes.push_back( "5p18" );
-  amplitudes.push_back( "6p00" );
-  amplitudes.push_back( "8p00" );
-  amplitudes.push_back( "10p00" );
-  //amplitudes.push_back( "3p0" );
+  drawAllGraphs( "SP5605" );
 
-  system( "mkdir -p plots" );
+  return 0;
+
+}
+
+
+void drawAllGraphs( const std::string& name ) {
+
+  std::vector<std::string> amplitudes;
+  amplitudes.push_back( "5p00" );
+  amplitudes.push_back( "6p00" );
+  amplitudes.push_back( "7p00" );
+  amplitudes.push_back( "8p00" );
+  amplitudes.push_back( "9p00" );
+  amplitudes.push_back( "10p00" );
+
+  system( Form("mkdir -p plots/%s", name.c_str()) );
 
   std::vector<TGraphErrors*> graphs;
 
   for( unsigned i=0; i<amplitudes.size(); ++i ) {
 
-    graphs.push_back( drawHVscan(amplitudes[i]) );
+    graphs.push_back( drawHVscan( name, amplitudes[i] ) );
 
   }
+
+  TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
+  c1->cd();
+  //c1->SetLogy();
+
+  // draw them all on the same plot
+  TH2D* h2_axes = new TH2D( "axes", "", 10, 400., 999., 10, 0., 500. );
+  h2_axes->SetXTitle( "PMT HV [V]" );
+  h2_axes->SetYTitle( "PMT Charge [pC]" );
+  h2_axes->Draw();
+
+  std::vector<int> colors;
+  colors.push_back(42);
+  colors.push_back(46);
+  colors.push_back(38);
+  colors.push_back(29);
+  colors.push_back(kGray+3);
+  colors.push_back(40);
+
+  TLegend* legend = new TLegend( 0.185, 0.5, 0.55, 0.8 );
+  legend->SetTextSize(0.035);
+  legend->SetFillColor(0);
+
+  for( unsigned i=0; i<graphs.size(); ++i ) {
+
+    graphs[i]->SetLineColor( colors[i] );
+    graphs[i]->SetMarkerColor( colors[i] );
+    graphs[i]->SetMarkerSize( 1.6 );
+    graphs[i]->SetMarkerStyle( 20 );
+    graphs[i]->Draw("P same");
+
+    legend->AddEntry( graphs[i], Form("A = %.1f", convertAmpToFloat( amplitudes[i] )), "P" );
+
+  }
+
+  legend->Draw("same");
+
+  TPaveText* label_led = new TPaveText( 0.185, 0.8, 0.55, 0.89, "brNDC" );
+  label_led->SetFillColor(0);
+  label_led->SetTextColor(kBlack);
+  label_led->SetTextSize(0.035);
+  label_led->SetTextAlign( 11 );
+  label_led->AddText( "CAEN UV LED Driver SP5605" );
+  label_led->AddText( "#lambda = 248 nm (E = 5 eV)");
+  label_led->Draw("same");
+  NanoUVCommon::addNanoUVLabel( c1, 1 );
+
+  c1->SaveAs("all.eps");
+
 
   TGraph* gr_gain = new TGraph(0);
   gr_gain->SetPoint( gr_gain->GetN(), 500., 1E4 );
@@ -51,7 +111,7 @@ int main() {
   gr_gain->SetPoint( gr_gain->GetN(), 750., 2.1E5 );
   gr_gain->SetPoint( gr_gain->GetN(), 800., 3.6E5 );
 
-  drawNPhotons( amplitudes, graphs, gr_gain, 650. );
+  drawNPhotons( name, amplitudes, graphs, gr_gain );
 
   //gr_gain->SetMarkerStyle(20);
   //gr_gain->SetMarkerSize(1.6);
@@ -75,18 +135,16 @@ int main() {
   //gr_gain->Draw("p same");
 
   //c1->SaveAs( "plots/gain.pdf" );
-
-  return 0;
-
 }
 
 
-TGraphErrors* drawHVscan( const std::string& amp ) {
+TGraphErrors* drawHVscan( const std::string& name, const std::string& amp ) {
 
   //float ampValue = convertAmplitude( amp );
 
-  std::string fileName( Form( "data/A%s.txt", amp.c_str()) );
+  std::string fileName( Form( "data/%s/A%s.txt", name.c_str(), amp.c_str()) );
   std::ifstream ifs(fileName.c_str());
+  std::cout << "-> Opening: " << fileName.c_str() << std::endl;
 
   TGraphErrors* graph = new TGraphErrors(0);
   graph->SetName( Form("gr_%s", amp.c_str()) );
@@ -108,7 +166,7 @@ TGraphErrors* drawHVscan( const std::string& amp ) {
   c1->SetLogy();
   //c1->SetLogx();
  
-  TH2D* h2_axes = new TH2D( "axes", "", 10, 501., 1099., 10, 3., 500. );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, 401., 1099., 10, 3., 500. );
   h2_axes->SetXTitle( "PMT Bias [V]" ); 
   h2_axes->SetYTitle( "PMT Charge [pC]" );
   h2_axes->GetYaxis()->SetNoExponent();
@@ -157,8 +215,8 @@ TGraphErrors* drawHVscan( const std::string& amp ) {
   NanoUVCommon::addNanoUVLabel(c1, 4);
 
 
-  c1->SaveAs( Form("plots/A%s.pdf", amp.c_str()) );
-  c1->SaveAs( Form("plots/A%s.eps", amp.c_str()) );
+  c1->SaveAs( Form("plots/%s/A%s.pdf", name.c_str(), amp.c_str()) );
+  c1->SaveAs( Form("plots/%s/A%s.eps", name.c_str(), amp.c_str()) );
 
   delete h2_axes;
   delete c1;
@@ -168,22 +226,28 @@ TGraphErrors* drawHVscan( const std::string& amp ) {
 }
 
 
-float findLastPoint( TGraph* graph, float threshold ) {
 
-  float foundX = 0.;
+int findLastPoint( TGraph* graph, float threshold ) {
 
+  int foundPoint = -1;
+
+std::cout << std::endl;
+std::cout << graph->GetName() << std::endl;
+std::cout << "threshold: " << threshold << std::endl;
   for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
 
     double x, y;
     graph->GetPoint( iPoint, x, y) ;
 
+std::cout << "point: " << x << " " << y << std::endl;
     if( y > threshold ) break;
 
-    foundX = x;
+    foundPoint = iPoint;
 
   }
 
-  return foundX;
+std::cout << "found: " << foundPoint << std::endl;
+  return foundPoint;
 
 } 
 
@@ -196,7 +260,6 @@ float convertAmpToFloat( std::string amp ) {
   std::vector<float> parts;
   float part;
   while ((pos = amp.find(delimiter)) != std::string::npos) {
-    std::cout << amp.substr(0, pos) << std::endl;
     part = atof(amp.substr(0, pos).c_str());
     amp.erase(0, pos + delimiter.length());
     parts.push_back(part);
@@ -212,36 +275,46 @@ float convertAmpToFloat( std::string amp ) {
 
 
 
-void drawNPhotons( const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, TGraph* gr_gain, float hv ) {
+void drawNPhotons( const std::string& name, const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, TGraph* gr_gain ) {
+
+  float qeff = 0.2; // at 248 nm
+  float gain = 7E4; // at 650 V
 
   TGraphErrors* gr_ch_vs_amp = new TGraphErrors(0);
+  TGraphErrors* gr_Nph_vs_amp = new TGraphErrors(0);
 
   for( unsigned i=0; i<graphs.size(); ++i ) {
 
-std::cout << "starting graph: " << graphs[i]->GetName() << std::endl;
-    float charge, chargeErr;
+    double x, charge;
+    int iPoint = findLastPoint( graphs[i], 100. );
+    graphs[i]->GetPoint( iPoint, x, charge );
+    float chargeErr = graphs[i]->GetErrorY( iPoint );
 
-    for( unsigned iPoint=0; iPoint<graphs[i]->GetN(); ++iPoint ) {
+    std::cout << graphs[i]->GetName() << " ---> HV = " << x << " V   charge = " << charge << " pC" << std::endl;
 
-      double x, y;
-      graphs[i]->GetPoint( iPoint, x, y );
-std::cout << "point: " << x << " " << y << std::endl;
-      if( x==hv ) {
-        charge = y;
-        chargeErr = graphs[i]->GetErrorY( iPoint );
-      }
+    //for( unsigned iPoint=0; iPoint<graphs[i]->GetN(); ++iPoint ) {
 
-    } // for points
+    //  double x, y;
+    //  graphs[i]->GetPoint( iPoint, x, y );
+    //  if( x==hv ) {
+    //    charge = y;
+    //    chargeErr = graphs[i]->GetErrorY( iPoint );
+    //  }
 
-    gr_ch_vs_amp->SetPoint( gr_ch_vs_amp->GetN(), convertAmpToFloat(amplitudes[i]), charge );
+    //} // for points
+
+    gr_ch_vs_amp ->SetPoint( gr_ch_vs_amp->GetN() , convertAmpToFloat(amplitudes[i]), charge );
+    gr_Nph_vs_amp->SetPoint( gr_Nph_vs_amp->GetN(), convertAmpToFloat(amplitudes[i]), charge*1E-12/((1.6E-19)*gain*qeff) );
 
   } // for graphs
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
-  gr_ch_vs_amp->Draw("APE*");
+  //gr_ch_vs_amp->Draw("APE*");
+  gr_Nph_vs_amp->Draw("APE*");
 
   c1->SaveAs( "gr650.pdf" );
+  c1->SaveAs( "gr650.eps" );
 
 }
