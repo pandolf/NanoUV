@@ -106,7 +106,8 @@ void drawAllGraphs( const std::string& name ) {
 
   NanoUVCommon::addNanoUVLabel( c1, 1 );
 
-  c1->SaveAs("all.eps");
+  c1->SaveAs( Form("plots/%s/all.eps", name.c_str()) );
+  c1->SaveAs( Form("plots/%s/all.pdf", name.c_str()) );
 
 
   TGraph* gr_gain = new TGraph(0);
@@ -166,7 +167,7 @@ void drawAllGraphs( const std::string& name ) {
   gr_N_kPhotons_hv650->SetMarkerSize( 1.6 );
   gr_N_kPhotons_hv650->Draw("P same");
 
-  TLegend* legend2 = new TLegend( 0.2, 0.7, 0.5, 0.9 );
+  TLegend* legend2 = new TLegend( 0.2, 0.66, 0.5, 0.9 );
   legend2->SetFillColor(0);
   legend2->SetTextSize(0.038);
   legend2->AddEntry( gr_N_kPhotons_th100, "Ch_{max} = 100 pC", "P" );
@@ -177,8 +178,8 @@ void drawAllGraphs( const std::string& name ) {
 
   NanoUVCommon::addNanoUVLabel( c1, 4 );
 
-  c1->SaveAs( "NPhotons_vs_ampl.eps" );
-  c1->SaveAs( "NPhotons_vs_ampl.pdf" );
+  c1->SaveAs( Form("plots/%s/NPhotons_vs_ampl.eps", name.c_str()) );
+  c1->SaveAs( Form("plots/%s/NPhotons_vs_ampl.pdf", name.c_str()) );
 
 }
 
