@@ -27,6 +27,7 @@ int main() {
 
   NanoUVCommon::setStyle();
 
+  drawAllGraphs( "SP5601" );
   drawAllGraphs( "SP5605" );
 
   return 0;
@@ -37,12 +38,19 @@ int main() {
 void drawAllGraphs( const std::string& name ) {
 
   std::vector<std::string> amplitudes;
-  amplitudes.push_back( "5p00" );
-  amplitudes.push_back( "6p00" );
-  amplitudes.push_back( "7p00" );
-  amplitudes.push_back( "8p00" );
-  amplitudes.push_back( "9p00" );
-  amplitudes.push_back( "10p00" );
+  if( name=="SP5605" ) {
+    amplitudes.push_back( "5p00" );
+    amplitudes.push_back( "6p00" );
+    amplitudes.push_back( "7p00" );
+    amplitudes.push_back( "8p00" );
+    amplitudes.push_back( "9p00" );
+    amplitudes.push_back( "10p00" );
+  } else if( name=="SP5601" ) {
+    amplitudes.push_back( "7p00" );
+    amplitudes.push_back( "8p00" );
+    amplitudes.push_back( "9p00" );
+    amplitudes.push_back( "10p00" );
+  }
 
   system( Form("mkdir -p plots/%s", name.c_str()) );
 
@@ -90,19 +98,25 @@ void drawAllGraphs( const std::string& name ) {
 
   }
 
-  legend->Draw("same");
-
-  for( unsigned i=0; i<graphs.size(); ++i )
-    graphs[i]->Draw("P same");
-
   TPaveText* label_led = new TPaveText( 0.55, 0.15, 0.95, 0.25, "brNDC" );
   label_led->SetFillColor(0);
   label_led->SetTextColor(kGray+2);
   label_led->SetTextSize(0.035);
   label_led->SetTextAlign( 31 );
-  label_led->AddText( "CAEN UV LED Driver SP5605" );
-  label_led->AddText( "#lambda = 248 nm (E = 5 eV)");
+  if( name=="SP5601" ) {
+    label_led->AddText( Form("CAEN UV LED Driver %s", name.c_str()) );
+    label_led->AddText( "#lambda = 400 nm (E = 3.1 eV)");
+  } else {
+    label_led->AddText( Form("CAEN UV LED Driver %s", name.c_str()) );
+    label_led->AddText( "#lambda = 248 nm (E = 5 eV)");
+  }
   label_led->Draw("same");
+
+  legend->Draw("same");
+
+  for( unsigned i=0; i<graphs.size(); ++i )
+    graphs[i]->Draw("P same");
+
 
   NanoUVCommon::addNanoUVLabel( c1, 1 );
 
@@ -125,16 +139,23 @@ void drawAllGraphs( const std::string& name ) {
 
   TGraphErrors* gr_N_kPhotons_th100 = get_N_kPhotons_fixedThresh( name, amplitudes, graphs, gr_gain, 100. );
 
+  TGraphErrors* gr_N_kPhotons_hv500 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 500., 1E4 );
   TGraphErrors* gr_N_kPhotons_hv550 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 550., 2E4 );
   TGraphErrors* gr_N_kPhotons_hv600 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 600., 4E4 );
   TGraphErrors* gr_N_kPhotons_hv650 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 650., 7E4 );
+  TGraphErrors* gr_N_kPhotons_hv700 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 700., 1.3E5 );
+  TGraphErrors* gr_N_kPhotons_hv750 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 750., 2.1E5 );
+  TGraphErrors* gr_N_kPhotons_hv800 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 800., 3.6E5 );
+  TGraphErrors* gr_N_kPhotons_hv850 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 850., 5.5E5 );
 
   c1->Clear();
   c1->SetLogy();
   c1->SetLogy(kFALSE);
   c1->SetLeftMargin(0.18);
 
-  TH2D* h2_axes2 = new TH2D( "axes2", "", 10, 4.5, 10.5, 10, 0., 99999. );
+  int yMax = (name=="SP5605") ? 99999. : 20000.;
+
+  TH2D* h2_axes2 = new TH2D( "axes2", "", 10, 4.5, 10.5, 10, 0., yMax );
   //TH2D* h2_axes2 = new TH2D( "axes2", "", 10, 4.5, 10.5, 10, 3000., 99999. );
   h2_axes2->SetXTitle( "LED Amplitude [a.u.]" );
   h2_axes2->SetYTitle( "Number of Photons" );
@@ -143,43 +164,95 @@ void drawAllGraphs( const std::string& name ) {
   h2_axes2->GetYaxis()->SetTitleOffset(1.9);
   h2_axes2->Draw();
 
-  gr_N_kPhotons_th100->SetMarkerStyle( 21 );
-  gr_N_kPhotons_th100->SetMarkerColor( kGray+3 );
-  gr_N_kPhotons_th100->SetLineColor  ( kGray+3 );
-  gr_N_kPhotons_th100->SetMarkerSize( 1.6 );
-  gr_N_kPhotons_th100->Draw("P same");
+  TPaveText* label_led2 = new TPaveText( 0.2, 0.8, 0.5, 0.9, "brNDC" );
+  label_led2->SetFillColor(0);
+  label_led2->SetTextColor(kGray+2);
+  label_led2->SetTextSize(0.035);
+  label_led2->SetTextAlign( 11 );
+  if( name=="SP5601" ) {
+    label_led2->AddText( Form("CAEN LED Driver %s", name.c_str()) );
+    label_led2->AddText( "#lambda = 400 nm (E = 3.1 eV)");
+  } else {
+    label_led2->AddText( Form("CAEN UV LED Driver %s", name.c_str()) );
+    label_led2->AddText( "#lambda = 248 nm (E = 5 eV)");
+  }
+  label_led2->Draw("same");
 
-  gr_N_kPhotons_hv550->SetMarkerStyle( 20 );
-  gr_N_kPhotons_hv550->SetMarkerColor( 46 );
-  gr_N_kPhotons_hv550->SetLineColor  ( 46 );
-  gr_N_kPhotons_hv550->SetMarkerSize( 1.6 );
-  gr_N_kPhotons_hv550->Draw("P same");
-
-  gr_N_kPhotons_hv600->SetMarkerStyle( 20 );
-  gr_N_kPhotons_hv600->SetMarkerColor( 38 );
-  gr_N_kPhotons_hv600->SetLineColor  ( 38 );
-  gr_N_kPhotons_hv600->SetMarkerSize( 1.6 );
-  gr_N_kPhotons_hv600->Draw("P same");
-
-  gr_N_kPhotons_hv650->SetMarkerStyle( 20 );
-  gr_N_kPhotons_hv650->SetMarkerColor( 29 );
-  gr_N_kPhotons_hv600->SetLineColor  ( 29 );
-  gr_N_kPhotons_hv650->SetMarkerSize( 1.6 );
-  gr_N_kPhotons_hv650->Draw("P same");
-
-  TLegend* legend2 = new TLegend( 0.2, 0.66, 0.5, 0.9 );
+  TLegend* legend2 = new TLegend( 0.2, 0.56, 0.5, 0.8 );
   legend2->SetFillColor(0);
   legend2->SetTextSize(0.038);
-  legend2->AddEntry( gr_N_kPhotons_th100, "Ch_{max} = 100 pC", "P" );
-  legend2->AddEntry( gr_N_kPhotons_hv650, "HV = 650 V", "P" );
-  legend2->AddEntry( gr_N_kPhotons_hv600, "HV = 600 V", "P" );
-  legend2->AddEntry( gr_N_kPhotons_hv550, "HV = 550 V", "P" );
+
+  if( name=="SP5605" ) {
+
+    gr_N_kPhotons_th100->SetMarkerStyle( 21 );
+    gr_N_kPhotons_th100->SetMarkerColor( kGray+3 );
+    gr_N_kPhotons_th100->SetLineColor  ( kGray+3 );
+    gr_N_kPhotons_th100->SetMarkerSize( 1.6 );
+    //gr_N_kPhotons_th100->Draw("P same");
+
+    gr_N_kPhotons_hv500->SetMarkerStyle( 20 );
+    gr_N_kPhotons_hv500->SetMarkerColor( kGray+3 );
+    gr_N_kPhotons_hv500->SetLineColor  ( kGray+3 );
+    gr_N_kPhotons_hv500->SetMarkerSize( 1.6 );
+    gr_N_kPhotons_hv500->Draw("P same");
+    legend2->AddEntry( gr_N_kPhotons_hv500, "HV = 500 V", "P" );
+
+    gr_N_kPhotons_hv550->SetMarkerStyle( 20 );
+    gr_N_kPhotons_hv550->SetMarkerColor( 46 );
+    gr_N_kPhotons_hv550->SetLineColor  ( 46 );
+    gr_N_kPhotons_hv550->SetMarkerSize( 1.6 );
+    gr_N_kPhotons_hv550->Draw("P same");
+    legend2->AddEntry( gr_N_kPhotons_hv550, "HV = 550 V", "P" );
+
+    gr_N_kPhotons_hv600->SetMarkerStyle( 20 );
+    gr_N_kPhotons_hv600->SetMarkerColor( 38 );
+    gr_N_kPhotons_hv600->SetLineColor  ( 38 );
+    gr_N_kPhotons_hv600->SetMarkerSize( 1.6 );
+    gr_N_kPhotons_hv600->Draw("P same");
+    legend2->AddEntry( gr_N_kPhotons_hv600, "HV = 600 V", "P" );
+
+    gr_N_kPhotons_hv650->SetMarkerStyle( 20 );
+    gr_N_kPhotons_hv650->SetMarkerColor( 29 );
+    gr_N_kPhotons_hv650->SetLineColor  ( 29 );
+    gr_N_kPhotons_hv650->SetMarkerSize( 1.6 );
+    gr_N_kPhotons_hv650->Draw("P same");
+    legend2->AddEntry( gr_N_kPhotons_hv650, "HV = 650 V", "P" );
+
+  } else {
+
+    gr_N_kPhotons_hv750->SetMarkerStyle( 20 );
+    gr_N_kPhotons_hv750->SetMarkerColor( 46 );
+    gr_N_kPhotons_hv750->SetLineColor  ( 46 );
+    gr_N_kPhotons_hv750->SetMarkerSize( 1.6 );
+    gr_N_kPhotons_hv750->Draw("P same");
+    legend2->AddEntry( gr_N_kPhotons_hv750, "HV = 750 V", "P" );
+
+    gr_N_kPhotons_hv800->SetMarkerStyle( 20 );
+    gr_N_kPhotons_hv800->SetMarkerColor( 38 );
+    gr_N_kPhotons_hv800->SetLineColor  ( 38 );
+    gr_N_kPhotons_hv800->SetMarkerSize( 1.6 );
+    gr_N_kPhotons_hv800->Draw("P same");
+    legend2->AddEntry( gr_N_kPhotons_hv800, "HV = 800 V", "P" );
+
+    gr_N_kPhotons_hv850->SetMarkerStyle( 20 );
+    gr_N_kPhotons_hv850->SetMarkerColor( 29 );
+    gr_N_kPhotons_hv850->SetLineColor  ( 29 );
+    gr_N_kPhotons_hv850->SetMarkerSize( 1.6 );
+    gr_N_kPhotons_hv850->Draw("P same");
+    legend2->AddEntry( gr_N_kPhotons_hv850, "HV = 850 V", "P" );
+
+  }
+
   legend2->Draw("same");
 
   NanoUVCommon::addNanoUVLabel( c1, 4 );
 
   c1->SaveAs( Form("plots/%s/NPhotons_vs_ampl.eps", name.c_str()) );
   c1->SaveAs( Form("plots/%s/NPhotons_vs_ampl.pdf", name.c_str()) );
+
+  delete c1;
+  delete h2_axes;
+  delete h2_axes2;
 
 }
 
@@ -318,7 +391,7 @@ float convertAmpToFloat( std::string amp ) {
 
 TGraphErrors* get_N_kPhotons_fixedThresh( const std::string& name, const std::vector<std::string>& amplitudes, const std::vector<TGraphErrors*>& graphs, TGraph* gr_gain, float thresh ) {
 
-  float qeff = 0.2; // at 248 nm
+  float qeff = (name=="SP5605") ? 0.2 : 0.25; 
 
   TGraphErrors* gr_Nph_vs_amp = new TGraphErrors(0);
   gr_Nph_vs_amp->SetName( Form("gr_N_kPhotons_thresh%.0f", thresh) );
