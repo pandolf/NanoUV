@@ -124,6 +124,7 @@ void drawAllGraphs( const std::string& name ) {
 
   TGraphErrors* gr_N_kPhotons_th100 = get_N_kPhotons_fixedThresh( name, amplitudes, graphs, gr_gain, 100. );
 
+  TGraphErrors* gr_N_kPhotons_hv550 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 550., 2E4 );
   TGraphErrors* gr_N_kPhotons_hv600 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 600., 4E4 );
   TGraphErrors* gr_N_kPhotons_hv650 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 650., 7E4 );
 
@@ -142,26 +143,36 @@ void drawAllGraphs( const std::string& name ) {
   h2_axes2->Draw();
 
   gr_N_kPhotons_th100->SetMarkerStyle( 21 );
-  gr_N_kPhotons_th100->SetMarkerColor( 46 );
+  gr_N_kPhotons_th100->SetMarkerColor( kGray+3 );
+  gr_N_kPhotons_th100->SetLineColor  ( kGray+3 );
   gr_N_kPhotons_th100->SetMarkerSize( 1.6 );
   gr_N_kPhotons_th100->Draw("P same");
 
+  gr_N_kPhotons_hv550->SetMarkerStyle( 20 );
+  gr_N_kPhotons_hv550->SetMarkerColor( 46 );
+  gr_N_kPhotons_hv550->SetLineColor  ( 46 );
+  gr_N_kPhotons_hv550->SetMarkerSize( 1.6 );
+  gr_N_kPhotons_hv550->Draw("P same");
+
   gr_N_kPhotons_hv600->SetMarkerStyle( 20 );
   gr_N_kPhotons_hv600->SetMarkerColor( 38 );
+  gr_N_kPhotons_hv600->SetLineColor  ( 38 );
   gr_N_kPhotons_hv600->SetMarkerSize( 1.6 );
   gr_N_kPhotons_hv600->Draw("P same");
 
   gr_N_kPhotons_hv650->SetMarkerStyle( 20 );
   gr_N_kPhotons_hv650->SetMarkerColor( 29 );
+  gr_N_kPhotons_hv600->SetLineColor  ( 29 );
   gr_N_kPhotons_hv650->SetMarkerSize( 1.6 );
   gr_N_kPhotons_hv650->Draw("P same");
 
   TLegend* legend2 = new TLegend( 0.2, 0.7, 0.5, 0.9 );
   legend2->SetFillColor(0);
   legend2->SetTextSize(0.038);
-  legend2->AddEntry( gr_N_kPhotons_hv600, "HV = 600 V", "P" );
-  legend2->AddEntry( gr_N_kPhotons_hv650, "HV = 650 V", "P" );
   legend2->AddEntry( gr_N_kPhotons_th100, "Ch_{max} = 100 pC", "P" );
+  legend2->AddEntry( gr_N_kPhotons_hv650, "HV = 650 V", "P" );
+  legend2->AddEntry( gr_N_kPhotons_hv600, "HV = 600 V", "P" );
+  legend2->AddEntry( gr_N_kPhotons_hv550, "HV = 550 V", "P" );
   legend2->Draw("same");
 
   NanoUVCommon::addNanoUVLabel( c1, 4 );
@@ -334,7 +345,10 @@ TGraphErrors* get_N_kPhotons_fixedThresh( const std::string& name, const std::ve
 
     int thisPoint = gr_Nph_vs_amp->GetN();
     gr_Nph_vs_amp->SetPoint( thisPoint, convertAmpToFloat(amplitudes[i]), charge*1E-12/((1.6E-19)*gain*qeff) );
-    gr_Nph_vs_amp->SetPointError( thisPoint, 0.01, chargeErr*1E-12/((1.6E-19)*gain*qeff) );
+
+    float gainErr = 0.15*gain;
+    float NphotonError = sqrt( chargeErr*1E-12/((1.6E-19)*gain*qeff)*chargeErr*1E-12/((1.6E-19)*gain*qeff) + chargeErr*1E-12/((1.6E-19)*gain*gain*gain*gain*qeff)*gainErr*gainErr );
+    gr_Nph_vs_amp->SetPointError( thisPoint, 0.01, NphotonError );
 
   } // for graphs
 
