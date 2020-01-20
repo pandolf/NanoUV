@@ -27,6 +27,7 @@ int main() {
 
   NanoUVCommon::setStyle();
 
+  int a = 10;
   drawAllGraphs( "SP5601" );
   drawAllGraphs( "SP5605" );
 
