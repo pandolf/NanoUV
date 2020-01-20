@@ -143,7 +143,7 @@ void drawAllGraphs( const std::string& name ) {
   TGraphErrors* gr_N_kPhotons_hv550 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 550., 2E4 );
   TGraphErrors* gr_N_kPhotons_hv600 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 600., 4E4 );
   TGraphErrors* gr_N_kPhotons_hv650 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 650., 7E4 );
-  TGraphErrors* gr_N_kPhotons_hv700 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 700., 1.3E5 );
+  //TGraphErrors* gr_N_kPhotons_hv700 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 700., 1.3E5 );
   TGraphErrors* gr_N_kPhotons_hv750 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 750., 2.1E5 );
   TGraphErrors* gr_N_kPhotons_hv800 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 800., 3.6E5 );
   TGraphErrors* gr_N_kPhotons_hv850 = get_N_kPhotons_fixedGain ( name, amplitudes, graphs, 850., 5.5E5 );
