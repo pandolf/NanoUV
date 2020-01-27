@@ -21,6 +21,7 @@ GunScanTool::GunScanTool( float gunEnergy, float APDhv, const std::string& data 
 
   firstN_fit_ = 7;
   lastN_fit_ = 5;
+  baselineFunc_ = "pol1";
 
 }
 
@@ -69,6 +70,11 @@ void GunScanTool::set_lastN_fit( int lastN_fit ) {
 }
 
 
+void GunScanTool::set_baselineFunc( const std::string& baselineFunc ) {
+
+  baselineFunc_ = baselineFunc;
+
+}
 
 
 
@@ -115,6 +121,12 @@ int GunScanTool::lastN_fit() const {
 
 }
 
+
+std::string GunScanTool::baselineFunc() const {
+
+  return baselineFunc_;
+
+}
 
 
 
@@ -197,23 +209,17 @@ float GunScanTool::getCurrentFromScan( TGraph* graph ) {
 
   } else if( currentMethod_ == "firstMax" ) {
 
-    int nDown = 0;
+    baselineFunc_ = "pol1";
 
     for( int iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
 
       double this_x, this_y;
       graph->GetPoint( iPoint, this_x, this_y );
+      if( this_x >= -6. ) continue;
       if( this_y>=current ) current = this_y;
 
-      double prev_x=0., prev_y=0.;
-      if( iPoint>0 ) graph->GetPoint( iPoint-1, prev_x, prev_y );
-      if( this_y<prev_y ) nDown++;
-      else                nDown=0; // reset
-
-      if( nDown>4 ) break; // break after finding first max
-
     } // for points
-  
+
   } else if( currentMethod_ == "integral" ) {
 
     for( int i=0; i<graph->GetN(); ++i ) {
@@ -268,7 +274,8 @@ TF1* GunScanTool::fitDrift( TGraph* graph ) {
     xMax = xFirst;
   }
 
-  TF1* baseline = new TF1( Form("line_%s", graph->GetName()), "[0] + [1]*x + [2]*x*x + [3]*x*x*x", xMin, xMax );
+  TF1* baseline = new TF1( Form("line_%s", graph->GetName()), baselineFunc_.c_str(), xMin, xMax );
+  //TF1* baseline = new TF1( Form("line_%s", graph->GetName()), "[0] + [1]*x + [2]*x*x + [3]*x*x*x", xMin, xMax );
 
   fit_points->Fit( baseline, "QR" );
  
@@ -304,7 +311,7 @@ void GunScanTool::addPointToGraph( TGraphErrors* graph, const std::string& fileN
     xMax = xFirst;
   }
   
-  double yMin = 101.;
+  double yMin = 0.99*yFirst;
 
   // find max by hand
   double yMax = getYmax( gr_scan );
@@ -382,7 +389,7 @@ void GunScanTool::addPointToGraph( TGraphErrors* graph, const std::string& fileN
 
   float iAPD = getCurrentFromScan( gr_scan_corr )*1000; // convert to pA
 
-  std::cout << "For this configuration the APD current was: " << iAPD << " nA" << std::endl;
+  std::cout << "--> for E(gun) = " << this->gunEnergy() << " eV, V(APD) = " << this->APDhv() << " V, I(gun) = " << gunCurrent << " pA, the APD current was: " << iAPD/1000. << " nA" << std::endl;
 
   int thisPoint = graph->GetN();
   graph->SetPoint     ( thisPoint, gunCurrent, iAPD );

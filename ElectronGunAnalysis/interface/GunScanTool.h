@@ -19,6 +19,7 @@ class GunScanTool {
   void set_data( const std::string& data );
   void set_firstN_fit( int firstN_fit );
   void set_lastN_fit( int lastN_fit );
+  void set_baselineFunc( const std::string& baselineFunc );
 
   float gunEnergy() const;
   float APDhv() const;
@@ -26,6 +27,8 @@ class GunScanTool {
   std::string data() const;
   int firstN_fit() const;
   int lastN_fit() const;
+  std::string baselineFunc() const;
+
 
   TGraph* getScanFromFile( const std::string& fileName );
   TGraph* getCorrectedGraph( TGraph* graph, TF1* baseline );
@@ -48,6 +51,7 @@ class GunScanTool {
 
   int firstN_fit_;
   int lastN_fit_;
+  std::string baselineFunc_;
 
 };
 
