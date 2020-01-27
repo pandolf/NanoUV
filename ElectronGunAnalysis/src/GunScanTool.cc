@@ -2,6 +2,8 @@
 
 #include <fstream>
 
+#include "TF1.h"
+
 
 
 GunScanTool::GunScanTool( float gunEnergy, float APDhv, const std::string& data ) {
@@ -11,8 +13,8 @@ GunScanTool::GunScanTool( float gunEnergy, float APDhv, const std::string& data 
   data_ = data;
   currentMethod_ = "max";
 
-  int firstN_fit_ = 7;
-  int lastN_fit_ = 5;
+  firstN_fit_ = 7;
+  lastN_fit_ = 5;
 
 }
 
@@ -135,18 +137,19 @@ TGraph* GunScanTool::getScanFromFile( const std::string& fileName, float gunEner
 
   return graph;
 
+}
 
 
 
 
-TGraph* GunScanTool::getCorrectedGraph( TGraph* graph );
+TGraph* GunScanTool::getCorrectedGraph( TGraph* graph ) {
 
   TF1* baseline = this->fitDrift( graph );
 
   TGraph* graph_corr = new TGraph(0);
   graph_corr->SetName( Form( "%s_corr", graph->GetName() ) );
 
-  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+  for( int iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
 
     double x, y;
     graph->GetPoint( iPoint, x, y );
@@ -173,7 +176,7 @@ TF1* GunScanTool::fitDrift( TGraph* graph ) {
 
   int nPoints = graph->GetN();
 
-  for( unsigned i=0; i<nPoints; ++i ) {
+  for( int i=0; i<nPoints; ++i ) {
 
     if( (i<=firstN_fit_) || (i>=(nPoints-lastN_fit_)) ) {
 
