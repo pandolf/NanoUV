@@ -280,7 +280,7 @@ TF1* GunScanTool::fitDrift( TGraph* graph ) {
 
 void GunScanTool::addPointToGraph( TGraphErrors* graph, const std::string& fileName, float iGunBefore, float iGunAfter ) {
 
-  TGraph* gr_scan = this->getScanFromFile( Form("data/%s/%s", data_.c_str(), fileName.c_str()) );
+  TGraph* gr_scan = this->getScanFromFile( fileName.c_str() );
 
   TF1* baseline = fitDrift( gr_scan );
 
@@ -380,13 +380,13 @@ void GunScanTool::addPointToGraph( TGraphErrors* graph, const std::string& fileN
   c1->SaveAs(Form("plots/APDscans/%s/scanCorr_%s.eps", data_.c_str(), fileName.c_str()));
 
 
-  float iAPD = getCurrentFromScan( gr_scan_corr ); 
+  float iAPD = getCurrentFromScan( gr_scan_corr )*1000; // convert to pA
 
   std::cout << "For this configuration the APD current was: " << iAPD << " nA" << std::endl;
 
   int thisPoint = graph->GetN();
   graph->SetPoint     ( thisPoint, gunCurrent, iAPD );
-  graph->SetPointError( thisPoint, fabs( iGunAfter-iGunBefore ), 0.05*iAPD );
+  graph->SetPointError( thisPoint, fabs( iGunAfter-iGunBefore ), 0.02*iAPD ); // error on APD current = 2% (?)
 
   delete c1;
   delete h2_axes;
