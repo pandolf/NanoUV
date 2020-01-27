@@ -111,7 +111,7 @@ int main( int argc, char* argv[] ) {
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_16_M_.dat", 0.106, 0.111 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_20_M_.dat", 0.039, 0.040 );
         //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_05_M_.dat", 165., 207. );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_21_M_.dat", 9.9, 10.2 );
+        //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_21_M_.dat", 9.9, 10.2 );
   
       } // APDhv
 
@@ -170,6 +170,30 @@ int main( int argc, char* argv[] ) {
 
   c1->SaveAs( Form("plots/APDscans/%s/iapd_vs_igun_E%.0f_hv%.0f.pdf", data.c_str(), gunEnergy, gst.APDhv()) );
   c1->SaveAs( Form("plots/APDscans/%s/iapd_vs_igun_E%.0f_hv%.0f.eps", data.c_str(), gunEnergy, gst.APDhv()) );
+
+  c1->Clear();
+
+  c1->SetLogx();
+  c1->SetLogy();
+
+  TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, 0.01, xMax, 10, 1., yMax );
+  h2_axes_log->SetXTitle( "Gun Current [pA]" );
+  h2_axes_log->SetYTitle( "APD Current [pA]" );
+  h2_axes_log->Draw();
+
+  label_settings->Draw("same");
+
+  label->Draw("same");
+  gPad->RedrawAxis();
+
+  f1_line->Draw("L same");
+  gr_iapd_vs_igun->Draw("P same");
+
+  fitResults->Draw("same");
+
+  c1->SaveAs( Form("plots/APDscans/%s/iapd_vs_igun_E%.0f_hv%.0f_log.pdf", data.c_str(), gunEnergy, gst.APDhv()) );
+  c1->SaveAs( Form("plots/APDscans/%s/iapd_vs_igun_E%.0f_hv%.0f_log.eps", data.c_str(), gunEnergy, gst.APDhv()) );
+
   
   return 0;
 
