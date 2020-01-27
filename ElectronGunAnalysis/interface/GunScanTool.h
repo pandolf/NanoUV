@@ -2,7 +2,8 @@
 #define GunScanTool_h
 
 #include <string>
-#include "TGraph.h"
+
+#include "TGraphErrors.h"
 
 
 class GunScanTool {
@@ -16,21 +17,27 @@ class GunScanTool {
   void set_APDhv( float APDhv );
   void set_currentMethod( const std::string& currentMethod );
   void set_data( const std::string& data );
+  void set_firstN_fit( int firstN_fit );
+  void set_lastN_fit( int lastN_fit );
 
   float gunEnergy() const;
   float APDhv() const;
   std::string currentMethod() const;
   std::string data() const;
+  int firstN_fit() const;
+  int lastN_fit() const;
 
-  TGraph* getScanFromFile( const std::string& fileName, float gunEnergy );
-  TGraph* getCorrectedGraph( TGraph* graph );
+  TGraph* getScanFromFile( const std::string& fileName );
+  TGraph* getCorrectedGraph( TGraph* graph, TF1* baseline );
 
   float getCurrentFromScan( TGraph* graph );
 
+  void addPointToGraph( TGraphErrors* graph, const std::string& fileName, float iGunBefore, float iGunAfter );
 
  private:
 
-  TF1* fitDrift( TGraph* graph, int firstN=7, int lastN=5 );
+  TF1* fitDrift( TGraph* graph );
+  float getYmax( TGraph* graph );
 
   float gunEnergy_;
   float APDhv_;
@@ -38,6 +45,9 @@ class GunScanTool {
   std::string currentMethod_;
 
   std::string data_;
+
+  int firstN_fit_;
+  int lastN_fit_;
 
 };
 
