@@ -40,7 +40,7 @@ int main( int argc, char* argv[] ) {
 
   GunScanTool gst( gunEnergy, APDhv, data);
 
-  std::string outdir( Form("plots/APDscans/%s/", data.c_str() ) );
+  std::string outdir( Form("plots/APDscans/%s/%.0feV/%.0fV", data.c_str(), gst.gunEnergy(), gst.APDhv() ) );
   system( Form("mkdir -p %s", outdir.c_str()) );
 
   TGraphErrors* gr_iapd_vs_igun = new TGraphErrors(0);
@@ -72,8 +72,9 @@ int main( int argc, char* argv[] ) {
 
   } else if( data == "2020_01" ) {
 
+    //gst.set_currentMethod("max");
     gst.set_currentMethod("firstMax");
-    gst.set_lastN_fit(0);
+    //gst.set_lastN_fit(0);
 
     if( gunEnergy == 900. ) {
   
@@ -168,8 +169,8 @@ int main( int argc, char* argv[] ) {
   fitResults->AddText( Form("m = %.1f #pm %.1f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
   fitResults->Draw("same");
 
-  c1->SaveAs( Form("plots/APDscans/%s/iapd_vs_igun_E%.0f_hv%.0f.pdf", data.c_str(), gunEnergy, gst.APDhv()) );
-  c1->SaveAs( Form("plots/APDscans/%s/iapd_vs_igun_E%.0f_hv%.0f.eps", data.c_str(), gunEnergy, gst.APDhv()) );
+  c1->SaveAs( Form("%s/iapd_vs_igun.pdf", outdir.c_str()) );
+  c1->SaveAs( Form("%s/iapd_vs_igun.eps", outdir.c_str()) );
 
   c1->Clear();
 
@@ -191,8 +192,9 @@ int main( int argc, char* argv[] ) {
 
   fitResults->Draw("same");
 
-  c1->SaveAs( Form("plots/APDscans/%s/iapd_vs_igun_E%.0f_hv%.0f_log.pdf", data.c_str(), gunEnergy, gst.APDhv()) );
-  c1->SaveAs( Form("plots/APDscans/%s/iapd_vs_igun_E%.0f_hv%.0f_log.eps", data.c_str(), gunEnergy, gst.APDhv()) );
+  c1->SaveAs( Form("%s/iapd_vs_igun_log.pdf", outdir.c_str()) );
+  c1->SaveAs( Form("%s/iapd_vs_igun_log.eps", outdir.c_str()) );
+
 
   
   return 0;
