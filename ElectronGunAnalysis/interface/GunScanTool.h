@@ -2,7 +2,8 @@
 #define GunScanTool_h
 
 #include <string>
-#include "TGraph.h"
+
+#include "TGraphErrors.h"
 
 
 class GunScanTool {
@@ -26,15 +27,17 @@ class GunScanTool {
   int firstN_fit() const;
   int lastN_fit() const;
 
-  TGraph* getScanFromFile( const std::string& fileName, float gunEnergy );
-  TGraph* getCorrectedGraph( TGraph* graph );
+  TGraph* getScanFromFile( const std::string& fileName );
+  TGraph* getCorrectedGraph( TGraph* graph, TF1* baseline );
 
   float getCurrentFromScan( TGraph* graph );
 
+  void addPointToGraph( TGraphErrors* graph, const std::string& fileName, float iGunBefore, float iGunAfter );
 
  private:
 
   TF1* fitDrift( TGraph* graph );
+  float getYmax( TGraph* graph );
 
   float gunEnergy_;
   float APDhv_;
