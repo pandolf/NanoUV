@@ -19,9 +19,9 @@ GunScanTool::GunScanTool( float gunEnergy, float APDhv, const std::string& data 
   data_ = data;
   currentMethod_ = "max";
 
-  firstN_fit_ = 7;
-  lastN_fit_ = 5;
-  baselineFunc_ = "pol1";
+  firstN_fit_ = 12;
+  lastN_fit_ = 12;
+  baselineFunc_ = "pol3";
 
 }
 
@@ -209,8 +209,6 @@ float GunScanTool::getCurrentFromScan( TGraph* graph ) {
 
   } else if( currentMethod_ == "firstMax" ) {
 
-    baselineFunc_ = "pol1";
-
     for( int iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
 
       double this_x, this_y;
@@ -311,27 +309,16 @@ void GunScanTool::addPointToGraph( TGraphErrors* graph, const std::string& fileN
     xMax = xFirst;
   }
   
-  double yMin = 0.99*yFirst;
 
-  // find max by hand
   double yMax = getYmax( gr_scan );
+  double yDiff = (yLast<yFirst) ? fabs(yMax - yLast) : fabs(yMax - yFirst);
+  double y0 = (yLast<yFirst) ? yLast : yFirst;
 
 
-  TH2D* h2_axes = new TH2D( Form("axes_%s", fileName.c_str()), "", 10, xMin, xMax, 10, yMin, yMin + 2.*(yMax-yMin) );
+  TH2D* h2_axes = new TH2D( Form("axes_%s", fileName.c_str()), "", 10, xMin, xMax, 10, y0 - 0.5*yDiff, y0 + 2.5*yDiff );
   h2_axes->SetXTitle("Gun Position [mm]"); 
   h2_axes->SetYTitle("APD Current [nA]");
   h2_axes->Draw();
-
-  baseline->SetLineWidth(2);
-  baseline->SetLineColor(46);
-  baseline->SetLineStyle(2);
-  baseline->Draw("L same");
-
-  gr_scan->SetMarkerStyle(20);
-  gr_scan->SetMarkerSize(1.6);
-  gr_scan->SetMarkerColor(kGray+3);
-  gr_scan->SetLineColor(kGray+3);
-  gr_scan->Draw("P same");
 
   TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
   label->Draw("same");  
@@ -352,16 +339,27 @@ void GunScanTool::addPointToGraph( TGraphErrors* graph, const std::string& fileN
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
   
+  baseline->SetLineWidth(2);
+  baseline->SetLineColor(46);
+  baseline->SetLineStyle(2);
+  baseline->Draw("L same");
 
-  c1->SaveAs(Form("plots/APDscans/%s/scan_%s.pdf", data_.c_str(), fileName.c_str()));
-  c1->SaveAs(Form("plots/APDscans/%s/scan_%s.eps", data_.c_str(), fileName.c_str()));
+  gr_scan->SetMarkerStyle(20);
+  gr_scan->SetMarkerSize(1.1);
+  gr_scan->SetMarkerColor(kGray+3);
+  gr_scan->SetLineColor(kGray+3);
+  gr_scan->Draw("P same");
+
+
+  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scan_%s.pdf", data_.c_str(), gunEnergy(), APDhv(), fileName.c_str()));
+  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scan_%s.eps", data_.c_str(), gunEnergy(), APDhv(), fileName.c_str()));
 
   c1->Clear();
 
   double yMax_corr = getYmax( gr_scan_corr );
 
   //TH2D* h2_axes_corr = new TH2D( Form("axes_corr_%s", fileName.c_str()), "", 10, xMin, xMax, 10, -1.5, 13. );
-  TH2D* h2_axes_corr = new TH2D( Form("axes_corr_%s", fileName.c_str()), "", 10, xMin, xMax, 10, -0.2*yMax_corr, 1.2*yMax_corr );
+  TH2D* h2_axes_corr = new TH2D( Form("axes_corr_%s", fileName.c_str()), "", 10, xMin, xMax, 10, -0.5*yMax_corr, 2.5*yMax_corr );
   h2_axes_corr->SetXTitle("Gun Position [mm]");
   h2_axes_corr->SetYTitle("Corrected APD Current [nA]");
   h2_axes_corr->Draw();
@@ -383,8 +381,8 @@ void GunScanTool::addPointToGraph( TGraphErrors* graph, const std::string& fileN
   label->Draw("same");  
   gPad->RedrawAxis();
 
-  c1->SaveAs(Form("plots/APDscans/%s/scanCorr_%s.pdf", data_.c_str(), fileName.c_str()));
-  c1->SaveAs(Form("plots/APDscans/%s/scanCorr_%s.eps", data_.c_str(), fileName.c_str()));
+  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.pdf", data_.c_str(), gunEnergy(), APDhv(), fileName.c_str()));
+  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.eps", data_.c_str(), gunEnergy(), APDhv(), fileName.c_str()));
 
 
   float iAPD = getCurrentFromScan( gr_scan_corr )*1000; // convert to pA
