@@ -335,7 +335,7 @@ void GunScanTool::addPointToGraph( TGraphErrors* graph, const std::string& fileN
     label_settings->AddText( Form("I_{gun} = %.0f fA", gunCurrent*1000.) );
   else
     label_settings->AddText( Form("I_{gun} = %.1f pA", gunCurrent) );
-  label_settings->AddText( Form( "I_{APD} = %.0f V", APDhv_ ) );
+  label_settings->AddText( Form( "V_{APD} = %.0f V", APDhv_ ) );
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
   
