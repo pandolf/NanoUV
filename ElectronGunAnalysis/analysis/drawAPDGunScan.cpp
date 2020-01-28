@@ -47,6 +47,8 @@ int main( int argc, char* argv[] ) {
 
   float xMax;
   float yMax;
+  float xMax_log;
+  float yMax_log;
 
   if( data == "2019_11_28" ) {
 
@@ -58,6 +60,8 @@ int main( int argc, char* argv[] ) {
   
       xMax = 30.;
       yMax = 13000.;
+      xMax_log = 30.;
+      yMax_log = 13000.;
   
     } else if( gunEnergy == 900. ) {
   
@@ -67,6 +71,8 @@ int main( int argc, char* argv[] ) {
   
       xMax = 20.;
       yMax = 75000.;
+      xMax_log = 20.;
+      yMax_log = 75000.;
   
     }
 
@@ -116,8 +122,10 @@ int main( int argc, char* argv[] ) {
   
       } // APDhv
 
-      xMax = 20.;
-      yMax = 11000.;
+      xMax = 2.;
+      xMax_log = 20.;
+      yMax = 1600.;
+      yMax_log = 11000.;
 
     } // if gunEnergy
 
@@ -160,13 +168,14 @@ int main( int argc, char* argv[] ) {
   gr_iapd_vs_igun->Draw("P same");
 
 
-  TPaveText* fitResults = new TPaveText( 0.6, 0.23, 0.9, 0.44, "brNDC" );
+  TPaveText* fitResults = new TPaveText( 0.6, 0.2, 0.9, 0.44, "brNDC" );
   fitResults->SetTextSize( 0.035 );
   fitResults->SetFillColor(0);
   fitResults->SetTextColor(46);
   fitResults->AddText( "f(x) = q + m*x" );
   fitResults->AddText( Form("q = %.1f #pm %.1f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
   fitResults->AddText( Form("m = %.1f #pm %.1f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
+  fitResults->AddText( Form("#chi^{2} / NDF = %.2f / %d", f1_line->GetChisquare(), f1_line->GetNDF() ) );
   fitResults->Draw("same");
 
   c1->SaveAs( Form("%s/iapd_vs_igun.pdf", outdir.c_str()) );
@@ -177,7 +186,7 @@ int main( int argc, char* argv[] ) {
   c1->SetLogx();
   c1->SetLogy();
 
-  TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, 0.01, xMax, 10, 1., yMax );
+  TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, 0.01, xMax_log, 10, 1., yMax_log );
   h2_axes_log->SetXTitle( "Gun Current [pA]" );
   h2_axes_log->SetYTitle( "APD Current [pA]" );
   h2_axes_log->Draw();
@@ -187,7 +196,14 @@ int main( int argc, char* argv[] ) {
   label->Draw("same");
   gPad->RedrawAxis();
 
-  f1_line->Draw("L same");
+
+  TF1* f1_lineLog = new TF1( "lineScan_log", "[0] + [1]*x", 0., xMax_log );
+  f1_lineLog->SetParameter( 0, f1_line->GetParameter(0) );
+  f1_lineLog->SetParameter( 1, f1_line->GetParameter(1) );
+  f1_lineLog->SetLineWidth(2);
+  f1_lineLog->SetLineColor(46);
+  f1_lineLog->SetLineStyle(2);
+  f1_lineLog->Draw("L same");
   gr_iapd_vs_igun->Draw("P same");
 
   fitResults->Draw("same");
