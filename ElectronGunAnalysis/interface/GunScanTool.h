@@ -40,6 +40,7 @@ class GunScanTool {
   // handy:
   float getXmax( TGraph* graph );
   float getYmax( TGraph* graph );
+  float getStep( TGraph* graph );
 
  private:
 

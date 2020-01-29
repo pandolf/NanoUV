@@ -214,6 +214,17 @@ float GunScanTool::getYmax( TGraph* graph ) {
 }
 
 
+float GunScanTool::getStep( TGraph* graph ) {
+
+  double x1, x2, y1, y2;
+
+  graph->GetPoint( 1, x1, y1 );
+  graph->GetPoint( 2, x2, y2 );
+
+  return fabs(x2-x1);
+
+}
+
 
 float GunScanTool::getCurrentFromScan( TGraph* graph ) {
 
@@ -237,14 +248,16 @@ float GunScanTool::getCurrentFromScan( TGraph* graph ) {
 
   } else if( currentMethod_ == "integral" ) {
 
+    float step = getStep(graph);
+
     for( int i=0; i<graph->GetN(); ++i ) {
 
       double x, y;
       graph->GetPoint( i, x, y );
-      current += y;
+      current += y*step;
 
     } // for points
-  
+
   } else {
 
     std::cout << "[GunScanTool::getCurrentFromScan] WARNING!! Current method '" << currentMethod_ << "' not recognized! Aborting." << std::endl;
