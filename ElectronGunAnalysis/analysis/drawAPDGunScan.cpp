@@ -91,7 +91,8 @@ int main( int argc, char* argv[] ) {
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_13_M_.dat", 0.106, 0.111 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_17_M_.dat", 0.039, 0.040 );
         //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_01_M_.dat", 165., 207. );
-        //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_18_M_.dat", 9.9, 10.2 );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_18_M_.dat", 9.9, 10.2 );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_14_M_.dat", 30.3, 29.5 );
 
       } else if( APDhv == 370. ) {
 
@@ -100,7 +101,8 @@ int main( int argc, char* argv[] ) {
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_14_M_.dat", 0.106, 0.111 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_18_M_.dat", 0.039, 0.040 );
         //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_03_M_.dat", 165., 207. );
-        //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_19_M_.dat", 9.9, 10.2 );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_19_M_.dat", 9.9, 10.2 );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_15_M_.dat", 30.3, 29.5 );
   
       } else if( APDhv == 360. ) {
 
@@ -109,7 +111,8 @@ int main( int argc, char* argv[] ) {
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_15_M_.dat", 0.106, 0.111 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_19_M_.dat", 0.039, 0.040 );
         //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_04_M_.dat", 165., 207. );
-        //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_20_M_.dat", 9.9, 10.2 );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_20_M_.dat", 9.9, 10.2 );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_16_M_.dat", 30.3, 29.5 );
   
       } else if( APDhv == 350. ) {
 
@@ -118,14 +121,20 @@ int main( int argc, char* argv[] ) {
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_16_M_.dat", 0.106, 0.111 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_20_M_.dat", 0.039, 0.040 );
         //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_05_M_.dat", 165., 207. );
-        //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_21_M_.dat", 9.9, 10.2 );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_21_M_.dat", 9.9, 10.2 );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_17_M_.dat", 30.3, 29.5 );
   
       } // APDhv
 
-      xMax = 2.;
-      xMax_log = 20.;
-      yMax = 1600.;
-      yMax_log = 11000.;
+      //xMax = 2.;
+      //xMax_log = 20.;
+      //yMax = 1600.*gst.APDhv()*gst.APDhv()/(350.*350.);
+      //yMax_log = 11000.;
+
+      xMax = 1.2*gst.getXmax(gr_iapd_vs_igun);
+      xMax_log = 5.*xMax;
+      yMax = 1.2*gst.getYmax(gr_iapd_vs_igun);
+      yMax_log = 5.*yMax;
 
     } // if gunEnergy
 
@@ -148,13 +157,24 @@ int main( int argc, char* argv[] ) {
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
 
+  TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0., xMax );
+  gr_iapd_vs_igun->Fit( f1_line, "QR0" );
+
+  TPaveText* fitResults = new TPaveText( 0.6, 0.2, 0.9, 0.44, "brNDC" );
+  fitResults->SetTextSize( 0.035 );
+  fitResults->SetFillColor(0);
+  fitResults->SetTextColor(46);
+  fitResults->AddText( "f(x) = q + m*x" );
+  fitResults->AddText( Form("q = %.1f #pm %.1f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
+  fitResults->AddText( Form("m = %.1f #pm %.1f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
+  fitResults->AddText( Form("#chi^{2} / NDF = %.2f / %d", f1_line->GetChisquare(), f1_line->GetNDF() ) );
+  fitResults->Draw("same");
+
+
   TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
   label->Draw("same");  
   gPad->RedrawAxis();
 
-
-  TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0., xMax );
-  gr_iapd_vs_igun->Fit( f1_line, "QR0" );
 
   f1_line->SetLineWidth(2);
   f1_line->SetLineColor(46);
@@ -167,16 +187,6 @@ int main( int argc, char* argv[] ) {
   gr_iapd_vs_igun->SetLineColor(kGray+3);
   gr_iapd_vs_igun->Draw("P same");
 
-
-  TPaveText* fitResults = new TPaveText( 0.6, 0.2, 0.9, 0.44, "brNDC" );
-  fitResults->SetTextSize( 0.035 );
-  fitResults->SetFillColor(0);
-  fitResults->SetTextColor(46);
-  fitResults->AddText( "f(x) = q + m*x" );
-  fitResults->AddText( Form("q = %.1f #pm %.1f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
-  fitResults->AddText( Form("m = %.1f #pm %.1f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
-  fitResults->AddText( Form("#chi^{2} / NDF = %.2f / %d", f1_line->GetChisquare(), f1_line->GetNDF() ) );
-  fitResults->Draw("same");
 
   c1->SaveAs( Form("%s/iapd_vs_igun.pdf", outdir.c_str()) );
   c1->SaveAs( Form("%s/iapd_vs_igun.eps", outdir.c_str()) );
