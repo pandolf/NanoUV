@@ -37,10 +37,13 @@ class GunScanTool {
 
   void addPointToGraph( TGraphErrors* graph, const std::string& fileName, float iGunBefore, float iGunAfter );
 
+  // handy:
+  float getXmax( TGraph* graph );
+  float getYmax( TGraph* graph );
+
  private:
 
   TF1* fitDrift( TGraph* graph );
-  float getYmax( TGraph* graph );
 
   float gunEnergy_;
   float APDhv_;

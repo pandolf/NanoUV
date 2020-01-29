@@ -180,6 +180,23 @@ TGraph* GunScanTool::getCorrectedGraph( TGraph* graph, TF1* baseline ) {
 
 
 
+float GunScanTool::getXmax( TGraph* graph ) {
+
+  float xMax = 0.;
+
+  for( int iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+
+    double this_x, this_y;
+    graph->GetPoint( iPoint, this_x, this_y );
+    if( this_x>=xMax ) xMax = this_x;
+
+  } // for points
+
+  return xMax;
+
+}
+
+
 float GunScanTool::getYmax( TGraph* graph ) {
 
   float yMax = 0.;
@@ -373,7 +390,7 @@ void GunScanTool::addPointToGraph( TGraphErrors* graph, const std::string& fileN
   label_settings->Draw("same");
 
   gr_scan_corr->SetMarkerStyle(20);
-  gr_scan_corr->SetMarkerSize(1.6);
+  gr_scan_corr->SetMarkerSize(1.1);
   gr_scan_corr->SetMarkerColor(kGray+3);
   gr_scan_corr->SetLineColor(kGray+3);
   gr_scan_corr->Draw("P same");
