@@ -38,12 +38,14 @@ int main( int argc, char* argv[] ) {
 
   NanoUVCommon::setStyle();
 
-  GunScanTool gst( gunEnergy, APDhv, data);
+  GunScanTool gst ( gunEnergy, APDhv, data);
+  GunScanTool gst2( gunEnergy, APDhv, "2019_11_28");
 
   std::string outdir( Form("plots/APDscans/%s/%.0feV/%.0fV", data.c_str(), gst.gunEnergy(), gst.APDhv() ) );
   system( Form("mkdir -p %s", outdir.c_str()) );
 
-  TGraphErrors* gr_iapd_vs_igun = new TGraphErrors(0);
+  TGraphErrors* gr_iapd_vs_igun  = new TGraphErrors(0);
+  TGraphErrors* gr_iapd_vs_igun2 = new TGraphErrors(0);
 
   float xMax;
   float yMax;
@@ -51,6 +53,10 @@ int main( int argc, char* argv[] ) {
   float yMax_log;
 
   if( data == "2019_11_28" ) {
+
+    gst.set_APDhv(380.);
+    gst.set_firstN_fit(7);
+    gst.set_lastN_fit(5);
 
     if( gunEnergy == 500. ) {
   
@@ -78,9 +84,11 @@ int main( int argc, char* argv[] ) {
 
   } else if( data == "2020_01" ) {
 
-    //gst.set_currentMethod("max");
-    gst.set_currentMethod("firstMax");
-    //gst.set_lastN_fit(0);
+    gst .set_currentMethod("integral");
+
+    gst2.set_currentMethod("integral");
+    gst2.set_firstN_fit(7);
+    gst2.set_lastN_fit(5);
 
     if( gunEnergy == 900. ) {
   
@@ -90,9 +98,13 @@ int main( int argc, char* argv[] ) {
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_09_M_.dat", 0.378, 0.375 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_13_M_.dat", 0.106, 0.111 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_17_M_.dat", 0.039, 0.040 );
-        //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_01_M_.dat", 165., 207. );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_01_M_.dat", 165., 207. );
         gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_18_M_.dat", 9.9, 10.2 );
         gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_14_M_.dat", 30.3, 29.5 );
+
+        gst2.addPointToGraph( gr_iapd_vs_igun2, "Ek_900_450fA_dfv.txt", 0.44, 0.45 );
+        gst2.addPointToGraph( gr_iapd_vs_igun2, "Ek_900_3.3pA_dfv_28nov19_01_M_.dat", 1.5, 3.3 );
+        gst2.addPointToGraph( gr_iapd_vs_igun2, "Ek_900_15pA_dfv.txt", 15.5, 17. );
 
       } else if( APDhv == 370. ) {
 
@@ -100,7 +112,7 @@ int main( int argc, char* argv[] ) {
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_10_M_.dat", 0.378, 0.375 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_14_M_.dat", 0.106, 0.111 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_18_M_.dat", 0.039, 0.040 );
-        //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_03_M_.dat", 165., 207. );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_03_M_.dat", 165., 207. );
         gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_19_M_.dat", 9.9, 10.2 );
         gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_15_M_.dat", 30.3, 29.5 );
   
@@ -110,7 +122,7 @@ int main( int argc, char* argv[] ) {
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_11_M_.dat", 0.378, 0.375 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_15_M_.dat", 0.106, 0.111 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_19_M_.dat", 0.039, 0.040 );
-        //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_04_M_.dat", 165., 207. );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_04_M_.dat", 165., 207. );
         gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_20_M_.dat", 9.9, 10.2 );
         gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_16_M_.dat", 30.3, 29.5 );
   
@@ -120,7 +132,7 @@ int main( int argc, char* argv[] ) {
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_12_M_.dat", 0.378, 0.375 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_16_M_.dat", 0.106, 0.111 );
         gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_20_M_.dat", 0.039, 0.040 );
-        //gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_05_M_.dat", 165., 207. );
+        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_05_M_.dat", 165., 207. );
         gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_21_M_.dat", 9.9, 10.2 );
         gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_17_M_.dat", 30.3, 29.5 );
   
@@ -157,7 +169,8 @@ int main( int argc, char* argv[] ) {
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
 
-  TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0., xMax );
+  TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0., 3. );
+  //TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0., xMax );
   gr_iapd_vs_igun->Fit( f1_line, "QR0" );
 
   TPaveText* fitResults = new TPaveText( 0.6, 0.2, 0.9, 0.44, "brNDC" );
@@ -187,6 +200,12 @@ int main( int argc, char* argv[] ) {
   gr_iapd_vs_igun->SetLineColor(kGray+3);
   gr_iapd_vs_igun->Draw("P same");
 
+  gr_iapd_vs_igun2->SetMarkerStyle(24);
+  gr_iapd_vs_igun2->SetMarkerSize(1.6);
+  gr_iapd_vs_igun2->SetMarkerColor(kGray+3);
+  gr_iapd_vs_igun2->SetLineColor(kGray+3);
+  gr_iapd_vs_igun2->Draw("P same");
+
 
   c1->SaveAs( Form("%s/iapd_vs_igun.pdf", outdir.c_str()) );
   c1->SaveAs( Form("%s/iapd_vs_igun.eps", outdir.c_str()) );
@@ -196,7 +215,9 @@ int main( int argc, char* argv[] ) {
   c1->SetLogx();
   c1->SetLogy();
 
-  TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, 0.01, xMax_log, 10, 1., yMax_log );
+  float yMin = (gst.currentMethod()=="integral") ? 30. : 10.;
+
+  TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, 0.01, xMax_log, 10, yMin, yMax_log );
   h2_axes_log->SetXTitle( "Gun Current [pA]" );
   h2_axes_log->SetYTitle( "APD Current [pA]" );
   h2_axes_log->Draw();
@@ -214,7 +235,9 @@ int main( int argc, char* argv[] ) {
   f1_lineLog->SetLineColor(46);
   f1_lineLog->SetLineStyle(2);
   f1_lineLog->Draw("L same");
-  gr_iapd_vs_igun->Draw("P same");
+
+  gr_iapd_vs_igun ->Draw("P same");
+  gr_iapd_vs_igun2->Draw("P same");
 
   fitResults->Draw("same");
 
