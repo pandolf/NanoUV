@@ -27,7 +27,7 @@ int main( int argc, char* argv[] ) {
 
   NanoUVCommon::setStyle();
 
-  TLegend* legend = new TLegend( 0.55, 0.63, 0.9, 0.9 );
+  TLegend* legend = new TLegend( 0.6, 0.65, 0.9, 0.9 );
   legend->SetFillColor(0);
   legend->SetTextSize(0.035);
 
