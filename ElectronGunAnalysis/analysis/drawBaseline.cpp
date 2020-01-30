@@ -27,7 +27,7 @@ int main( int argc, char* argv[] ) {
 
   NanoUVCommon::setStyle();
 
-  TLegend* legend = new TLegend( 0.5, 0.55, 0.9, 0.9 );
+  TLegend* legend = new TLegend( 0.55, 0.63, 0.9, 0.9 );
   legend->SetFillColor(0);
   legend->SetTextSize(0.035);
 
@@ -43,51 +43,48 @@ int main( int argc, char* argv[] ) {
     TGraphErrors* gr_baseline_vs_igun  = new TGraphErrors(0);
     gr_baseline_vs_igun->SetName( Form( "V_{APD} = %.0f V", APDhv) );
 
-    float xMax;
-    float yMax;
-
     GunScanTool gst( gunEnergy, APDhv, data);
     //gst.set_currentMethod("integral");
 
     if( APDhv == 380. ) {
 
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_05_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_09_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_13_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.0395, gst.getBaseline("22gen20_17_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_01_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_13_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_09_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_05_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 9.96  , gst.getBaseline("23gen20_18_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 29.9  , gst.getBaseline("23gen20_14_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_01_M_.dat", -6.) );
 
     } else if( APDhv == 370. ) {
 
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_06_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_10_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_14_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.0395, gst.getBaseline("22gen20_18_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_03_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_14_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_10_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_06_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 9.96  , gst.getBaseline("23gen20_19_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 29.9  , gst.getBaseline("23gen20_15_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_03_M_.dat", -6.) );
     
     } else if( APDhv == 360. ) {
 
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_07_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_11_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_15_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.0395, gst.getBaseline("22gen20_19_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_04_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_15_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_11_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_07_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 9.96  , gst.getBaseline("23gen20_20_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 29.9  , gst.getBaseline("23gen20_16_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_04_M_.dat", -6.) );
     
     } else if( APDhv == 350. ) {
 
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_08_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_12_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_16_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.0395, gst.getBaseline("22gen20_20_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_05_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_16_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_12_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_08_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 9.96  , gst.getBaseline("23gen20_21_M_.dat", -6.) );
       gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 29.9  , gst.getBaseline("23gen20_17_M_.dat", -6.) );
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_05_M_.dat", -6.) );
     
     } // APDhv
 
@@ -105,9 +102,10 @@ int main( int argc, char* argv[] ) {
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
+  c1->SetLogx();
 
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, 0., 300., 10, 0., 130. );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, 0.01, 500., 10, 0., 260. );
   h2_axes->SetXTitle( "Gun Current [pA]" );
   h2_axes->SetYTitle( "Baseline Current (at x_{gun} = -6 mm) [pA]" );
   h2_axes->Draw();
@@ -129,7 +127,7 @@ int main( int argc, char* argv[] ) {
   for( unsigned i=0; i<graphs.size(); ++i ) graphs[i]->Draw("PL same");
 
 
-  std::string outdir( Form("plots/APDscans/%s/%.0feV/", data.c_str(), gunEnergy) );
+  std::string outdir( Form("plots/APDscans/%s/%.0feV", data.c_str(), gunEnergy) );
   system( Form("mkdir -p %s", outdir.c_str()) );
   c1->SaveAs( Form("%s/baseline_vs_igun.pdf", outdir.c_str()) );
   c1->SaveAs( Form("%s/baseline_vs_igun.eps", outdir.c_str()) );
