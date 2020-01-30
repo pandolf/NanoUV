@@ -34,6 +34,8 @@ class GunScanTool {
   TGraph* getCorrectedGraph( TGraph* graph, TF1* baseline );
 
   float getCurrentFromScan( TGraph* graph );
+  float getBaseline( const std::string& fileName, float x0 ); // baseline at gun position = x0 [mm]
+
 
   void addPointToGraph( TGraphErrors* graph, const std::string& fileName, float iGunBefore, float iGunAfter );
 

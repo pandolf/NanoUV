@@ -270,6 +270,18 @@ float GunScanTool::getCurrentFromScan( TGraph* graph ) {
 }
 
 
+
+float GunScanTool::getBaseline( const std::string& fileName, float x0 ) {
+
+  TGraph* gr_scan = this->getScanFromFile( fileName.c_str() ); 
+
+  TF1* baseline = this->fitDrift( gr_scan );
+
+  return baseline->Eval(x0);
+
+}
+
+
 TF1* GunScanTool::fitDrift( TGraph* graph ) {
 
   TGraph* fit_points = new TGraph(0);
