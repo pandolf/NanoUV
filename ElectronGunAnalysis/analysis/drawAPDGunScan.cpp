@@ -1,5 +1,5 @@
 #include "../../CommonTools/interface/NanoUVCommon.h"
-#include "../../ElectronGunAnalysis/interface/GunScanTool.h"
+#include "../../ElectronGunAnalysis/interface/GunScan.h"
 
 #include <iostream>
 #include <fstream>
@@ -17,6 +17,7 @@
 
 std::string data = "2020_01";
 //std::string data = "2019_11_28";
+std::string currentMethod = "integral";
 
 
 int main( int argc, char* argv[] ) {
@@ -24,25 +25,22 @@ int main( int argc, char* argv[] ) {
   float gunEnergy;
   float APDhv;
 
-  if( argc < 3 ) {
+  if( argc < 2 ) {
 
-    std::cout << "USAGE: ./drawAPDGunScan [gunEnergy] [APDhv]" << std::endl;
+    std::cout << "USAGE: ./drawAPDGunScan [gunEnergy] [APDhv(default=all)]" << std::endl;
     exit(1);
 
   } else {
 
     gunEnergy = atof(argv[1]);
-    APDhv = atof(argv[2]);
+    APDhv = (argc<3) ? -1. : atof(argv[2]);
 
   }
 
   NanoUVCommon::setStyle();
 
-  GunScanTool gst ( gunEnergy, APDhv, data);
-  GunScanTool gst2( gunEnergy, APDhv, "2019_11_28");
-
-  std::string outdir( Form("plots/APDscans/%s/%.0feV/%.0fV", data.c_str(), gst.gunEnergy(), gst.APDhv() ) );
-  system( Form("mkdir -p %s", outdir.c_str()) );
+  std::vector< GunScan* > scans  = GunScan::loadScans( Form("data/%s/scans.dat", data.c_str()), gunEnergy, APDhv );
+  std::vector< GunScan* > scans2 = GunScan::loadScans( Form("data/2019_11_28/scans.dat"), gunEnergy, APDhv );
 
   TGraphErrors* gr_iapd_vs_igun  = new TGraphErrors(0);
   TGraphErrors* gr_iapd_vs_igun2 = new TGraphErrors(0);
@@ -52,105 +50,136 @@ int main( int argc, char* argv[] ) {
   float xMax_log;
   float yMax_log;
 
-  if( data == "2019_11_28" ) {
+//if( data == "2019_11_28" ) {
 
-    gst.set_APDhv(380.);
-    gst.set_firstN_fit(7);
-    gst.set_lastN_fit(5);
+//  gst.set_APDhv(380.);
+//  gst.set_firstN_fit(7);
+//  gst.set_lastN_fit(5);
 
-    if( gunEnergy == 500. ) {
-  
-      gst.addPointToGraph( gr_iapd_vs_igun, "Ek_500_750fA_dfh_APD__28nov19_07_M_.dat", 0.8, 0.75 );
-      gst.addPointToGraph( gr_iapd_vs_igun, "Ek_500_3.6pA_dfh_APD__28nov19_06_M_.dat", 3.7, 3.6  );
-      gst.addPointToGraph( gr_iapd_vs_igun, "Ek_500_26pA_dfh_APD__28nov19_05_M_.dat" , 27.7, 26. );
-  
-      xMax = 30.;
-      yMax = 13000.;
-      xMax_log = 30.;
-      yMax_log = 13000.;
-  
-    } else if( gunEnergy == 900. ) {
-  
-      gst.addPointToGraph( gr_iapd_vs_igun, "Ek_900_450fA_dfv.txt", 0.44, 0.45 );
-      gst.addPointToGraph( gr_iapd_vs_igun, "Ek_900_3.3pA_dfv_28nov19_01_M_.dat", 1.5, 3.3 );
-      gst.addPointToGraph( gr_iapd_vs_igun, "Ek_900_15pA_dfv.txt", 15.5, 17. );
-  
-      xMax = 20.;
-      yMax = 75000.;
-      xMax_log = 20.;
-      yMax_log = 75000.;
-  
-    }
+//  if( gunEnergy == 500. ) {
+//
+//    gst.addPointToGraph( gr_iapd_vs_igun, "Ek_500_750fA_dfh_APD__28nov19_07_M_.dat", 0.8, 0.75 );
+//    gst.addPointToGraph( gr_iapd_vs_igun, "Ek_500_3.6pA_dfh_APD__28nov19_06_M_.dat", 3.7, 3.6  );
+//    gst.addPointToGraph( gr_iapd_vs_igun, "Ek_500_26pA_dfh_APD__28nov19_05_M_.dat" , 27.7, 26. );
+//
+//    xMax = 30.;
+//    yMax = 13000.;
+//    xMax_log = 30.;
+//    yMax_log = 13000.;
+//
+//  } else if( gunEnergy == 900. ) {
+//
+//    gst.addPointToGraph( gr_iapd_vs_igun, "Ek_900_450fA_dfv.txt", 0.44, 0.45 );
+//    gst.addPointToGraph( gr_iapd_vs_igun, "Ek_900_3.3pA_dfv_28nov19_01_M_.dat", 1.5, 3.3 );
+//    gst.addPointToGraph( gr_iapd_vs_igun, "Ek_900_15pA_dfv.txt", 15.5, 17. );
+//
+//    xMax = 20.;
+//    yMax = 75000.;
+//    xMax_log = 20.;
+//    yMax_log = 75000.;
+//
+//  }
 
-  } else if( data == "2020_01" ) {
+//} else if( data == "2020_01" ) {
 
-    gst .set_currentMethod("integral");
+//    gst .set_currentMethod("integral");
+//    gst2.set_currentMethod("integral");
+//    gst2.set_firstN_fit(7);
+//    gst2.set_lastN_fit(5);
+//
+//    if( gunEnergy == 900. ) {
+//  
+//      if( APDhv == 380. ) {
+//
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_05_M_.dat", 1.21, 1.21 ); // see logbook
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_09_M_.dat", 0.378, 0.375 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_13_M_.dat", 0.106, 0.111 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_17_M_.dat", 0.039, 0.040 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_01_M_.dat", 165., 207. );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_18_M_.dat", 9.9, 10.2 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_14_M_.dat", 30.3, 29.5 );
+//
+//        gst2.addPointToGraph( gr_iapd_vs_igun2, "Ek_900_450fA_dfv.txt", 0.44, 0.45 );
+//        gst2.addPointToGraph( gr_iapd_vs_igun2, "Ek_900_3.3pA_dfv_28nov19_01_M_.dat", 1.5, 3.3 );
+//        gst2.addPointToGraph( gr_iapd_vs_igun2, "Ek_900_15pA_dfv.txt", 15.5, 17. );
+//
+//      } else if( APDhv == 370. ) {
+//
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_06_M_.dat", 1.21, 1.21 ); 
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_10_M_.dat", 0.378, 0.375 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_14_M_.dat", 0.106, 0.111 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_18_M_.dat", 0.039, 0.040 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_03_M_.dat", 165., 207. );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_19_M_.dat", 9.9, 10.2 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_15_M_.dat", 30.3, 29.5 );
+//  
+//      } else if( APDhv == 360. ) {
+//
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_07_M_.dat", 1.21, 1.21 ); 
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_11_M_.dat", 0.378, 0.375 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_15_M_.dat", 0.106, 0.111 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_19_M_.dat", 0.039, 0.040 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_04_M_.dat", 165., 207. );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_20_M_.dat", 9.9, 10.2 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_16_M_.dat", 30.3, 29.5 );
+//  
+//      } else if( APDhv == 350. ) {
+//
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_08_M_.dat", 1.21, 1.21 ); 
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_12_M_.dat", 0.378, 0.375 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_16_M_.dat", 0.106, 0.111 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_20_M_.dat", 0.039, 0.040 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_05_M_.dat", 165., 207. );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_21_M_.dat", 9.9, 10.2 );
+//        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_17_M_.dat", 30.3, 29.5 );
+//  
+//      } // APDhv
+//
+//      //xMax = 2.;
+//      //xMax_log = 20.;
+//      //yMax = 1600.*gst.APDhv()*gst.APDhv()/(350.*350.);
+//      //yMax_log = 11000.;
+//
+//      xMax = 1.2*gst.getXmax(gr_iapd_vs_igun);
+//      xMax_log = 5.*xMax;
+//      yMax = 1.2*gst.getYmax(gr_iapd_vs_igun);
+//      yMax_log = 5.*yMax;
+//
+//    } // if gunEnergy
+//
+//  } // data
 
-    gst2.set_currentMethod("integral");
-    gst2.set_firstN_fit(7);
-    gst2.set_lastN_fit(5);
 
-    if( gunEnergy == 900. ) {
-  
-      if( APDhv == 380. ) {
 
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_05_M_.dat", 1.21, 1.21 ); // see logbook
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_09_M_.dat", 0.378, 0.375 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_13_M_.dat", 0.106, 0.111 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_17_M_.dat", 0.039, 0.040 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_01_M_.dat", 165., 207. );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_18_M_.dat", 9.9, 10.2 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_14_M_.dat", 30.3, 29.5 );
+  for( unsigned iScan=0; iScan<scans.size(); iScan++ ) {
 
-        gst2.addPointToGraph( gr_iapd_vs_igun2, "Ek_900_450fA_dfv.txt", 0.44, 0.45 );
-        gst2.addPointToGraph( gr_iapd_vs_igun2, "Ek_900_3.3pA_dfv_28nov19_01_M_.dat", 1.5, 3.3 );
-        gst2.addPointToGraph( gr_iapd_vs_igun2, "Ek_900_15pA_dfv.txt", 15.5, 17. );
+      if( scans[iScan]->gunEnergy() != gunEnergy ) continue;
+      if( scans[iScan]->APDhv() != APDhv ) continue;
 
-      } else if( APDhv == 370. ) {
+      scans[iScan]->set_currentMethod(currentMethod);
+      scans[iScan]->addPointToGraph( gr_iapd_vs_igun );
 
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_06_M_.dat", 1.21, 1.21 ); 
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_10_M_.dat", 0.378, 0.375 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_14_M_.dat", 0.106, 0.111 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_18_M_.dat", 0.039, 0.040 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_03_M_.dat", 165., 207. );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_19_M_.dat", 9.9, 10.2 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_15_M_.dat", 30.3, 29.5 );
-  
-      } else if( APDhv == 360. ) {
+  }
 
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_07_M_.dat", 1.21, 1.21 ); 
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_11_M_.dat", 0.378, 0.375 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_15_M_.dat", 0.106, 0.111 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_19_M_.dat", 0.039, 0.040 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_04_M_.dat", 165., 207. );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_20_M_.dat", 9.9, 10.2 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_16_M_.dat", 30.3, 29.5 );
-  
-      } else if( APDhv == 350. ) {
 
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_08_M_.dat", 1.21, 1.21 ); 
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_12_M_.dat", 0.378, 0.375 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_16_M_.dat", 0.106, 0.111 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "22gen20_20_M_.dat", 0.039, 0.040 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_05_M_.dat", 165., 207. );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_21_M_.dat", 9.9, 10.2 );
-        gst.addPointToGraph( gr_iapd_vs_igun, "23gen20_17_M_.dat", 30.3, 29.5 );
-  
-      } // APDhv
+  for( unsigned iScan=0; iScan<scans2.size(); iScan++ ) {
 
-      //xMax = 2.;
-      //xMax_log = 20.;
-      //yMax = 1600.*gst.APDhv()*gst.APDhv()/(350.*350.);
-      //yMax_log = 11000.;
+      if( scans2[iScan]->gunEnergy() != gunEnergy ) continue;
+      if( scans2[iScan]->APDhv() != APDhv ) continue;
 
-      xMax = 1.2*gst.getXmax(gr_iapd_vs_igun);
-      xMax_log = 5.*xMax;
-      yMax = 1.2*gst.getYmax(gr_iapd_vs_igun);
-      yMax_log = 5.*yMax;
+      scans2[iScan]->set_currentMethod(currentMethod);
+      scans2[iScan]->set_firstN_fit(7);
+      scans2[iScan]->set_lastN_fit(5);
+      scans2[iScan]->addPointToGraph( gr_iapd_vs_igun2 );
 
-    } // if gunEnergy
+  }
 
-  } // data
+  xMax = 1.2*GunScan::getXmax(gr_iapd_vs_igun);
+  xMax_log = 5.*xMax;
+  yMax = 1.2*GunScan::getYmax(gr_iapd_vs_igun);
+  yMax_log = 5.*yMax;
+
+
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
@@ -165,7 +194,7 @@ int main( int argc, char* argv[] ) {
   label_settings->SetTextSize( 0.035 );
   label_settings->SetFillColor(0);
   label_settings->AddText( Form("E_{gun} = %.0f eV", gunEnergy) );
-  label_settings->AddText( Form("I_{APD} = %.0f V", gst.APDhv()) );
+  label_settings->AddText( Form("I_{APD} = %.0f V", APDhv) );
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
 
@@ -207,15 +236,15 @@ int main( int argc, char* argv[] ) {
   gr_iapd_vs_igun2->Draw("P same");
 
 
-  c1->SaveAs( Form("%s/iapd_vs_igun.pdf", outdir.c_str()) );
-  c1->SaveAs( Form("%s/iapd_vs_igun.eps", outdir.c_str()) );
+  c1->SaveAs( Form("%s/iapd_vs_igun.pdf", scans[0]->outdir().c_str()) );
+  c1->SaveAs( Form("%s/iapd_vs_igun.eps", scans[0]->outdir().c_str()) );
 
   c1->Clear();
 
   c1->SetLogx();
   c1->SetLogy();
 
-  float yMin = (gst.currentMethod()=="integral") ? 30. : 10.;
+  float yMin = (currentMethod=="integral") ? 30. : 10.;
 
   TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, 0.01, xMax_log, 10, yMin, yMax_log );
   h2_axes_log->SetXTitle( "Gun Current [pA]" );
@@ -241,8 +270,8 @@ int main( int argc, char* argv[] ) {
 
   fitResults->Draw("same");
 
-  c1->SaveAs( Form("%s/iapd_vs_igun_log.pdf", outdir.c_str()) );
-  c1->SaveAs( Form("%s/iapd_vs_igun_log.eps", outdir.c_str()) );
+  c1->SaveAs( Form("%s/iapd_vs_igun_log.pdf", scans[0]->outdir().c_str()) );
+  c1->SaveAs( Form("%s/iapd_vs_igun_log.eps", scans[0]->outdir().c_str()) );
 
 
   
