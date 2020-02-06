@@ -3,6 +3,7 @@
 #include "../../CommonTools/interface/NanoUVCommon.h"
 
 #include <fstream>
+#include <sstream>
 
 #include "TF1.h"
 #include "TCanvas.h"
@@ -29,6 +30,8 @@ GunScan::GunScan( float gunEnergy, float APDhv, const std::string& dataDir, cons
   baselineFunc_ = "pol3";
 
   loadScan();
+
+  system( Form("mkdir -p %s", this->outdir().c_str()) );
 
 }
 
@@ -183,6 +186,13 @@ std::string GunScan::baselineFunc() const {
 // ---- OTHER FUNCTIONS
 
 
+std::string GunScan::outdir() const {
+
+  return std::string(Form("plots/APDscans/%s/%.0feV/%.0fV", dataDir_.c_str(), gunEnergy_, APDhv_) );
+
+}
+
+
 float GunScan::gunCurrent() const {
 
   return 0.5*(iGunBefore_+iGunAfter_);
@@ -199,7 +209,7 @@ float GunScan::gunCurrentError() const {
 
 void GunScan::loadScan() {
 
-  if( graph_ != 0 ) delete graph_;
+  //if( graph_ != 0 ) delete graph_;
   graph_ = new TGraph(0);
   graph_->SetName( Form( "gr_%s", scanName_.c_str()) );
 
@@ -222,22 +232,69 @@ void GunScan::loadScan() {
 
 
 
+std::vector< GunScan* > GunScan::loadScans( const std::string& scansFile, float gunEnergy, float APDhv ) {
 
-TGraph* GunScan::getCorrectedGraph( TF1* baseline ) {
+  std::cout << "-> Loading scans from file: " << scansFile << std::endl;
+  if( gunEnergy>=0. ) std::cout << "  -> Will load only scans with E(gun) = " << gunEnergy << std::endl;
+  if( APDhv    >=0. ) std::cout << "  -> Will load only scans with HV(APD) = " << APDhv << std::endl;
+  std::cout << std::endl;
 
-  TGraph* graph_corr = new TGraph(0);
-  graph_corr->SetName( Form( "%s_corr", graph_->GetName() ) );
+  std::string dataDir = findDataDirFromPath( scansFile );
 
-  for( int iPoint=0; iPoint<graph_->GetN(); ++iPoint ) {
+  std::vector< GunScan* > scans;
 
-    double x, y;
-    graph_->GetPoint( iPoint, x, y );
+  std::ifstream ifs(scansFile.c_str());
 
-    graph_corr->SetPoint( iPoint, x, y-baseline->Eval(x) );
+  std::string line;
+  while( ifs.good() ) {
 
+    std::getline(ifs, line);
+    TString line_tstr(line);
+    if( line_tstr.BeginsWith("#") ) continue;
+    if( line_tstr.Length()<10 ) continue;
+
+    std::string this_scanName;
+    float this_gunEnergy, this_APDhv, this_iGunBefore, this_iGunAfter;
+
+    std::istringstream iss(line);
+    iss >> this_scanName >> this_gunEnergy >> this_APDhv >> this_iGunBefore >> this_iGunAfter;
+    //std::cout << this_scanName << " " <<  this_gunEnergy << " " <<  this_APDhv << " " <<  this_iGunBefore << " " <<  this_iGunAfter << std::endl;
+    GunScan* this_gunScan = new GunScan( this_gunEnergy, this_APDhv, dataDir, this_scanName, this_iGunBefore, this_iGunAfter );
+
+    bool gunEnergyOK = (gunEnergy<0.) || (gunEnergy>=0. && this_gunEnergy==gunEnergy);
+    bool APDhvOK     = (APDhv    <0.) || (APDhv    >=0. && this_APDhv    ==APDhv    );
+    if( gunEnergyOK && APDhvOK )
+      scans.push_back( this_gunScan );
+
+  } // while ifs
+
+  std::cout << std::endl << std::endl;
+
+  return scans;
+
+}
+
+
+
+std::string GunScan::findDataDirFromPath( const std::string& scansFile ) {
+
+  TString scansFile_tstr(scansFile);
+  std::string scansFile2(std::string(scansFile_tstr.ReplaceAll( "//", "/" )));
+
+  std::vector<std::string> parts;
+  std::string delimiter = "/";
+  size_t pos = 0;
+  while (( pos = scansFile2.find(delimiter)) != std::string::npos) {
+    std::string part = scansFile2.substr(0, pos);
+    parts.push_back(part);
+    scansFile2.erase(0, pos + delimiter.length());
   }
 
-  return graph_corr;
+  std::string dataDir = parts[parts.size()-1];
+
+  std::cout << "-> Automatically found dataDir: " << dataDir << std::endl;
+
+  return dataDir;
 
 }
 
@@ -295,15 +352,15 @@ float GunScan::getCurrentFromScan() {
 
   if( currentMethod_ == "max" ) {
 
-    current = getYmax( graph_ );
+    current = getYmax( graph_corr_ );
 
 
   } else if( currentMethod_ == "firstMax" ) {
 
-    for( int iPoint=0; iPoint<graph_->GetN(); ++iPoint ) {
+    for( int iPoint=0; iPoint<graph_corr_->GetN(); ++iPoint ) {
 
       double this_x, this_y;
-      graph_->GetPoint( iPoint, this_x, this_y );
+      graph_corr_->GetPoint( iPoint, this_x, this_y );
       if( this_x >= -6. ) continue;
       if( this_y>=current ) current = this_y;
 
@@ -311,12 +368,12 @@ float GunScan::getCurrentFromScan() {
 
   } else if( currentMethod_ == "integral" ) {
 
-    float step = getStep(graph_);
+    float step = getStep(graph_corr_);
 
-    for( int i=0; i<graph_->GetN(); ++i ) {
+    for( int i=0; i<graph_corr_->GetN(); ++i ) {
 
       double x, y;
-      graph_->GetPoint( i, x, y );
+      graph_corr_->GetPoint( i, x, y );
       current += y*step;
 
     } // for points
@@ -386,11 +443,31 @@ TF1* GunScan::fitDrift( TGraph* graph ) {
 
 
 
-void GunScan::addPointToGraph( TGraphErrors* graph, const std::string& fileName ) {
+void GunScan::correctGraph( TF1* baseline ) {
+
+  graph_corr_ = new TGraph(0);
+  graph_corr_->SetName( Form( "%s_corr", graph_->GetName() ) );
+
+  for( int iPoint=0; iPoint<graph_->GetN(); ++iPoint ) {
+
+    double x, y;
+    graph_->GetPoint( iPoint, x, y );
+
+    graph_corr_->SetPoint( iPoint, x, y-baseline->Eval(x) );
+
+  }
+
+}
+
+
+
+
+
+void GunScan::addPointToGraph( TGraphErrors* graph ) {
 
   TF1* baseline = fitDrift( graph_ );
 
-  TGraph* gr_scan_corr = getCorrectedGraph( baseline );
+  correctGraph( baseline );
 
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
@@ -416,7 +493,7 @@ void GunScan::addPointToGraph( TGraphErrors* graph, const std::string& fileName 
   double y0 = (yLast<yFirst) ? yLast : yFirst;
 
 
-  TH2D* h2_axes = new TH2D( Form("axes_%s", fileName.c_str()), "", 10, xMin, xMax, 10, y0 - 0.5*yDiff, y0 + 2.5*yDiff );
+  TH2D* h2_axes = new TH2D( Form("axes_%s", graph_->GetName()), "", 10, xMin, xMax, 10, y0 - 0.5*yDiff, y0 + 2.5*yDiff );
   h2_axes->SetXTitle("Gun Position [mm]"); 
   h2_axes->SetYTitle("APD Current [nA]");
   h2_axes->Draw();
@@ -451,15 +528,14 @@ void GunScan::addPointToGraph( TGraphErrors* graph, const std::string& fileName 
   graph_->Draw("P same");
 
 
-  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scan_%s.pdf", dataDir_.c_str(), gunEnergy(), APDhv(), fileName.c_str()));
-  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scan_%s.eps", dataDir_.c_str(), gunEnergy(), APDhv(), fileName.c_str()));
+  c1->SaveAs(Form("%s/scan_%s.pdf", this->outdir().c_str(), scanName_.c_str()));
+  c1->SaveAs(Form("%s/scan_%s.eps", this->outdir().c_str(), scanName_.c_str()));
 
   c1->Clear();
 
-  double yMax_corr = getYmax( gr_scan_corr );
+  double yMax_corr = getYmax( graph_corr_ );
 
-  //TH2D* h2_axes_corr = new TH2D( Form("axes_corr_%s", fileName.c_str()), "", 10, xMin, xMax, 10, -1.5, 13. );
-  TH2D* h2_axes_corr = new TH2D( Form("axes_corr_%s", fileName.c_str()), "", 10, xMin, xMax, 10, -0.5*yMax_corr, 2.5*yMax_corr );
+  TH2D* h2_axes_corr = new TH2D( Form("axes_corr_%s", graph_->GetName()), "", 10, xMin, xMax, 10, -0.5*yMax_corr, 2.5*yMax_corr );
   h2_axes_corr->SetXTitle("Gun Position [mm]");
   h2_axes_corr->SetYTitle("Corrected APD Current [nA]");
   h2_axes_corr->Draw();
@@ -472,17 +548,17 @@ void GunScan::addPointToGraph( TGraphErrors* graph, const std::string& fileName 
 
   label_settings->Draw("same");
 
-  gr_scan_corr->SetMarkerStyle(20);
-  gr_scan_corr->SetMarkerSize(1.1);
-  gr_scan_corr->SetMarkerColor(kGray+3);
-  gr_scan_corr->SetLineColor(kGray+3);
-  gr_scan_corr->Draw("P same");
+  graph_corr_->SetMarkerStyle(20);
+  graph_corr_->SetMarkerSize(1.1);
+  graph_corr_->SetMarkerColor(kGray+3);
+  graph_corr_->SetLineColor(kGray+3);
+  graph_corr_->Draw("P same");
 
   label->Draw("same");  
   gPad->RedrawAxis();
 
-  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.pdf", dataDir_.c_str(), gunEnergy(), APDhv(), fileName.c_str()));
-  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.eps", dataDir_.c_str(), gunEnergy(), APDhv(), fileName.c_str()));
+  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.pdf", dataDir_.c_str(), gunEnergy(), APDhv(), scanName_.c_str()));
+  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.eps", dataDir_.c_str(), gunEnergy(), APDhv(), scanName_.c_str()));
 
 
   float iAPD = this->getCurrentFromScan()*1000; // convert to pA

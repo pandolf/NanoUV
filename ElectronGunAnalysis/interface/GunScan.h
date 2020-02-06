@@ -39,21 +39,22 @@ class GunScan {
   int lastN_fit() const;
   std::string baselineFunc() const;
 
+  std::string outdir() const;
   float gunCurrent() const;
   float gunCurrentError() const;
 
   void loadScan();
 
-  static std::vector<GunScan*> loadScans( const std::string& scansFileName );
+  static std::vector<GunScan*> loadScans( const std::string& scansFileName, float gunEnergy=-1., float APDhv=-1. ); // default = all
 
-  TGraph* getCorrectedGraph( TF1* baseline );
+  void correctGraph( TF1* baseline );
 
   float getCurrentFromScan();
 
   float getBaseline( float x0 ); // baseline at gun position = x0 [mm]
 
 
-  void addPointToGraph( TGraphErrors* graph, const std::string& fileName );
+  void addPointToGraph( TGraphErrors* graph );
 
   // handy:
   static float getXmax( TGraph* graph );
@@ -71,6 +72,7 @@ class GunScan {
   float iGunAfter_;
 
   TGraph* graph_;
+  TGraph* graph_corr_;
 
   std::string currentMethod_;
   int firstN_fit_;
@@ -78,6 +80,7 @@ class GunScan {
   std::string baselineFunc_;
 
   TF1* fitDrift( TGraph* graph );
+  static std::string findDataDirFromPath( const std::string& scansFile );
 
 };
 
