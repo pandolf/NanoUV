@@ -19,16 +19,16 @@ drawGain: drawGain.cpp NanoUVCommon.o
 drawCurrent: drawCurrent.cpp NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawCurrent drawCurrent.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
-drawAPDGunScan: drawAPDGunScan.cpp NanoUVCommon.o GunScanTool.o
-	$(CC) -Wall $(INCLUDES) -o drawAPDGunScan drawAPDGunScan.cpp NanoUVCommon.o GunScanTool.o $(ROOTFLAG) $(EXTRALIBS)
+drawAPDGunScan: drawAPDGunScan.cpp NanoUVCommon.o GunScan.o
+	$(CC) -Wall $(INCLUDES) -o drawAPDGunScan drawAPDGunScan.cpp NanoUVCommon.o GunScan.o $(ROOTFLAG) $(EXTRALIBS)
 
-drawBaseline: drawBaseline.cpp NanoUVCommon.o GunScanTool.o
-	$(CC) -Wall $(INCLUDES) -o drawBaseline drawBaseline.cpp NanoUVCommon.o GunScanTool.o $(ROOTFLAG) $(EXTRALIBS)
+drawBaseline: drawBaseline.cpp NanoUVCommon.o GunScan.o
+	$(CC) -Wall $(INCLUDES) -o drawBaseline drawBaseline.cpp NanoUVCommon.o GunScan.o $(ROOTFLAG) $(EXTRALIBS)
 
 
 
-GunScanTool.o: ../../ElectronGunAnalysis/src/GunScanTool.cc NanoUVCommon.o
-	$(CC) -Wall $(INCLUDES) -c ../../ElectronGunAnalysis/src/GunScanTool.cc NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+GunScan.o: ../../ElectronGunAnalysis/src/GunScan.cc NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -c ../../ElectronGunAnalysis/src/GunScan.cc NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
 NanoUVCommon.o: ../../CommonTools/src/NanoUVCommon.cc 
 	$(CC) -Wall $(INCLUDES) -c ../../CommonTools/src/NanoUVCommon.cc $(ROOTFLAG) $(EXTRALIBS)
