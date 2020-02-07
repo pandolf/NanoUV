@@ -25,6 +25,7 @@ GunScan::GunScan( float gunEnergy, float APDhv, const std::string& dataDir, cons
   iGunAfter_ = (iGunAfter>=0.) ? iGunAfter : iGunBefore;
 
   currentMethod_ = "max";
+  currentEvalPoint_ = -6.;
   firstN_fit_ = 12;
   lastN_fit_ = 12;
   baselineFunc_ = "pol3";
@@ -58,6 +59,13 @@ void GunScan::set_APDhv( float APDhv ) {
 void GunScan::set_currentMethod( const std::string& currentMethod ) {
 
   currentMethod_ = currentMethod;
+
+}
+
+
+void GunScan::set_currentEvalPoint( float currentEvalPoint ) {
+
+  currentEvalPoint_ = currentEvalPoint;
 
 }
 
@@ -131,6 +139,13 @@ float GunScan::APDhv() const {
 std::string GunScan::currentMethod() const {
 
   return currentMethod_;
+
+}
+
+
+float GunScan::currentEvalPoint() const {
+
+  return currentEvalPoint_;
 
 }
 
@@ -394,6 +409,26 @@ float GunScan::getCurrentFromScan() {
       double x, y;
       graph_corr_->GetPoint( i, x, y );
       current += y*step;
+
+    } // for points
+
+  } else if( currentMethod_ == "point" ) {
+
+    for( int i=0; i<graph_corr_->GetN()-1; ++i ) {
+
+      double x1, y1;
+      graph_corr_->GetPoint( i  , x1, y1 );
+
+      double x2, y2;
+      graph_corr_->GetPoint( i+1, x2, y2 );
+
+      if( currentEvalPoint_ > x1 && currentEvalPoint_ < x2 ) {
+
+        // linear interpolation
+        float slope = (y2-y1)/(x2-x1);
+        current = y1 + slope*(currentEvalPoint_-x1);
+
+      } // if
 
     } // for points
 

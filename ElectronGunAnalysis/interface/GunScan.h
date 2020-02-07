@@ -24,6 +24,7 @@ class GunScan {
   void set_iGunBefore( float iGunBefore );
   void set_iGunAfter( float iGunAfter );
   void set_currentMethod( const std::string& currentMethod );
+  void set_currentEvalPoint( float currentEvalPoint );
   void set_firstN_fit( int firstN_fit );
   void set_lastN_fit( int lastN_fit );
   void set_baselineFunc( const std::string& baselineFunc );
@@ -35,6 +36,7 @@ class GunScan {
   float iGunBefore() const;
   float iGunAfter() const;
   std::string currentMethod() const;
+  float currentEvalPoint() const;
   int firstN_fit() const;
   int lastN_fit() const;
   std::string baselineFunc() const;
@@ -78,6 +80,7 @@ class GunScan {
   TF1* baseline_;
 
   std::string currentMethod_;
+  float currentEvalPoint_;
   int firstN_fit_;
   int lastN_fit_;
   std::string baselineFunc_;
