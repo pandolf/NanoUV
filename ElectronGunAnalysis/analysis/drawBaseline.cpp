@@ -142,12 +142,12 @@ int main( int argc, char* argv[] ) {
     float xMin = 341.;
     float xMax = 389.;
 
-    TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., 10 );
+    TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., 1.2*GunScan::getYmax(gr_iapd_vs_APDhv_norm) );
     h2_axes->SetXTitle( "V_{APD} [V]" );
     h2_axes->SetYTitle( "Relative Current Intensity" );
     h2_axes->Draw();
 
-    TLegend* legend = new TLegend( 0.2, 0.6, 0.5, 0.8 );
+    TLegend* legend = new TLegend( 0.25, 0.5, 0.5, 0.65 );
     legend->SetFillColor(0);
     legend->SetTextSize(0.035);
     legend->AddEntry( gr_iapd_vs_APDhv_norm, "I_{APD}", "LP" );
@@ -155,18 +155,21 @@ int main( int argc, char* argv[] ) {
     legend->Draw("same");
 
     gr_baseline_vs_APDhv_norm->SetMarkerStyle(24);
-    gr_baseline_vs_APDhv_norm->SetMarkerSize(1.3);
-    gr_baseline_vs_APDhv_norm->SetMarkerColor(kGray+3);
-    gr_baseline_vs_APDhv_norm->SetLineColor(kGray+3);
+    gr_baseline_vs_APDhv_norm->SetMarkerSize(1.6);
+    gr_baseline_vs_APDhv_norm->SetMarkerColor(46);
+    gr_baseline_vs_APDhv_norm->SetLineColor(46);
     gr_baseline_vs_APDhv_norm->Draw("PL same");
 
     gr_iapd_vs_APDhv_norm->SetMarkerStyle(20);
-    gr_iapd_vs_APDhv_norm->SetMarkerSize(1.3);
-    gr_iapd_vs_APDhv_norm->SetMarkerColor(kGray+3);
-    gr_iapd_vs_APDhv_norm->SetLineColor(kGray+3);
+    gr_iapd_vs_APDhv_norm->SetMarkerSize(1.6);
+    gr_iapd_vs_APDhv_norm->SetMarkerColor(46);
+    gr_iapd_vs_APDhv_norm->SetLineColor(46);
     gr_iapd_vs_APDhv_norm->Draw("PL same");
 
-    TPaveText* label_gun = new TPaveText( 0.7, 0.2, 0.9, 0.3, "brNDC" );
+    TPaveText* label_gun = new TPaveText( 0.2, 0.65, 0.5, 0.85, "brNDC" );
+    //TPaveText* label_gun = new TPaveText( 0.25, 0.3, 0.5, 0.4, "brNDC" );
+    //TPaveText* label_gun = new TPaveText( 0.7, 0.2, 0.9, 0.3, "brNDC" );
+    label_gun->SetTextAlign(11);
     label_gun->SetFillColor(0);
     label_gun->SetTextSize(0.035);
     label_gun->AddText( Form("%s", gunCurrentText.c_str()) );
