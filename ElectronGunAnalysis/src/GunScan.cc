@@ -202,7 +202,24 @@ float GunScan::gunCurrent() const {
 
 float GunScan::gunCurrentError() const {
 
-  return fabs(iGunBefore_-iGunAfter_);
+  float error = fabs(iGunBefore_-iGunAfter_);
+
+  if( error==0. ) error = 0.01*this->gunCurrent();
+  
+  return error;
+
+}
+
+
+std::string gunCurrentText() const {
+
+  std::string gunCurrentText;
+  if( this->gunCurrent() < 1. )
+    gunCurrentText = std::string(Form("I_{gun} = %.0f fA", this->gunCurrent()*1000.) );
+  else
+    gunCurrentText = std::string(Form("I_{gun} = %.1f pA", this->gunCurrent()) );
+
+  return gunCurrenttext;
 
 }
 
@@ -507,11 +524,8 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
   label_settings->SetTextColor( 46 );
   label_settings->SetFillColor(0);
   label_settings->AddText( Form("E_{gun} = %.0f eV", gunEnergy_) );
+  label_settings->AddText( Form("%s", this->gunCurrentText().c_str()) );
 
-  if( this->gunCurrent() < 1. )
-    label_settings->AddText( Form("I_{gun} = %.0f fA", this->gunCurrent()*1000.) );
-  else
-    label_settings->AddText( Form("I_{gun} = %.1f pA", this->gunCurrent()) );
   label_settings->AddText( Form( "V_{APD} = %.0f V", APDhv_ ) );
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
