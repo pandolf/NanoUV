@@ -1,5 +1,5 @@
 #include "../../CommonTools/interface/NanoUVCommon.h"
-#include "../../ElectronGunAnalysis/interface/GunScanTool.h"
+#include "../../ElectronGunAnalysis/interface/GunScan.h"
 
 #include <iostream>
 #include <fstream>
@@ -18,6 +18,7 @@
 std::string data = "2020_01";
 //std::string data = "2019_11_28";
 
+void addBaselineMeanPoint( TGraphErrors* gr_baseline_vs_APDhv, float APDhv, TGraphErrors* gr_baseline_vs_igun );
 
 
 
@@ -34,59 +35,19 @@ int main( int argc, char* argv[] ) {
   std::vector<int> colors = NanoUVCommon::colors();
 
   std::vector< TGraphErrors* > graphs;
+  TGraphErrors* gr_baseline_vs_APDhv = new TGraphErrors(0);
+
+
 
   for( float APDhv=350.; APDhv <= 380.; APDhv += 10. ) {
 
-    std::string outdir( Form("plots/APDscans/%s/%.0feV/%.0fV", data.c_str(), gunEnergy, APDhv ) );
-    system( Form("mkdir -p %s", outdir.c_str()) );
+    std::vector< GunScan* > scans  = GunScan::loadScans( Form("data/%s/scans.dat", data.c_str()), gunEnergy, APDhv );
 
     TGraphErrors* gr_baseline_vs_igun  = new TGraphErrors(0);
     gr_baseline_vs_igun->SetName( Form( "V_{APD} = %.0f V", APDhv) );
 
-    GunScanTool gst( gunEnergy, APDhv, data);
-    //gst.set_currentMethod("integral");
-
-    if( APDhv == 380. ) {
-
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.0395, gst.getBaseline("22gen20_17_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_13_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_09_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_05_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 9.96  , gst.getBaseline("23gen20_18_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 29.9  , gst.getBaseline("23gen20_14_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_01_M_.dat", -6.) );
-
-    } else if( APDhv == 370. ) {
-
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.0395, gst.getBaseline("22gen20_18_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_14_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_10_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_06_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 9.96  , gst.getBaseline("23gen20_19_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 29.9  , gst.getBaseline("23gen20_15_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_03_M_.dat", -6.) );
-    
-    } else if( APDhv == 360. ) {
-
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.0395, gst.getBaseline("22gen20_19_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_15_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_11_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_07_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 9.96  , gst.getBaseline("23gen20_20_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 29.9  , gst.getBaseline("23gen20_16_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_04_M_.dat", -6.) );
-    
-    } else if( APDhv == 350. ) {
-
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.0395, gst.getBaseline("22gen20_20_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.109 , gst.getBaseline("22gen20_16_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 0.3765, gst.getBaseline("22gen20_12_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 1.21  , gst.getBaseline("22gen20_08_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 9.96  , gst.getBaseline("23gen20_21_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 29.9  , gst.getBaseline("23gen20_17_M_.dat", -6.) );
-      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), 186.  , gst.getBaseline("23gen20_05_M_.dat", -6.) );
-    
-    } // APDhv
+    for( unsigned iScan=0; iScan<scans.size(); ++iScan )
+      gr_baseline_vs_igun->SetPoint( gr_baseline_vs_igun->GetN(), scans[iScan]->gunCurrent(), scans[iScan]->getBaseline(-6.) );
 
     gr_baseline_vs_igun->SetMarkerStyle( 20 ); 
     gr_baseline_vs_igun->SetMarkerSize( 1.4 ); 
@@ -96,6 +57,9 @@ int main( int argc, char* argv[] ) {
     graphs.push_back( gr_baseline_vs_igun );
 
     legend->AddEntry( gr_baseline_vs_igun, gr_baseline_vs_igun->GetName(), "P" );
+
+    addBaselineMeanPoint( gr_baseline_vs_APDhv, APDhv, gr_baseline_vs_igun );
+
 
   } // for APDhv
 
@@ -172,3 +136,15 @@ int main( int argc, char* argv[] ) {
 
 }
 
+
+void addBaselineMeanPoint( TGraphErrors* gr_baseline_vs_APDhv, float APDhv, TGraphErrors* gr_baseline_vs_igun ) {
+
+  float meanBaseline = gr_baseline_vs_igun->GetMean(2);
+  float rmsBaseline = gr_baseline_vs_igun->GetRMS(2);
+
+  int thisPoint = gr_baseline_vs_APDhv->GetN();
+
+  gr_baseline_vs_APDhv->SetPoint     ( thisPoint, APDhv, meanBaseline );
+  gr_baseline_vs_APDhv->SetPointError( thisPoint,    0.,  rmsBaseline );
+
+}
