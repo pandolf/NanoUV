@@ -235,8 +235,8 @@ void GunScan::loadScan() {
 std::vector< GunScan* > GunScan::loadScans( const std::string& scansFile, float gunEnergy, float APDhv ) {
 
   std::cout << "-> Loading scans from file: " << scansFile << std::endl;
-  if( gunEnergy>=0. ) std::cout << "  -> Will load only scans with E(gun) = " << gunEnergy << std::endl;
-  if( APDhv    >=0. ) std::cout << "  -> Will load only scans with HV(APD) = " << APDhv << std::endl;
+  if( gunEnergy>=0. ) std::cout << "  -> Will load only scans with E(gun) = " << gunEnergy << " eV" << std::endl;
+  if( APDhv    >=0. ) std::cout << "  -> Will load only scans with HV(APD) = " << APDhv << " V" << std::endl;
   std::cout << std::endl;
 
   std::string dataDir = findDataDirFromPath( scansFile );
@@ -258,13 +258,13 @@ std::vector< GunScan* > GunScan::loadScans( const std::string& scansFile, float 
 
     std::istringstream iss(line);
     iss >> this_scanName >> this_gunEnergy >> this_APDhv >> this_iGunBefore >> this_iGunAfter;
-    //std::cout << this_scanName << " " <<  this_gunEnergy << " " <<  this_APDhv << " " <<  this_iGunBefore << " " <<  this_iGunAfter << std::endl;
-    GunScan* this_gunScan = new GunScan( this_gunEnergy, this_APDhv, dataDir, this_scanName, this_iGunBefore, this_iGunAfter );
 
     bool gunEnergyOK = (gunEnergy<0.) || (gunEnergy>=0. && this_gunEnergy==gunEnergy);
     bool APDhvOK     = (APDhv    <0.) || (APDhv    >=0. && this_APDhv    ==APDhv    );
-    if( gunEnergyOK && APDhvOK )
+    if( gunEnergyOK && APDhvOK ) {
+      GunScan* this_gunScan = new GunScan( this_gunEnergy, this_APDhv, dataDir, this_scanName, this_iGunBefore, this_iGunAfter );
       scans.push_back( this_gunScan );
+     }
 
   } // while ifs
 
@@ -292,7 +292,7 @@ std::string GunScan::findDataDirFromPath( const std::string& scansFile ) {
 
   std::string dataDir = parts[parts.size()-1];
 
-  std::cout << "-> Automatically found dataDir: " << dataDir << std::endl;
+  //std::cout << "-> Automatically found dataDir: " << dataDir << std::endl;
 
   return dataDir;
 
