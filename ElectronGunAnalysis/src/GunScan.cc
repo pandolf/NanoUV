@@ -30,6 +30,8 @@ GunScan::GunScan( float gunEnergy, float APDhv, const std::string& dataDir, cons
   baselineFunc_ = "pol3";
 
   loadScan();
+  correctGraph();
+
 
   system( Form("mkdir -p %s", this->outdir().c_str()) );
 
@@ -211,7 +213,7 @@ float GunScan::gunCurrentError() const {
 }
 
 
-std::string gunCurrentText() const {
+std::string GunScan::gunCurrentText() const {
 
   std::string gunCurrentText;
   if( this->gunCurrent() < 1. )
@@ -219,7 +221,7 @@ std::string gunCurrentText() const {
   else
     gunCurrentText = std::string(Form("I_{gun} = %.1f pA", this->gunCurrent()) );
 
-  return gunCurrenttext;
+  return gunCurrentText;
 
 }
 
@@ -410,25 +412,33 @@ float GunScan::getCurrentFromScan() {
 
 float GunScan::getBaseline( float x0 ) {
 
-  TF1* baseline = this->fitDrift( graph_ );
-
-  return baseline->Eval(x0);
+  return baseline_->Eval(x0);
 
 }
 
 
-TF1* GunScan::fitDrift( TGraph* graph ) {
+
+void GunScan::correctGraph() {
+
+  fitDrift();
+  subtractBaseline();
+
+}
+
+
+
+void GunScan::fitDrift() {
 
   TGraph* fit_points = new TGraph(0);
 
-  int nPoints = graph->GetN();
+  int nPoints = graph_->GetN();
 
   for( int i=0; i<nPoints; ++i ) {
 
     if( (i<=firstN_fit_) || (i>=(nPoints-lastN_fit_)) ) {
 
       double x, y;
-      graph->GetPoint( i, x, y );
+      graph_->GetPoint( i, x, y );
 
       fit_points->SetPoint( fit_points->GetN(), x, y );
 
@@ -437,8 +447,8 @@ TF1* GunScan::fitDrift( TGraph* graph ) {
   } // for
 
   double xFirst, xLast, yFirst, yLast;
-  graph->GetPoint( 0, xFirst, yFirst );
-  graph->GetPoint( nPoints-1, xLast, yLast );
+  graph_->GetPoint( 0, xFirst, yFirst );
+  graph_->GetPoint( nPoints-1, xLast, yLast );
 
   double xMin, xMax;
   if(xFirst<xLast) {
@@ -449,18 +459,15 @@ TF1* GunScan::fitDrift( TGraph* graph ) {
     xMax = xFirst;
   }
 
-  TF1* baseline = new TF1( Form("line_%s", graph->GetName()), baselineFunc_.c_str(), xMin, xMax );
-  //TF1* baseline = new TF1( Form("line_%s", graph->GetName()), "[0] + [1]*x + [2]*x*x + [3]*x*x*x", xMin, xMax );
+  baseline_ = new TF1( Form("line_%s", graph_->GetName()), baselineFunc_.c_str(), xMin, xMax );
 
-  fit_points->Fit( baseline, "QR" );
+  fit_points->Fit( baseline_, "QR" );
  
-  return baseline;
-
 }
 
 
 
-void GunScan::correctGraph( TF1* baseline ) {
+void GunScan::subtractBaseline() {
 
   graph_corr_ = new TGraph(0);
   graph_corr_->SetName( Form( "%s_corr", graph_->GetName() ) );
@@ -470,7 +477,7 @@ void GunScan::correctGraph( TF1* baseline ) {
     double x, y;
     graph_->GetPoint( iPoint, x, y );
 
-    graph_corr_->SetPoint( iPoint, x, y-baseline->Eval(x) );
+    graph_corr_->SetPoint( iPoint, x, y-baseline_->Eval(x) );
 
   }
 
@@ -481,10 +488,6 @@ void GunScan::correctGraph( TF1* baseline ) {
 
 
 void GunScan::addPointToGraph( TGraphErrors* graph ) {
-
-  TF1* baseline = fitDrift( graph_ );
-
-  correctGraph( baseline );
 
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
@@ -530,10 +533,10 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
   
-  baseline->SetLineWidth(2);
-  baseline->SetLineColor(46);
-  baseline->SetLineStyle(2);
-  baseline->Draw("L same");
+  baseline_->SetLineWidth(2);
+  baseline_->SetLineColor(46);
+  baseline_->SetLineStyle(2);
+  baseline_->Draw("L same");
 
   graph_->SetMarkerStyle(20);
   graph_->SetMarkerSize(1.1);

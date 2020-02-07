@@ -45,6 +45,7 @@ class GunScan {
   std::string gunCurrentText() const;
 
   void loadScan();
+  void correctGraph();
 
   static std::vector<GunScan*> loadScans( const std::string& scansFileName, float gunEnergy=-1., float APDhv=-1. ); // default = all
 
@@ -74,13 +75,15 @@ class GunScan {
 
   TGraph* graph_;
   TGraph* graph_corr_;
+  TF1* baseline_;
 
   std::string currentMethod_;
   int firstN_fit_;
   int lastN_fit_;
   std::string baselineFunc_;
 
-  TF1* fitDrift( TGraph* graph );
+  void fitDrift();
+  void subtractBaseline();
   static std::string findDataDirFromPath( const std::string& scansFile );
 
 };
