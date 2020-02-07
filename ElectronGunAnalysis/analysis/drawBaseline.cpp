@@ -98,14 +98,15 @@ int main( int argc, char* argv[] ) {
   c1->SaveAs( Form("%s/baseline_vs_igun.pdf", outdir.c_str()) );
   c1->SaveAs( Form("%s/baseline_vs_igun.eps", outdir.c_str()) );
 
-  c1->Clear();
+  delete c1;
+  delete h2_axes;
 
 
   std::vector< std::pair< float, float > > gunCurrents;
   gunCurrents.push_back( std::pair< float, float > (0.03, 0.04) );
   gunCurrents.push_back( std::pair< float, float > (0.1 ,  0.2) );
   gunCurrents.push_back( std::pair< float, float > (1.  ,   2.) );
-  gunCurrents.push_back( std::pair< float, float > (9.  ,  10.) );
+  gunCurrents.push_back( std::pair< float, float > (9.  ,  11.) );
   gunCurrents.push_back( std::pair< float, float > (29. ,  30.) );
   gunCurrents.push_back( std::pair< float, float > (100., 200.) );
 
@@ -126,6 +127,8 @@ int main( int argc, char* argv[] ) {
       if( scans[iScan]->gunCurrent() < gunCurrents[iCurrent].first  ) continue;
       if( scans[iScan]->gunCurrent() > gunCurrents[iCurrent].second ) continue;
 
+      scans[iScan]->set_currentMethod("point");
+      scans[iScan]->set_currentEvalPoint(-6.);
       gunCurrentText = scans[iScan]->gunCurrentText();
 
       gr_iapd_vs_APDhv    ->SetPoint( gr_iapd_vs_APDhv    ->GetN(), scans[iScan]->APDhv(), scans[iScan]->getCurrentFromScan() );
@@ -152,6 +155,7 @@ int main( int argc, char* argv[] ) {
     legend->SetTextSize(0.035);
     legend->AddEntry( gr_iapd_vs_APDhv_norm, "I_{APD}", "LP" );
     legend->AddEntry( gr_baseline_vs_APDhv_norm, "Baseline", "LP" );
+
     legend->Draw("same");
 
     gr_baseline_vs_APDhv_norm->SetMarkerStyle(24);
