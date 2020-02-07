@@ -42,6 +42,7 @@ class GunScan {
   std::string outdir() const;
   float gunCurrent() const;
   float gunCurrentError() const;
+  std::string gunCurrentText() const;
 
   void loadScan();
 
