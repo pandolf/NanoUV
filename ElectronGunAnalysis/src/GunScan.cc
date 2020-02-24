@@ -220,7 +220,7 @@ float GunScan::gunCurrent() const {
 float GunScan::gunCurrentError() const {
 
   float diffCurrent = fabs(iGunBefore_-iGunAfter_);
-  float threePercent = 0.03*this->gunCurrent();
+  float threePercent = 0.01*this->gunCurrent();
 
   float error = (diffCurrent>threePercent) ? diffCurrent : threePercent;
 
