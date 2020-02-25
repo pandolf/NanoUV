@@ -15,25 +15,25 @@
 
 
 
-std::string data = "2020_01";
-//std::string data = "2019_11_28";
 std::string currentMethod = "integral";
 
 
 int main( int argc, char* argv[] ) {
 
+  std::string data;
   float gunEnergy;
   float APDhv;
 
   if( argc < 2 ) {
 
-    std::cout << "USAGE: ./drawAPDGunScan [gunEnergy] [APDhv(default=all)]" << std::endl;
+    std::cout << "USAGE: ./drawAPDGunScan [data] [gunEnergy(default=900 eV)] [APDhv(default=350 V)]" << std::endl;
     exit(1);
 
   } else {
 
-    gunEnergy = atof(argv[1]);
-    APDhv = (argc<3) ? -1. : atof(argv[2]);
+    data = std::string(argv[1]);
+    gunEnergy = (argc<3) ? 900. : atof(argv[2]);
+    APDhv     = (argc<4) ? 350. : atof(argv[3]);
 
   }
 
@@ -198,7 +198,7 @@ int main( int argc, char* argv[] ) {
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
 
-  TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0., 3. );
+  TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0.1, 15. );
   //TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0., xMax );
   gr_iapd_vs_igun->Fit( f1_line, "QR0" );
 
