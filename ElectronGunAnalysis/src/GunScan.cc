@@ -295,9 +295,9 @@ std::vector< GunScan* > GunScan::loadScans( const std::string& scansFile, float 
     iss >> this_scanName >> this_gunEnergy >> this_APDhv >> this_iGunBefore >> this_iGunAfter;
 
     // correcting for the different zeros at different dynamic ranges (measured values)
-    if( this_iGunBefore < 2. ) this_iGunBefore += 0.005; 
+    if( this_iGunBefore < 2. ) this_iGunBefore += 0.0052; 
     else                       this_iGunBefore -= 0.028; 
-    if( this_iGunAfter  < 2. ) this_iGunAfter  += 0.005;
+    if( this_iGunAfter  < 2. ) this_iGunAfter  += 0.0052;
     else                       this_iGunAfter  -= 0.028; 
 
     bool gunEnergyOK = (gunEnergy<0.) || (gunEnergy>=0. && this_gunEnergy==gunEnergy);
