@@ -198,7 +198,18 @@ int main( int argc, char* argv[] ) {
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
 
-  TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0.1, 15. );
+  float xFitMin, xFitMax;
+  if( APDhv==350. ) {
+    xFitMin = 0.1;
+    xFitMax = 15.;
+  } else if( APDhv==380. && gunEnergy==500.) {
+    xFitMin = 0.5;
+    xFitMax = 100.;
+  } else {
+    xFitMin = 0.;
+    xFitMax = 15.;
+  }
+  TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", xFitMin, xFitMax );
   //TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0., xMax );
   gr_iapd_vs_igun->Fit( f1_line, "QR0" );
 
