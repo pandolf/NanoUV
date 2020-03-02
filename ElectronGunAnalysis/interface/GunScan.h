@@ -17,6 +17,7 @@ class GunScan {
   GunScan( float gunEnergy, float APDhv, const std::string& data, const std::string& scanName, float iGunBefore, float iGunAfter=-1. );
   ~GunScan() {};
 
+  // setters
   void set_gunEnergy( float gunEnergy );
   void set_APDhv( float APDhv );
   void set_dataDir( const std::string& dataDir );
@@ -29,6 +30,7 @@ class GunScan {
   void set_lastN_fit( int lastN_fit );
   void set_baselineFunc( const std::string& baselineFunc );
 
+  // getters
   float gunEnergy() const;
   float APDhv() const;
   std::string dataDir() const;
@@ -41,6 +43,12 @@ class GunScan {
   int lastN_fit() const;
   std::string baselineFunc() const;
 
+  TGraph* graph() const;
+  TGraph* graph_corr() const;
+  TF1* baseline() const;
+
+  // other functions
+  
   std::string outdir() const;
   float gunCurrent() const;
   float gunCurrentError() const;
@@ -50,8 +58,6 @@ class GunScan {
   void correctGraph();
 
   static std::vector<GunScan*> loadScans( const std::string& scansFileName, float gunEnergy=-1., float APDhv=-1. ); // default = all
-
-  void correctGraph( TF1* baseline );
 
   float getCurrentFromScan();
 
