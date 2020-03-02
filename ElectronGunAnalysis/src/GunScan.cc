@@ -199,6 +199,27 @@ std::string GunScan::baselineFunc() const {
 }
 
 
+TGraph* GunScan::graph() const {
+
+  return graph_;
+
+}
+
+
+TGraph* GunScan::graph_corr() const {
+
+  return graph_corr_;
+
+}
+
+
+TF1* GunScan::baseline() const {
+
+  return baseline_;
+
+}
+
+
 
 // ---- OTHER FUNCTIONS
 
