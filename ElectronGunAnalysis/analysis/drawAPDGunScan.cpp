@@ -48,24 +48,30 @@ int main( int argc, char* argv[] ) {
 
   for( unsigned iScan=0; iScan<scans.size(); iScan++ ) {
 
-      if( scans[iScan]->gunEnergy() != gunEnergy ) continue;
-      if( scans[iScan]->APDhv() != APDhv ) continue;
+    if( scans[iScan]->gunEnergy() != gunEnergy ) continue;
+    if( scans[iScan]->APDhv() != APDhv ) continue;
+    //if( scans[iScan]->scanName() == "25feb20_08_M_.dat") {
+    //  scans[iScan]->set_firstN_fit( 5 );
+    //  scans[iScan]->set_lastN_fit( 25 );
+    //  scans[iScan]->set_baselineFunc( "pol5" );
 
-      scans[iScan]->set_currentMethod(currentMethod);
-      scans[iScan]->addPointToGraph( gr_iapd_vs_igun );
+    //  }
+
+    scans[iScan]->set_currentMethod(currentMethod);
+    scans[iScan]->addPointToGraph( gr_iapd_vs_igun );
 
   }
 
 
   for( unsigned iScan=0; iScan<scans2.size(); iScan++ ) {
 
-      if( scans2[iScan]->gunEnergy() != gunEnergy ) continue;
-      if( scans2[iScan]->APDhv() != APDhv ) continue;
+    if( scans2[iScan]->gunEnergy() != gunEnergy ) continue;
+    if( scans2[iScan]->APDhv() != APDhv ) continue;
 
-      scans2[iScan]->set_currentMethod(currentMethod);
-      scans2[iScan]->set_firstN_fit(7);
-      scans2[iScan]->set_lastN_fit(5);
-      scans2[iScan]->addPointToGraph( gr_iapd_vs_igun2 );
+    scans2[iScan]->set_currentMethod(currentMethod);
+    scans2[iScan]->set_firstN_fit(7);
+    scans2[iScan]->set_lastN_fit(5);
+    scans2[iScan]->addPointToGraph( gr_iapd_vs_igun2 );
 
   }
 
@@ -178,7 +184,8 @@ int main( int argc, char* argv[] ) {
   c1->SaveAs( Form("%s/iapd_vs_igun_log.pdf", scans[0]->outdir().c_str()) );
   c1->SaveAs( Form("%s/iapd_vs_igun_log.eps", scans[0]->outdir().c_str()) );
 
-
+  std::cout << "xFitMin = " << xFitMin << std::endl;
+  std::cout << "xFitMax = " << xFitMax << std::endl;
   
   return 0;
 
