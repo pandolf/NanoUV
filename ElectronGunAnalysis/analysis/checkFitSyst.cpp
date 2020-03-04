@@ -97,8 +97,8 @@ int main( int argc, char* argv[] ) {
     h1_systRMS ->Fill( h1_thisSyst->GetRMS () );
 
     int thisPoint = gr_syst->GetN();
-    gr_syst->SetPoint     ( thisPoint, thisPoint+0.5, h1_thisSyst->GetMean() );
-    gr_syst->SetPointError( thisPoint,            0., h1_thisSyst->GetRMS()  );
+    gr_syst->SetPoint     ( thisPoint, thisPoint+0.5, 1000.*h1_thisSyst->GetMean() ); // in pA
+    gr_syst->SetPointError( thisPoint,            0., 1000.*h1_thisSyst->GetRMS()  );
 
     TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
     c1->cd();
@@ -168,12 +168,12 @@ int main( int argc, char* argv[] ) {
   TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
   c2->cd();
 
-  float yMin = (APDhv==380) ? -0.2 : -0.02;
-  float yMax = (APDhv==380) ?  0.2 :  0.02;
+  float yMin = (APDhv==380) ? -200. : -20.;
+  float yMax = (APDhv==380) ?  200. :  20.;
 
   TH2D* h2_axes2 = new TH2D( "axes2", "", 10, 0., gr_syst->GetN(), 10, yMin, yMax );
   h2_axes2->SetXTitle( "Baseline scan number" );
-  h2_axes2->SetYTitle( "Fit - true [nA]" );
+  h2_axes2->SetYTitle( "Fit - true [pA]" );
   h2_axes2->Draw();
 
   TLine* line_zero = new TLine( 0., 0., gr_syst->GetN(), 0. );
