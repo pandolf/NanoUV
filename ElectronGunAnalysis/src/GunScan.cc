@@ -241,9 +241,9 @@ float GunScan::gunCurrent() const {
 float GunScan::gunCurrentError() const {
 
   float diffCurrent = fabs(iGunBefore_-iGunAfter_);
-  float threePercent = 0.01*this->gunCurrent();
+  float fixedPercent = 0.01*this->gunCurrent();
 
-  float error = (diffCurrent>threePercent) ? diffCurrent : threePercent;
+  float error = (diffCurrent>fixedPercent) ? diffCurrent : fixedPercent;
 
   return error;
 
@@ -646,8 +646,14 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
   std::cout << "--> for E(gun) = " << this->gunEnergy() << " eV, V(APD) = " << this->APDhv() << " V, I(gun) = " << this->gunCurrent() << " pA, the APD current was: " << iAPD/1000. << " nA" << std::endl;
 
   int thisPoint = graph->GetN();
+  float iAPDError = this->gunCurrentError()/this->gunCurrent()*iAPD;
+  float fitError = 2;
+  
+  if ( this->APDhv() == 380 ) { fitError = 50; }
+  
+  float ErrorTot = sqrt(pow(fitError,2)+pow(iAPDError,2));
   graph->SetPoint     ( thisPoint, this->gunCurrent(), iAPD );
-  graph->SetPointError( thisPoint, this->gunCurrentError(), 0.02*iAPD ); // error on APD current = 2% (?)
+  graph->SetPointError( thisPoint, this->gunCurrentError(), ErrorTot );
 
   delete c1;
   delete h2_axes;
