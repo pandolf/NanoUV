@@ -20,9 +20,21 @@ std::string currentMethod = "integral";
 
 int main( int argc, char* argv[] ) {
 
-  NanoUVCommon::setStyle();
 
-  float APDhv = 380;
+  float APDhv;
+
+  if( argc==1 ) {
+
+    std::cout << "USAGE: ./checkFitSyst [APDhv]" << std::endl;
+    exit(1);
+
+  } else {
+
+    APDhv = atof(argv[1]);
+
+  }
+
+  NanoUVCommon::setStyle();
 
   std::vector< GunScan* > scans  = GunScan::loadScans( "data/baselines/scans.txt", 900, APDhv );
 
@@ -30,6 +42,16 @@ int main( int argc, char* argv[] ) {
   TH1D* h1_systMean = new TH1D( "systMean", "", 50, -0.25, 0.25 );
   TH1D* h1_systRMS  = new TH1D( "systRMS" , "", 50, 0., 0.5 );
 
+  TGraphErrors* gr_syst = new TGraphErrors(0);
+
+  // will need also later (after loop)
+  TPaveText* label_settings = new TPaveText( 0.21, 0.7, 0.48, 0.77, "brNDC" );
+  label_settings->SetTextSize( 0.035 );
+  label_settings->SetTextColor( 46 );
+  label_settings->SetFillColor(0);
+  label_settings->AddText( Form( "V_{APD} = %.0f V", APDhv ) );
+  label_settings->SetTextAlign(11);
+    
 
   for( unsigned iScan=0; iScan<scans.size(); iScan++ ) {
 
@@ -74,6 +96,10 @@ int main( int argc, char* argv[] ) {
     h1_systMean->Fill( h1_thisSyst->GetMean() );
     h1_systRMS ->Fill( h1_thisSyst->GetRMS () );
 
+    int thisPoint = gr_syst->GetN();
+    gr_syst->SetPoint     ( thisPoint, thisPoint+0.5, h1_thisSyst->GetMean() );
+    gr_syst->SetPointError( thisPoint,            0., h1_thisSyst->GetRMS()  );
+
     TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
     c1->cd();
 
@@ -104,14 +130,8 @@ int main( int argc, char* argv[] ) {
     label->Draw("same");  
     gPad->RedrawAxis();
 
-    TPaveText* label_settings = new TPaveText( 0.21, 0.7, 0.48, 0.77, "brNDC" );
-    label_settings->SetTextSize( 0.035 );
-    label_settings->SetTextColor( 46 );
-    label_settings->SetFillColor(0);
-    label_settings->AddText( Form( "V_{APD} = %.0f V", APDhv ) );
-    label_settings->SetTextAlign(11);
     label_settings->Draw("same");
-    
+
     thisBaseline->SetLineWidth(2);
     thisBaseline->SetLineColor(46);
     thisBaseline->SetLineStyle(2);
@@ -144,14 +164,42 @@ int main( int argc, char* argv[] ) {
 
   } // for scans
 
-  TFile* file = TFile::Open( "testSyst.root", "recreate" );
-  file->cd();
 
-  h1_systTot ->Write(); 
-  h1_systMean->Write(); 
-  h1_systRMS ->Write(); 
+  TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
+  c2->cd();
 
-  file->Close();
+  float yMin = (APDhv==380) ? -0.2 : -0.02;
+  float yMax = (APDhv==380) ?  0.2 :  0.02;
+
+  TH2D* h2_axes2 = new TH2D( "axes2", "", 10, 0., gr_syst->GetN(), 10, yMin, yMax );
+  h2_axes2->SetXTitle( "Baseline scan number" );
+  h2_axes2->SetYTitle( "Fit - true [nA]" );
+  h2_axes2->Draw();
+
+  TLine* line_zero = new TLine( 0., 0., gr_syst->GetN(), 0. );
+  line_zero->Draw("same");
+ 
+  gr_syst->SetMarkerStyle(20);
+  gr_syst->SetMarkerSize(1.3);
+  gr_syst->SetMarkerColor(46);
+  gr_syst->SetLineColor(kGray+3);
+  gr_syst->Draw("Psame");
+
+  NanoUVCommon::addNanoUVLabel( c2, 2 );
+
+  label_settings->Draw("same");
+
+  c2->SaveAs( Form("systFit_APDhv%.0f.pdf", APDhv) );
+
+
+//TFile* file = TFile::Open( "testSyst.root", "recreate" );
+//file->cd();
+
+//h1_systTot ->Write(); 
+//h1_systMean->Write(); 
+//h1_systRMS ->Write(); 
+
+//file->Close();
 
   return 0;
 
