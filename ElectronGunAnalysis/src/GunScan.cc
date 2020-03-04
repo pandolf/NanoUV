@@ -647,7 +647,7 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
 
   int thisPoint = graph->GetN();
   float iAPDError = this->gunCurrentError()/this->gunCurrent()*iAPD;
-  float fitError = 5;
+  float fitError = 2;
   
   if ( this->APDhv() == 380 ) { fitError = 50; }
   
