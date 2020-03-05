@@ -15,25 +15,28 @@
 
 
 TGraphErrors* getGraphFromFile( const std::string& fileName );
-TGraphErrors* getGain( TGraphErrors* gopen, TGraphErrors* gdark );
+TGraphErrors* getGain( TGraphErrors* gopen, TGraphErrors* gdark, float Igun );
 
 
 
 int main( int argc, char* argv[] ) {
 
 std::string fileOpen;
-std::string fileDark("IV_darkL.txt");
-
+std::string fileDark("IV_dark.txt");
+float gunEnergy; 
+float gunCurrent; 
 if( argc==1 ) {
 
-  std::cout << "USAGE: ./APDGraph [fileName]" << std::endl;
+  std::cout << "USAGE: ./APDGraph [fileName] [gunEnergy] [gunCurrentInpA]" << std::endl;
   exit(1);
 
 } else {
 
   fileOpen = std::string(argv[1]);
-
+  gunEnergy = std::stof(std::string(argv[2]));
+  gunCurrent = std::stof(std::string(argv[3]));
 }
+
 
 
 NanoUVCommon::setStyle();
@@ -58,8 +61,8 @@ TGraphErrors* graphDark = getGraphFromFile(fileDark);
 TLegend* legend = new TLegend( 0.2, 0.6, 0.6, 0.8 );
 legend->SetTextSize(0.025);
 legend->SetFillColor(0);
-//legend->AddEntry((TObject*)0, "E gun = 500 eV", "");
-//legend->AddEntry((TObject*)0, "I gun = 1.07 nA", "");
+legend->AddEntry((TObject*)0, Form("E gun = %f eV", gunEnergy), "");
+legend->AddEntry((TObject*)0, Form("I gun = %f pA", gunCurrent), "");
 legend->AddEntry(graphOpen, "I APD", "P");
 legend->AddEntry(graphDark, "I dark", "P");
 legend->Draw("same");
@@ -76,7 +79,7 @@ graphDark->SetMarkerSize(1);
 graphDark->SetMarkerStyle(20);
 graphDark->Draw("P same");
 
-c1->SaveAs(Form("IV_%s.pdf", fileOpen.c_str()));
+c1->SaveAs(Form("IV_E%f_I%f.pdf", gunEnergy, gunCurrent ));
 
 
 
@@ -94,13 +97,13 @@ h2_axes->Draw();
 
 NanoUVCommon::addNanoUVLabel( c2, 2 );
 
-TGraphErrors* graphGain = getGain( graphOpen, graphDark );
+TGraphErrors* graphGain = getGain( graphOpen, graphDark, gunCurrent );
 
 TLegend* legendG = new TLegend( 0.2, 0.6, 0.6, 0.8 );
 legendG->SetTextSize(0.025);
 legendG->SetFillColor(0);
-//legendG->AddEntry((TObject*)0, "E gun = 500 eV", "");
-//legendG->AddEntry((TObject*)0, "I gun = 1.07 nA", "");
+legendG->AddEntry((TObject*)0, Form("E gun = %f eV", gunEnergy), "");
+legendG->AddEntry((TObject*)0, Form("I gun = %f pA", gunCurrent), "");
 legendG->AddEntry(graphGain, "Gain", "P");
 legendG->Draw("same");
 
@@ -110,7 +113,7 @@ graphGain->SetMarkerSize(1);
 graphGain->SetMarkerStyle(20);
 graphGain->Draw("P same");
 
-c2->SaveAs(Form("Gain_%s.pdf", fileOpen.c_str()));   
+c2->SaveAs(Form("Gain_E%f_I%f.pdf", gunEnergy, gunCurrent));   
 
 
 
@@ -154,24 +157,25 @@ TGraphErrors* getGraphFromFile( const std::string& fileName ) {
 
 }
 
-TGraphErrors* getGain( TGraphErrors* gopen, TGraphErrors* gdark  ) {
+TGraphErrors* getGain( TGraphErrors* gopen, TGraphErrors* gdark, float Igun  ) {
 
    TGraphErrors* graphGAIN = new TGraphErrors(0);
    graphGAIN->SetName("grgain");
 
-   int V_0 = 1;
-   double Vopen0, Vdark0, Iopen0, Idark0;
-   gopen->GetPoint(V_0, Vopen0, Iopen0);
-   gdark->GetPoint(V_0, Vdark0, Idark0);
+   //int V_0 = 1;
+   //double Vopen0, Vdark0, Iopen0, Idark0;
+   //gopen->GetPoint(V_0, Vopen0, Iopen0);
+   //gdark->GetPoint(V_0, Vdark0, Idark0);
    
    for (unsigned i=0; i<gopen->GetN(); ++i) {
    
       int k = graphGAIN->GetN();
       double Vopen, IopenV, Vdark, IdarkV;
-   
+      float IgunNano = Igun/1000.;    //converting gun current to nA
+
       gopen->GetPoint(i, Vopen, IopenV);
       gdark->GetPoint(i, Vdark, IdarkV);
-      graphGAIN->SetPoint(k, Vopen, (IopenV-IdarkV)/(Iopen0-Idark0));
+      graphGAIN->SetPoint(k, Vopen, (IopenV-IdarkV)/IgunNano);
    
       }
 
