@@ -100,13 +100,19 @@ int main( int argc, char* argv[] ) {
   label_settings->Draw("same");
 
   float xFitMin, xFitMax;
-  if( APDhv==350. ) {
+   if( APDhv==350. && gunEnergy==500.) {
+    xFitMin = 0.1;
+    xFitMax = 50.;
+  } else if( APDhv==350. && gunEnergy==900.) {
     xFitMin = 0.1;
     xFitMax = 15.;
   } else if( APDhv==380. && gunEnergy==500.) {
-    xFitMin = 0.5;
+    xFitMin = 0.05;
     xFitMax = 100.;
-  } else {
+  } else if( APDhv==380. && gunEnergy==900.) {
+    xFitMin = 0.01;
+    xFitMax = 55.;
+  }else {
     xFitMin = 0.;
     xFitMax = 15.;
   }
