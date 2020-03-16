@@ -14,10 +14,9 @@
 
 
 
-TGraphErrors* getGraphFromFile( const std::string& fileName );
+TGraphErrors* getGraphFromFile( const std::string& fileName, float& Egun, float& Igun );
 TGraphErrors* getGain( TGraphErrors* gopen, TGraphErrors* gdark, float Igun );
 std::string getDarkFile( const std::string& file_open );
-float *getGunEnergyCurrent( const std::string& fileName );
 
 
 int main( int argc, char* argv[] ) {
@@ -35,7 +34,6 @@ if( argc==1 ) {
 }
 
 std::string fileDark = getDarkFile(fileOpen);
-float *gunEnergy_Current = getGunEnergyCurrent(fileOpen);
 
 NanoUVCommon::setStyle();
 
@@ -53,31 +51,36 @@ h2_axes->Draw();
 
 NanoUVCommon::addNanoUVLabel( c1, 2 );
 
-TGraphErrors* graphOpen = getGraphFromFile(fileOpen);
-TGraphErrors* graphDark = getGraphFromFile(fileDark);
+float gunEnergy, gunCurrent;
+TGraphErrors* graphOpen = getGraphFromFile(fileOpen, gunEnergy, gunCurrent);
+TGraphErrors* graphDark = getGraphFromFile(fileDark, gunEnergy, gunCurrent);
 
 TLegend* legend = new TLegend( 0.2, 0.6, 0.6, 0.8 );
 legend->SetTextSize(0.025);
 legend->SetFillColor(0);
-legend->AddEntry((TObject*)0, Form("E gun = %.0f eV", gunEnergy_Current[0]), "");
-legend->AddEntry((TObject*)0, Form("I gun = %.2f pA", gunEnergy_Current[1]), "");
+if( gunEnergy != 0 && gunCurrent != 0 ){
+    legend->AddEntry((TObject*)0, Form("E gun = %.0f eV", gunEnergy), "");
+    legend->AddEntry((TObject*)0, Form("I gun = %.1f pA", gunCurrent), "");
+    }
 legend->AddEntry(graphOpen, "I APD", "P");
 legend->AddEntry(graphDark, "I dark", "P");
 legend->Draw("same");
 
 graphOpen->SetLineColor(46);
 graphOpen->SetMarkerColor(46);
-graphOpen->SetMarkerSize(1);
+graphOpen->SetMarkerSize(0.5);
 graphOpen->SetMarkerStyle(20);
 graphOpen->Draw("P same");
 
 graphDark->SetLineColor(38);
 graphDark->SetMarkerColor(38);
-graphDark->SetMarkerSize(1);
+graphDark->SetMarkerSize(0.5);
 graphDark->SetMarkerStyle(20);
 graphDark->Draw("P same");
 
-c1->SaveAs(Form("IV_E%.0f_I%.2f.pdf", gunEnergy_Current[0], gunEnergy_Current[1] ));
+if( fileOpen == "IV_light.txt" ) {
+     c1->SaveAs("IV_light.pdf");} 
+else{c1->SaveAs(Form("IV_E%.0f_I%.1f.pdf", gunEnergy, gunCurrent));}
 
 
 
@@ -97,23 +100,27 @@ h2_axes->Draw();
 
 NanoUVCommon::addNanoUVLabel( c2, 2 );
 
-TGraphErrors* graphGain = getGain( graphOpen, graphDark, gunEnergy_Current[1] );
+TGraphErrors* graphGain = getGain( graphOpen, graphDark, gunCurrent );
 
-TLegend* legendG = new TLegend( 0.2, 0.6, 0.6, 0.8 );
-legendG->SetTextSize(0.025);
-legendG->SetFillColor(0);
-legendG->AddEntry((TObject*)0, Form("E gun = %.0f eV", gunEnergy_Current[0]), "");
-legendG->AddEntry((TObject*)0, Form("I gun = %.2f pA", gunEnergy_Current[1]), "");
-legendG->AddEntry(graphGain, "Gain", "P");
-legendG->Draw("same");
+if( gunEnergy != 0 && gunCurrent != 0 ){
+    TLegend* legendG = new TLegend( 0.2, 0.6, 0.6, 0.8 );
+    legendG->SetTextSize(0.025);
+    legendG->SetFillColor(0);
+    legendG->AddEntry((TObject*)0, Form("E gun = %.0f eV", gunEnergy), "");
+    legendG->AddEntry((TObject*)0, Form("I gun = %.1f pA", gunCurrent), "");
+    legendG->AddEntry(graphGain, "Gain", "P");
+    legendG->Draw("same");
+    }
 
 graphGain->SetLineColor(46);
 graphGain->SetMarkerColor(46);
-graphGain->SetMarkerSize(1);
+graphGain->SetMarkerSize(0.5);
 graphGain->SetMarkerStyle(20);
 graphGain->Draw("P same");
 
-c2->SaveAs(Form("Gain_E%.0f_I%.2f.pdf", gunEnergy_Current[0], gunEnergy_Current[1]));   
+if( fileOpen == "IV_light.txt" ) {
+     c2->SaveAs("Gain_light.pdf");} 
+else{c2->SaveAs(Form("Gain_E%.0f_I%.1f.pdf", gunEnergy, gunCurrent));}  
 
 
 
@@ -148,37 +155,7 @@ std::string getDarkFile( const std::string& file_open ) {
 }
 
 
-float *getGunEnergyCurrent( const std::string& fileName ) {
-   
-   std::ifstream ifs(fileName.c_str());
-   std::cout << "Opening: " << fileName.c_str() << std::endl;
-   float *gunE_I = new float[2];
-   float gunE, gunI;
-   char a;
-   
-   std::string line;
-   while( ifs.good() ) {
-     
-     std::getline(ifs, line);
-     TString line_tstr(line);
-     
-     if( line_tstr.BeginsWith("#") ) continue;
-     else if( line_tstr.BeginsWith("@") ) {
-      
-       std::istringstream iss(line);
-       iss >> a >> gunE >> gunI;
-       
-       gunE_I[0] = gunE;
-       gunE_I[1] = gunI;
-       
-       }
-   }
-
-   return gunE_I;
-}
-
-
-TGraphErrors* getGraphFromFile( const std::string& fileName ) {
+TGraphErrors* getGraphFromFile( const std::string& fileName, float& Egun, float& Igun ) {
 
    std::ifstream ifs(fileName.c_str());
    std::cout << "Opening: " << fileName.c_str() << std::endl;
@@ -186,27 +163,37 @@ TGraphErrors* getGraphFromFile( const std::string& fileName ) {
    TGraphErrors* graph = new TGraphErrors(0);
    graph->SetName(Form("gr_%s", fileName.c_str()));
 
-   float hv, I, ErrI;
+   float hv, I, ErrI, gunE, gunI;
+   char a;
 
    std::string line;
    while( ifs.good() ) {
    
       std::getline(ifs, line);
       TString line_tstr(line);
-      if( line_tstr.BeginsWith("#") || line_tstr.BeginsWith("@") ) continue;
 
-      std::istringstream iss(line); 
-      iss >> hv >> I >> ErrI;
+      if( line_tstr.BeginsWith("#") ){ 
+          continue;
+      } else if( line_tstr.BeginsWith("@") ){
+          std::istringstream iss(line);
+          iss >> a >> gunE >> gunI;
+          
+          Egun = gunE;
+          Igun = gunI;
+      } else{   
+          std::istringstream iss(line); 
+          iss >> hv >> I >> ErrI;
 
-      int i = graph->GetN();
-      graph->SetPoint(i, hv, I);
-      graph->SetPointError(i, 0., ErrI);
+          int i = graph->GetN();
+          graph->SetPoint(i, hv, I);
+          graph->SetPointError(i, 0., ErrI);
 
-      }
-  
+          }
+ 
+      } 
    return graph;     
 
-}
+   }
 
 TGraphErrors* getGain( TGraphErrors* gopen, TGraphErrors* gdark, float Igun  ) {
 
@@ -220,7 +207,7 @@ TGraphErrors* getGain( TGraphErrors* gopen, TGraphErrors* gdark, float Igun  ) {
    float Eopen0 = gopen->GetErrorY(V_0);
    float Edark0 = gdark->GetErrorY(V_0);
    float IgunNano = Igun/1000.;           //converting gun current to nA
-   float ErrorGun = 0.01*IgunNano; 
+   float ErrorGun = 0.1*IgunNano;         //Gun current error: 10% 
    //float ErrorGun = (diffCurrent>fixedPercent) ? diffCurrent : fixedPercent;
 
    for (unsigned i=0; i<gopen->GetN(); ++i) {
