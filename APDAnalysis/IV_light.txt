@@ -1,3 +1,5 @@
+#	E_gun	I_gun(pA)
+@	0	0
 #Vapd	I_light ErrI_light 
 0	117.28	0.01	
 20	122.88	0.01	

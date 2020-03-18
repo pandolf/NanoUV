@@ -1,3 +1,5 @@
+#	E_gun	I_gun(pA)
+@	900	976
 #V_apd	I_apd(nA)	ErrI_apd
 0	6.15		0.01 
 10	10.98		0.01
