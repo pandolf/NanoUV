@@ -240,8 +240,8 @@ float GunScan::gunCurrent() const {
 
 float GunScan::gunCurrentError() const {
 
-  float diffCurrent = fabs(iGunBefore_-iGunAfter_);
-  float fixedPercent = 0.01*this->gunCurrent();
+  float diffCurrent = fabs(iGunBefore_-iGunAfter_)/2.;
+  float fixedPercent = 0.005*this->gunCurrent();
 
   float error = (diffCurrent>fixedPercent) ? diffCurrent : fixedPercent;
 
@@ -408,14 +408,15 @@ float GunScan::getStep( TGraph* graph ) {
 }
 
 
-float GunScan::getCurrentFromScan() {
+float GunScan::getCurrentFromScan( float& currentError ) {
 
-  float current = 0.;
+  float current = 0.; // in nA
+  float keithleyErr = 0.1/1000.; // Keithley uncertainty 0.1 pA, converted in nA
 
   if( currentMethod_ == "max" ) {
 
     current = getYmax( graph_corr_ );
-
+    currentError = keithleyErr;
 
   } else if( currentMethod_ == "firstMax" ) {
 
@@ -426,7 +427,9 @@ float GunScan::getCurrentFromScan() {
       if( this_y>=current ) current = this_y;
     } // for points
 
-  } else if( currentMethod_ == "integral" ) {
+    currentError = keithleyErr;
+
+  } else if( currentMethod_ == "integral" ) { // unsupported
 
     float step = getStep(graph_corr_);
 
@@ -438,7 +441,9 @@ float GunScan::getCurrentFromScan() {
 
     } // for points
 
-  } else if( currentMethod_ == "average" ) {
+    currentError = keithleyErr; // this is wrong, but integral method should not be used
+
+  } else if( currentMethod_ == "average" ) { // currently supported method 
 
     float step = getStep(graph_corr_);
     float Ntot = 0.; 
@@ -458,7 +463,8 @@ float GunScan::getCurrentFromScan() {
       } // for points
       
       current = sumCurrent/Ntot;
-      std::cout << "The average is computed on a length of: " << Ntot*step << " mm " << std::endl;
+      currentError = keithleyErr/sqrt((float)Ntot);
+      std::cout << "The average is computed on a length of: " << Ntot*step << " mm (" << Ntot << " points)" << std::endl;
 
   } else if( currentMethod_ == "point" ) {
 
@@ -661,17 +667,22 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
   c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.eps", dataDir_.c_str(), gunEnergy(), APDhv(), scanName_.c_str()));
 
 
-  float iAPD = this->getCurrentFromScan()*1000; // convert to pA
+  float iAPDError;
+  float iAPD = this->getCurrentFromScan(iAPDError);
+
+  iAPD      *= 1000; // convert to pA
+  iAPDError *= 1000; // convert to pA
+
 
   std::cout << "--> for E(gun) = " << this->gunEnergy() << " eV, V(APD) = " << this->APDhv() << " V, I(gun) = " << this->gunCurrent() << " pA, the APD current was: " << iAPD/1000. << " nA" << std::endl;
 
   int thisPoint = graph->GetN();
-  float iAPDError = this->gunCurrentError()/this->gunCurrent()*iAPD;
-  float fitError = 2;
-  
-  if ( this->APDhv() == 380 ) { fitError = 50; }
-  
+
+  float fitError = 2; // in pA... systematic on fit, from https://agenda.infn.it/event/22066/contributions/111663/attachments/71099/89094/pandolfi_2020_03_05.pdf
+  if ( this->APDhv() == 380 ) { fitError = 50; } // in pA
+
   float ErrorTot = sqrt(pow(fitError,2)+pow(iAPDError,2));
+  
   graph->SetPoint     ( thisPoint, this->gunCurrent(), iAPD );
   graph->SetPointError( thisPoint, this->gunCurrentError(), ErrorTot );
 
