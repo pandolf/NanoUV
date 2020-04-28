@@ -15,7 +15,7 @@
 
 
 
-std::string currentMethod = "integral";
+std::string currentMethod = "average";
 
 
 int main( int argc, char* argv[] ) {
@@ -78,7 +78,7 @@ int main( int argc, char* argv[] ) {
   float xMax = 1.2*GunScan::getXmax(gr_iapd_vs_igun);
   float xMax_log = 5.*xMax;
   float yMax = 1.2*GunScan::getYmax(gr_iapd_vs_igun);
-  float yMax_log = 5.*yMax;
+  float yMax_log = 3.*yMax;
 
 
 
