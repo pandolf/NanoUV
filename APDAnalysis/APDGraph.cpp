@@ -55,9 +55,10 @@ float gunEnergy, gunCurrent;
 TGraphErrors* graphOpen = getGraphFromFile(fileOpen, gunEnergy, gunCurrent);
 TGraphErrors* graphDark = getGraphFromFile(fileDark, gunEnergy, gunCurrent);
 
-TLegend* legend = new TLegend( 0.2, 0.6, 0.6, 0.8 );
-legend->SetTextSize(0.025);
-legend->SetFillColor(0);
+TLegend* legend = new TLegend( 0.15, 0.6, 0.6, 0.8 );
+legend->SetTextSize(0.035);
+legend->SetFillStyle(0);
+legend->SetBorderSize(0);
 if( gunEnergy != 0 && gunCurrent != 0 ){
     legend->AddEntry((TObject*)0, Form("E gun = %.0f eV", gunEnergy), "");
     legend->AddEntry((TObject*)0, Form("I gun = %.1f pA", gunCurrent), "");
@@ -68,13 +69,13 @@ legend->Draw("same");
 
 graphOpen->SetLineColor(46);
 graphOpen->SetMarkerColor(46);
-graphOpen->SetMarkerSize(0.5);
+graphOpen->SetMarkerSize(0.8);
 graphOpen->SetMarkerStyle(20);
 graphOpen->Draw("P same");
 
 graphDark->SetLineColor(38);
 graphDark->SetMarkerColor(38);
-graphDark->SetMarkerSize(0.5);
+graphDark->SetMarkerSize(0.8);
 graphDark->SetMarkerStyle(20);
 graphDark->Draw("P same");
 
@@ -103,18 +104,19 @@ NanoUVCommon::addNanoUVLabel( c2, 2 );
 TGraphErrors* graphGain = getGain( graphOpen, graphDark, gunCurrent );
 
 if( gunEnergy != 0 && gunCurrent != 0 ){
-    TLegend* legendG = new TLegend( 0.2, 0.6, 0.6, 0.8 );
-    legendG->SetTextSize(0.025);
-    legendG->SetFillColor(0);
+    TLegend* legendG = new TLegend( 0.1, 0.7, 0.6, 0.8 );
+    legendG->SetTextSize(0.035);
+    legendG->SetFillStyle(0);
+    legendG->SetBorderSize(0);
     legendG->AddEntry((TObject*)0, Form("E gun = %.0f eV", gunEnergy), "");
     legendG->AddEntry((TObject*)0, Form("I gun = %.1f pA", gunCurrent), "");
-    legendG->AddEntry(graphGain, "Gain", "P");
+    //legendG->AddEntry(graphGain, "Gain", "P");
     legendG->Draw("same");
     }
 
 graphGain->SetLineColor(46);
 graphGain->SetMarkerColor(46);
-graphGain->SetMarkerSize(0.5);
+graphGain->SetMarkerSize(0.8);
 graphGain->SetMarkerStyle(20);
 graphGain->Draw("P same");
 
@@ -139,7 +141,7 @@ std::string getDarkFile( const std::string& file_open ) {
 
    if( file_open == "IV_E900_I2p9.txt" || file_open == "IV_E900_I2p9_DEFLESSO.txt" ) {
      
-     file_dark = std::string("IV_dark.txt");
+     file_dark = std::string("IV_dark1.txt");
    
      } else if( file_open == "IV_light.txt" ) {  
    
@@ -226,10 +228,18 @@ TGraphErrors* getGain( TGraphErrors* gopen, TGraphErrors* gdark, float Igun  ) {
       if( Igun == 0 ) { 
           graphGAIN->SetPoint(k, Vopen, (IopenV-IdarkV)/(Iopen0-Idark0));    //gain for APD illuminated with phone light
           graphGAIN->SetPointError(k, 0., ErrG_light);
+          if( Vopen == 350 || Vopen == 360){
+              std::cout << "gain(" <<  Vopen << ") = " << (IopenV-IdarkV)/(Iopen0-Idark0) << std::endl;
+              std::cout << "error = " << ErrG_light << std::endl;
+              }
           }  
       else { 
           graphGAIN->SetPoint(k, Vopen, (IopenV-IdarkV)/IgunNano);    //gain for APD illuminated with gun    
           graphGAIN->SetPointError(k, 0., ErrG);
+          if( Vopen == 350 || Vopen == 360){
+              std::cout << "gain(" <<  Vopen << ") = " << (IopenV-IdarkV)/IgunNano << std::endl;
+              std::cout << "error = " << ErrG << std::endl;
+              }
           } 
       }
       
