@@ -421,11 +421,9 @@ float GunScan::getCurrentFromScan() {
 
     for( int iPoint=0; iPoint<graph_corr_->GetN(); ++iPoint ) {
 
-      double this_x, this_y;
+      double this_x, this_y=0.;
       graph_corr_->GetPoint( iPoint, this_x, this_y );
-      if( this_x >= -6. ) continue;
       if( this_y>=current ) current = this_y;
-
     } // for points
 
   } else if( currentMethod_ == "integral" ) {
@@ -439,6 +437,28 @@ float GunScan::getCurrentFromScan() {
       current += y*step;
 
     } // for points
+
+  } else if( currentMethod_ == "average" ) {
+
+    float step = getStep(graph_corr_);
+    float Ntot = 0.; 
+    float halfHeight = getYmax( graph_corr_ )/2.;
+    float sumCurrent = 0.;
+
+    for( int i=0; i<graph_corr_->GetN(); ++i ) {
+
+      double x, y;
+      graph_corr_->GetPoint( i, x, y );
+
+      if ( y >= halfHeight ) {
+        sumCurrent += y;
+        Ntot += 1;
+        }
+
+      } // for points
+      
+      current = sumCurrent/Ntot;
+      std::cout << "The average is computed on a length of: " << Ntot*step << " mm " << std::endl;
 
   } else if( currentMethod_ == "point" ) {
 
