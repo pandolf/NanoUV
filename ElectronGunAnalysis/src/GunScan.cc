@@ -411,7 +411,7 @@ float GunScan::getStep( TGraph* graph ) {
 float GunScan::getCurrentFromScan( float& currentError ) {
 
   float current = 0.; // in nA
-  float keithleyErr = 0.1/1000.; // Keithley uncertainty 0.1 pA, converted in nA
+  float keithleyErr = 0.01/1000.; // Keithley uncertainty 0.01 pA, converted in nA
 
   if( currentMethod_ == "max" ) {
 
