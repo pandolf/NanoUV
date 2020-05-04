@@ -15,7 +15,7 @@
 
 
 
-std::string currentMethod = "integral";
+std::string currentMethod = "average";
 
 
 int main( int argc, char* argv[] ) {
