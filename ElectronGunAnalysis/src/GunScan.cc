@@ -412,7 +412,7 @@ float GunScan::getCurrentFromScan( float& currentError ) {
 
   float current = 0.; // in nA
   float keithleyErr = 0.01/1000.; // Keithley uncertainty 0.01 pA, converted in nA
-  float systErr = 1/1000.; //systematic on fit 1pA per bin, converted in nA, from checkSystFit.cpp
+  float systErr = 1.349/1000.; //systematic on fit 1.349 pA per bin, converted in nA, from checkSystFit.cpp
 
   if( currentMethod_ == "max" ) {
 
