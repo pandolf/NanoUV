@@ -85,7 +85,7 @@ int main( int argc, char* argv[] ) {
 
         gr_nofit->SetPoint( gr_nofit->GetN(), thisX, thisY );
 
-        h1_thisSyst->Fill( (thisBaseline->Eval(thisX)-thisY) );
+        h1_thisSyst->Fill( (thisBaseline->Eval(thisX)-thisY)*1000. ); //in pA
         h1_systTot ->Fill( (thisBaseline->Eval(thisX)-thisY)*1000. ); //in pA
 
       } // if isFit
@@ -96,8 +96,8 @@ int main( int argc, char* argv[] ) {
     h1_systRMS ->Fill( h1_thisSyst->GetRMS () );
 
     int thisPoint = gr_syst->GetN();
-    gr_syst->SetPoint     ( thisPoint, thisPoint+0.5, 1000.*h1_thisSyst->GetMean() ); // in pA
-    gr_syst->SetPointError( thisPoint,            0., 1000.*h1_thisSyst->GetRMS()  );
+    gr_syst->SetPoint     ( thisPoint, thisPoint+0.5, h1_thisSyst->GetMean() );
+    gr_syst->SetPointError( thisPoint,            0., h1_thisSyst->GetRMS()  );
 
     TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
     c1->cd();
@@ -197,7 +197,6 @@ int main( int argc, char* argv[] ) {
   c3->cd();
   
   gStyle->SetHistFillColor(kCyan+3);
-  //gStyle->SetOptStat("MR");
 
   h1_systTot->SetXTitle( "Fit - true [pA]" );
   h1_systTot->UseCurrentStyle();
