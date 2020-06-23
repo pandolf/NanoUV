@@ -87,15 +87,15 @@ int main( int argc, char* argv[] ) {
 
 
   TH2D* h2_axes = new TH2D( "axes", "", 10, 0., xMax, 10, 0., yMax );
-  h2_axes->SetXTitle( "Gun Current [pA]" );
-  h2_axes->SetYTitle( "APD Current [pA]" );
+  h2_axes->SetXTitle( "I_{gun} [pA]" );
+  h2_axes->SetYTitle( "I_{apd} [pA]" );
   h2_axes->Draw();
 
   TPaveText* label_settings = new TPaveText( 0.23, 0.65, 0.5, 0.77, "brNDC" );
   label_settings->SetTextSize( 0.035 );
   label_settings->SetFillColor(0);
-  label_settings->AddText( Form("E_{gun} = %.0f eV", gunEnergy) );
-  label_settings->AddText( Form("V_{APD} = %.0f V", APDhv) );
+  label_settings->AddText( Form("E_{e} = %.0f eV", gunEnergy) );
+  label_settings->AddText( Form("V_{apd} = %.0f V", APDhv) );
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
 
@@ -123,9 +123,9 @@ int main( int argc, char* argv[] ) {
   fitResults->SetTextSize( 0.035 );
   fitResults->SetFillColor(0);
   fitResults->SetTextColor(46);
-  fitResults->AddText( "f(x) = q + m*x" );
-  fitResults->AddText( Form("q = %.1f #pm %.1f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
-  fitResults->AddText( Form("m = %.1f #pm %.1f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
+  fitResults->AddText( "I_{apd} = I_{0} + G#timesI_{gun}" );
+  fitResults->AddText( Form("I_{0} = %.1f #pm %.1f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
+  fitResults->AddText( Form("G = %.1f #pm %.1f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
   fitResults->AddText( Form("#chi^{2} / NDF = %.2f / %d", f1_line->GetChisquare(), f1_line->GetNDF() ) );
   fitResults->Draw("same");
 
@@ -164,8 +164,8 @@ int main( int argc, char* argv[] ) {
   float yMin = (currentMethod=="integral") ? 30. : 10.;
 
   TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, 0.01, xMax_log, 10, yMin, yMax_log );
-  h2_axes_log->SetXTitle( "Gun Current [pA]" );
-  h2_axes_log->SetYTitle( "APD Current [pA]" );
+  h2_axes_log->SetXTitle( "I_{gun} [pA]" );
+  h2_axes_log->SetYTitle( "I_{apd} [pA]" );
   h2_axes_log->Draw();
 
   label_settings->Draw("same");
