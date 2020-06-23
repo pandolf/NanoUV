@@ -48,7 +48,7 @@ int main( int argc, char* argv[] ) {
   label_settings->SetTextSize( 0.035 );
   label_settings->SetTextColor( 46 );
   label_settings->SetFillColor(0);
-  label_settings->AddText( Form( "V_{APD} = %.0f V", APDhv ) );
+  label_settings->AddText( Form( "V_{apd} = %.0f V", APDhv ) );
   label_settings->SetTextAlign(11);
     
 
@@ -225,6 +225,8 @@ int main( int argc, char* argv[] ) {
   //h1_systRMS ->Write(); 
 
   //file->Close();
+
+  std::cout << "-> The systematic uncertainty is: " << h1_systTot->GetRMS() << " pA" << std::endl;
 
   return 0;
 
