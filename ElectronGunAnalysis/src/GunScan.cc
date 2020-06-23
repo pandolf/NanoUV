@@ -26,8 +26,8 @@ GunScan::GunScan( float gunEnergy, float APDhv, const std::string& dataDir, cons
 
   currentMethod_ = "max";
   currentEvalPoint_ = -6.;
-  firstN_fit_ = 12;
-  lastN_fit_ = 12;
+  firstN_fit_ = 18;
+  lastN_fit_ = 16;
   baselineFunc_ = "pol3";
 
   loadScan();
@@ -411,7 +411,8 @@ float GunScan::getStep( TGraph* graph ) {
 float GunScan::getCurrentFromScan( float& currentError ) {
 
   float current = 0.; // in nA
-  float keithleyErr = 0.01/1000.; // Keithley uncertainty 0.01 pA, converted in nA
+  float keithleyErr = 1./1000.; // the Keithley picoammeter was unfortunately saved truncating at less uncertainty
+  //float keithleyErr = 0.01/1000.; // Keithley uncertainty 0.01 pA, converted in nA
   float systErr = 1.349/1000.; //systematic on fit 1.349 pA per bin, converted in nA, from checkSystFit.cpp
 
   if( currentMethod_ == "max" ) {
@@ -464,7 +465,7 @@ float GunScan::getCurrentFromScan( float& currentError ) {
       } // for points
       
       current = sumCurrent/Ntot;
-      currentError = systErr/sqrt((float)Ntot);
+      currentError = sqrt(keithleyErr*keithleyErr + systErr*systErr)/sqrt((float)Ntot);
       std::cout << "The average is computed on a length of: " << Ntot*step << " mm (" << Ntot << " points)" << std::endl;
 
   } else if( currentMethod_ == "point" ) {
@@ -616,10 +617,10 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
   label_settings->SetTextSize( 0.035 );
   label_settings->SetTextColor( 46 );
   label_settings->SetFillColor(0);
-  label_settings->AddText( Form("E_{gun} = %.0f eV", gunEnergy_) );
+  label_settings->AddText( Form("E_{e} = %.0f eV", gunEnergy_) );
   label_settings->AddText( Form("%s", this->gunCurrentText().c_str()) );
 
-  label_settings->AddText( Form( "V_{APD} = %.0f V", APDhv_ ) );
+  label_settings->AddText( Form( "V_{apd} = %.0f V", APDhv_ ) );
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
   
