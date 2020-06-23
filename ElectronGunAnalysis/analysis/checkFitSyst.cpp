@@ -12,10 +12,10 @@
 #include "TCanvas.h"
 #include "TGraphErrors.h"
 #include "TLegend.h"
+#include "TStyle.h"
 
 
-
-std::string currentMethod = "integral";
+std::string currentMethod = "average";
 
 
 int main( int argc, char* argv[] ) {
@@ -37,8 +37,7 @@ int main( int argc, char* argv[] ) {
   NanoUVCommon::setStyle();
 
   std::vector< GunScan* > scans  = GunScan::loadScans( "data/baselines/scans.txt", 900, APDhv );
-
-  TH1D* h1_systTot  = new TH1D( "systTot" , "", 50, -0.25, 0.25 );
+  TH1D* h1_systTot  = new TH1D( "systTot" , "", 50, -5, 5 ); 
   TH1D* h1_systMean = new TH1D( "systMean", "", 50, -0.25, 0.25 );
   TH1D* h1_systRMS  = new TH1D( "systRMS" , "", 50, 0., 0.5 );
 
@@ -86,8 +85,8 @@ int main( int argc, char* argv[] ) {
 
         gr_nofit->SetPoint( gr_nofit->GetN(), thisX, thisY );
 
-        h1_thisSyst->Fill( (thisBaseline->Eval(thisX)-thisY) );
-        h1_systTot ->Fill( (thisBaseline->Eval(thisX)-thisY) );
+        h1_thisSyst->Fill( (thisBaseline->Eval(thisX)-thisY)*1000. ); //in pA
+        h1_systTot ->Fill( (thisBaseline->Eval(thisX)-thisY)*1000. ); //in pA
 
       } // if isFit
 
@@ -97,8 +96,8 @@ int main( int argc, char* argv[] ) {
     h1_systRMS ->Fill( h1_thisSyst->GetRMS () );
 
     int thisPoint = gr_syst->GetN();
-    gr_syst->SetPoint     ( thisPoint, thisPoint+0.5, 1000.*h1_thisSyst->GetMean() ); // in pA
-    gr_syst->SetPointError( thisPoint,            0., 1000.*h1_thisSyst->GetRMS()  );
+    gr_syst->SetPoint     ( thisPoint, thisPoint+0.5, h1_thisSyst->GetMean() );
+    gr_syst->SetPointError( thisPoint,            0., h1_thisSyst->GetRMS()  );
 
     TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
     c1->cd();
@@ -191,6 +190,32 @@ int main( int argc, char* argv[] ) {
 
   c2->SaveAs( Form("systFit_APDhv%.0f.pdf", APDhv) );
 
+  delete c2;
+  delete h2_axes2;
+
+  TCanvas* c3 = new TCanvas( "c3", "", 600, 600 );
+  c3->cd();
+  
+  gStyle->SetHistFillColor(kCyan+3);
+
+  h1_systTot->SetXTitle( "Fit - true [pA]" );
+  h1_systTot->UseCurrentStyle();
+  h1_systTot->Draw("B");
+  
+  TLegend* legend1 = new TLegend( 0.52, 0.82, 0.9, 0.9 );
+  legend1->SetTextSize(0.03);
+  legend1->SetFillStyle(0);
+  legend1->SetBorderSize(0);
+  legend1->AddEntry((TObject*)0 , Form("Mean = %.3f #pm %.3f pA", h1_systTot->GetMean(), h1_systTot->GetMeanError()), "" );
+  legend1->AddEntry((TObject*)0 , Form("RMS = %.3f #pm %.3f pA", h1_systTot->GetRMS(), h1_systTot->GetRMSError()), "" );
+  legend1->Draw("same");
+
+  NanoUVCommon::addNanoUVLabel( c3, 2 );
+  label_settings->Draw("same");
+
+  c3->SaveAs( Form("systHistTot_APDhv%.0f.pdf", APDhv) );
+
+  delete c3;
 
   //TFile* file = TFile::Open( "testSyst.root", "recreate" );
   //file->cd();

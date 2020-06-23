@@ -95,7 +95,7 @@ int main( int argc, char* argv[] ) {
   label_settings->SetTextSize( 0.035 );
   label_settings->SetFillColor(0);
   label_settings->AddText( Form("E_{gun} = %.0f eV", gunEnergy) );
-  label_settings->AddText( Form("I_{APD} = %.0f V", APDhv) );
+  label_settings->AddText( Form("V_{APD} = %.0f V", APDhv) );
   label_settings->SetTextAlign(11);
   label_settings->Draw("same");
 

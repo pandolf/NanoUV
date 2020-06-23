@@ -411,7 +411,8 @@ float GunScan::getStep( TGraph* graph ) {
 float GunScan::getCurrentFromScan( float& currentError ) {
 
   float current = 0.; // in nA
-  float keithleyErr = 0.1/1000.; // Keithley uncertainty 0.1 pA, converted in nA
+  float keithleyErr = 0.01/1000.; // Keithley uncertainty 0.01 pA, converted in nA
+  float systErr = 1.349/1000.; //systematic on fit 1.349 pA per bin, converted in nA, from checkSystFit.cpp
 
   if( currentMethod_ == "max" ) {
 
@@ -463,7 +464,7 @@ float GunScan::getCurrentFromScan( float& currentError ) {
       } // for points
       
       current = sumCurrent/Ntot;
-      currentError = keithleyErr/sqrt((float)Ntot);
+      currentError = systErr/sqrt((float)Ntot);
       std::cout << "The average is computed on a length of: " << Ntot*step << " mm (" << Ntot << " points)" << std::endl;
 
   } else if( currentMethod_ == "point" ) {
@@ -678,13 +679,11 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
 
   int thisPoint = graph->GetN();
 
-  float fitError = 2; // in pA... systematic on fit, from https://agenda.infn.it/event/22066/contributions/111663/attachments/71099/89094/pandolfi_2020_03_05.pdf
-  if ( this->APDhv() == 380 ) { fitError = 50; } // in pA
-
-  float ErrorTot = sqrt(pow(fitError,2)+pow(iAPDError,2));
+  //float fitError = 2; // in pA... systematic on fit, from https://agenda.infn.it/event/22066/contributions/111663/attachments/71099/89094/pandolfi_2020_03_05.pdf
+  //if ( this->APDhv() == 380 ) { fitError = 50; } // in pA
   
   graph->SetPoint     ( thisPoint, this->gunCurrent(), iAPD );
-  graph->SetPointError( thisPoint, this->gunCurrentError(), ErrorTot );
+  graph->SetPointError( thisPoint, this->gunCurrentError(), iAPDError );
 
   delete c1;
   delete h2_axes;
