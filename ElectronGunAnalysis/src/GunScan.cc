@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 
+#include "TFile.h"
 #include "TF1.h"
 #include "TCanvas.h"
 #include "TH2D.h"
@@ -24,15 +25,18 @@ GunScan::GunScan( float gunEnergy, float APDhv, const std::string& dataDir, cons
   iGunBefore_ = iGunBefore;
   iGunAfter_ = (iGunAfter>=0.) ? iGunAfter : iGunBefore;
 
-  currentMethod_ = "max";
+  currentMethod_ = "average";
   currentEvalPoint_ = -6.;
   firstN_fit_ = 18;
   lastN_fit_ = 16;
   baselineFunc_ = "pol3";
 
+  gr_currentSyst_ = 0;
+
   loadScan();
   correctGraph();
 
+  loadCurrentSyst();
 
   system( Form("mkdir -p %s", this->outdir().c_str()) );
 
@@ -362,6 +366,41 @@ std::string GunScan::findDataDirFromPath( const std::string& scansFile ) {
 
 
 
+void GunScan::loadCurrentSyst() {
+
+  TFile* systFile = TFile::Open( Form("systCurrent_E%.0feV_APDhv%.0fV.root", this->gunEnergy(), this->APDhv()) );
+  gr_currentSyst_ = (TGraphErrors*)systFile->Get("syst");
+
+}
+
+
+
+float GunScan::getCurrentSyst() const {
+
+  float syst = 0.;
+
+  if( gr_currentSyst_!=0 ) {
+
+    for( unsigned iPoint=0; iPoint<gr_currentSyst_->GetN(); ++iPoint ) {
+
+      double x,y;
+      gr_currentSyst_->GetPoint( iPoint, x, y );
+
+      if( x==this->gunCurrent() ) {
+        syst = y;
+        break;
+      }
+
+    }
+
+  } // if graph exists
+
+  return syst;
+
+}
+  
+
+
 float GunScan::getXmax( TGraph* graph ) {
 
   float xMax = 0.;
@@ -408,6 +447,16 @@ float GunScan::getStep( TGraph* graph ) {
 }
 
 
+float GunScan::getCurrentFromScan() {
+
+  float dummyError;
+
+  return this->getCurrentFromScan( dummyError );
+
+}
+
+
+
 float GunScan::getCurrentFromScan( float& currentError ) {
 
   float current = 0.; // in nA
@@ -443,6 +492,8 @@ float GunScan::getCurrentFromScan( float& currentError ) {
 
     } // for points
 
+    current /= 3.; // diameter of the APD is 3mm
+
     currentError = keithleyErr; // this is wrong, but integral method should not be used
 
   } else if( currentMethod_ == "average" ) { // currently supported method 
@@ -450,6 +501,54 @@ float GunScan::getCurrentFromScan( float& currentError ) {
     float step = getStep(graph_corr_);
     float Ntot = 0.; 
     float halfHeight = getYmax( graph_corr_ )/2.;
+    float sumCurrent = 0.;
+
+    for( int i=0; i<graph_corr_->GetN(); ++i ) {
+
+      double x, y;
+      graph_corr_->GetPoint( i, x, y );
+
+      if ( y >= halfHeight ) {
+        sumCurrent += y;
+        Ntot += 1;
+        }
+
+      } // for points
+      
+      current = sumCurrent/Ntot;
+      currentError = sqrt(keithleyErr*keithleyErr + systErr*systErr)/sqrt((float)Ntot);
+      std::cout << "The average is computed on a length of: " << Ntot*step << " mm (" << Ntot << " points)" << std::endl;
+
+
+  } else if( currentMethod_ == "average25" ) { // currently supported method 
+
+    float step = getStep(graph_corr_);
+    float Ntot = 0.; 
+    float halfHeight = 0.25*getYmax( graph_corr_ );
+    float sumCurrent = 0.;
+
+    for( int i=0; i<graph_corr_->GetN(); ++i ) {
+
+      double x, y;
+      graph_corr_->GetPoint( i, x, y );
+
+      if ( y >= halfHeight ) {
+        sumCurrent += y;
+        Ntot += 1;
+        }
+
+      } // for points
+      
+      current = sumCurrent/Ntot;
+      currentError = sqrt(keithleyErr*keithleyErr + systErr*systErr)/sqrt((float)Ntot);
+      std::cout << "The average is computed on a length of: " << Ntot*step << " mm (" << Ntot << " points)" << std::endl;
+
+
+  } else if( currentMethod_ == "average75" ) { // currently supported method 
+
+    float step = getStep(graph_corr_);
+    float Ntot = 0.; 
+    float halfHeight = 0.75*getYmax( graph_corr_ );
     float sumCurrent = 0.;
 
     for( int i=0; i<graph_corr_->GetN(); ++i ) {
@@ -675,6 +774,9 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
   iAPD      *= 1000; // convert to pA
   iAPDError *= 1000; // convert to pA
 
+  // add current method Syst
+  float currentSyst = this->getCurrentSyst()*iAPD;
+  iAPDError = sqrt( iAPDError*iAPDError + currentSyst*currentSyst );
 
   std::cout << "--> for E(gun) = " << this->gunEnergy() << " eV, V(APD) = " << this->APDhv() << " V, I(gun) = " << this->gunCurrent() << " pA, the APD current was: " << iAPD/1000. << " nA" << std::endl;
 

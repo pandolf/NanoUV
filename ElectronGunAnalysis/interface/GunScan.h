@@ -57,8 +57,12 @@ class GunScan {
   void loadScan();
   void correctGraph();
 
+  void loadCurrentSyst();
+  float getCurrentSyst() const;
+
   static std::vector<GunScan*> loadScans( const std::string& scansFileName, float gunEnergy=-1., float APDhv=-1. ); // default = all
 
+  float getCurrentFromScan();
   float getCurrentFromScan( float& currentError );
 
   float getBaseline( float x0 ); // baseline at gun position = x0 [mm]
@@ -90,6 +94,8 @@ class GunScan {
   int firstN_fit_;
   int lastN_fit_;
   std::string baselineFunc_;
+
+  TGraphErrors* gr_currentSyst_;
 
   void fitDrift();
   void subtractBaseline();
