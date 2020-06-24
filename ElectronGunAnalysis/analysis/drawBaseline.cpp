@@ -43,7 +43,7 @@ int main( int argc, char* argv[] ) {
 
   for( float APDhv=350.; APDhv <= 380.; APDhv += 10. ) {
 
-    std::vector< GunScan* > scans  = GunScan::loadScans( Form("data/%s/scans.dat", data.c_str()), gunEnergy, APDhv );
+    std::vector< GunScan* > scans  = GunScan::loadScans( Form("data/%s/scans.txt", data.c_str()), gunEnergy, APDhv );
 
     TGraphErrors* gr_baseline_vs_igun  = new TGraphErrors(0);
     gr_baseline_vs_igun->SetName( Form( "V_{APD} = %.0f V", APDhv) );
