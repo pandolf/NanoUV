@@ -103,7 +103,7 @@ int main( int argc, char* argv[] ) {
 
   label_settings->Draw("same");
 
-  c1->SaveAs( Form("systCurrent_E%.0feV_APDhv%.0f.pdf", gunEnergy, APDhv) );
+  c1->SaveAs( Form("systCurrent_E%.0feV_APDhv%.0fV.pdf", gunEnergy, APDhv) );
 
   delete c1;
   delete h2_axes;
