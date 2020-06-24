@@ -109,7 +109,14 @@ int main( int argc, char* argv[] ) {
   delete h2_axes;
 
 
-  std::cout << "-> The systematic uncertainty is: " << h1_syst->GetMean() << " percent" << std::endl;
+  std::string outfileName(Form("systCurrent_E%.0feV_APDhv%.0fV.root", gunEnergy, APDhv));
+  TFile* outfile = TFile::Open( outfileName.c_str(), "recreate" );
+  outfile->cd();
+  gr_syst_subtractMin->SetName("syst");
+  gr_syst_subtractMin->Write();
+  outfile->Close();
+
+  std::cout << "-> Saved syst in file: " << outfileName << std::endl;
 
   return 0;
 
