@@ -28,6 +28,9 @@ drawBaseline: drawBaseline.cpp NanoUVCommon.o GunScan.o
 checkFitSyst: checkFitSyst.cpp NanoUVCommon.o GunScan.o
 	$(CC) -Wall $(INCLUDES) -o checkFitSyst checkFitSyst.cpp NanoUVCommon.o GunScan.o $(ROOTFLAG) $(EXTRALIBS)
 
+checkCurrentSyst: checkCurrentSyst.cpp NanoUVCommon.o GunScan.o
+	$(CC) -Wall $(INCLUDES) -o checkCurrentSyst checkCurrentSyst.cpp NanoUVCommon.o GunScan.o $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 GunScan.o: ../../ElectronGunAnalysis/src/GunScan.cc NanoUVCommon.o
