@@ -39,8 +39,8 @@ int main( int argc, char* argv[] ) {
 
   NanoUVCommon::setStyle();
 
-  std::vector< GunScan* > scans  = GunScan::loadScans( Form("data/%s/scans.dat", data.c_str()), gunEnergy, APDhv );
-  std::vector< GunScan* > scans2 = GunScan::loadScans( Form("data/2019_11_28/scans.dat"), gunEnergy, APDhv );
+  std::vector< GunScan* > scans  = GunScan::loadScans( Form("data/%s/scans.txt", data.c_str()), gunEnergy, APDhv );
+  std::vector< GunScan* > scans2 = GunScan::loadScans( Form("data/2019_11_28/scans.txt"), gunEnergy, APDhv );
 
   TGraphErrors* gr_iapd_vs_igun  = new TGraphErrors(0);
   TGraphErrors* gr_iapd_vs_igun2 = new TGraphErrors(0);
@@ -101,10 +101,10 @@ int main( int argc, char* argv[] ) {
 
   float xFitMin, xFitMax;
    if( APDhv==350. && gunEnergy==500.) {
-    xFitMin = 0.1;
-    xFitMax = 50.;
+    xFitMin = 0.01;
+    xFitMax = 25.;
   } else if( APDhv==350. && gunEnergy==900.) {
-    xFitMin = 0.1;
+    xFitMin = 0.01;
     xFitMax = 15.;
   } else if( APDhv==380. && gunEnergy==500.) {
     xFitMin = 0.05;
@@ -162,6 +162,7 @@ int main( int argc, char* argv[] ) {
   c1->SetLogy();
 
   float yMin = (currentMethod=="integral") ? 30. : 10.;
+  if( gunEnergy == 500. ) yMin /=10.;
 
   TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, 0.01, xMax_log, 10, yMin, yMax_log );
   h2_axes_log->SetXTitle( "I_{gun} [pA]" );
