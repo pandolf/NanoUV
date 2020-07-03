@@ -82,7 +82,14 @@ void drawAllGraphs( const std::string& name ) {
   colors.push_back(kGray+3);
   colors.push_back(40);
 
-  TLegend* legend = new TLegend( 0.16, 0.6, 0.6, 0.9 );
+  TPaveText* label_pmt = new TPaveText( 0.18, 0.86, 0.6, 0.88, "brNDC" );
+  label_pmt->SetTextSize( 0.035 );
+  label_pmt->SetFillColor(0);
+  label_pmt->SetTextAlign(11);
+  label_pmt->AddText( "Hamamatsu R7378A" );
+  label_pmt->Draw("same");
+
+  TLegend* legend = new TLegend( 0.16, 0.58, 0.6, 0.86);
   legend->SetTextSize(0.035);
   legend->SetFillColor(0);
 
