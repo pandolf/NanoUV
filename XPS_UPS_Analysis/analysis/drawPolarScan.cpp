@@ -24,8 +24,10 @@ TGraphErrors* getNormalizedGraph( TGraphErrors* graph);
 
 int main() {
 
+  NanoUVCommon::setStyle();
 
   TGraphErrors* graph = new TGraphErrors(0);
+  graph->SetName("polarScan");
 
   std::ifstream ifs("data/drainCurrent_polarAngle_cnt.dat");
   
@@ -57,6 +59,11 @@ int main() {
     float sigma_di_o_df = sqrt( sigma_delta_i*sigma_delta_i/(delta_flux*delta_flux) + sigma_delta_flux*sigma_delta_flux*delta_i*delta_i/(delta_flux*delta_flux*delta_flux*delta_flux)
 );
 
+    std::cout << "deltaI: " << delta_i << " +- " << sigma_delta_i << " (" << sigma_delta_i/delta_i << "%%)" << std::endl;
+    std::cout << "deltaFlux: " << delta_flux << " +- " << sigma_delta_flux << " (" << sigma_delta_flux/delta_flux << "%%)" << std::endl;
+    std::cout << "di_o_df: " << di_o_df << " +- " << sigma_di_o_df << " (" << sigma_di_o_df/di_o_df << "%%)" << std::endl;
+    std::cout << std::endl;
+
     int iPoint = graph->GetN();
     graph->SetPoint( iPoint, angle, di_o_df );
     graph->SetPointError( iPoint, 0., sigma_di_o_df );
@@ -65,17 +72,18 @@ int main() {
 
 
   TGraphErrors* graphNorm = getNormalizedGraph( graph );
+  graphNorm->SetName( "polarScanNorm" );
 
 
   TCanvas* c1 = new TCanvas( "c1", "c1", 600, 600 );
   c1->cd();
 
   float xMin = 40.;
-  float xMax = 91.;
+  float xMax = 93.;
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., 13. );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., 15. );
   h2_axes->SetXTitle( "Angle with respect to normal (deg)" );
-  h2_axes->SetYTitle( "#DeltaI/#Delta#Phi (normalized to first point)");
+  h2_axes->SetYTitle( "#DeltaI / #Delta#Phi (normalized to first point)");
   h2_axes->Draw();
 
   TLine* lineOne = new TLine( xMin, 1., xMax, 1. );
@@ -88,6 +96,8 @@ int main() {
   graphNorm->SetMarkerColor(kGray+3);
   graphNorm->SetLineColor(kGray+3);
   graphNorm->Draw("Psame");
+
+  NanoUVCommon::addNanoUVLabel( c1, 2 );
 
   c1->SaveAs("drainCurrent_polarScan.pdf");
 
@@ -124,7 +134,7 @@ TGraphErrors* getNormalizedGraph( TGraphErrors* graph ) {
     graph->GetPoint( iPoint, x, y );
 
     newgraph->SetPoint ( iPoint, x, y/yNorm );
-    newgraph->SetPointError( iPoint, 0., graph->GetErrorY( iPoint ) );
+    newgraph->SetPointError( iPoint, 0., graph->GetErrorY( iPoint )/yNorm );
 
   }
 
