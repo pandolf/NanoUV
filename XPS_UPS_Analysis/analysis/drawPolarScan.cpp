@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <stdlib.h>
 #include <math.h>
 
@@ -16,6 +17,9 @@
 
 
 #define PI 3.14159265
+
+
+TGraphErrors* getNormalizedGraph( TGraphErrors* graph);
 
 
 int main() {
@@ -60,7 +64,7 @@ int main() {
   }
 
 
-  TGraphErrors* grapNorm = getNormalizedGraph( graph );
+  TGraphErrors* graphNorm = getNormalizedGraph( graph );
 
 
   TCanvas* c1 = new TCanvas( "c1", "c1", 600, 600 );
@@ -90,3 +94,40 @@ int main() {
   return 0;
 
 }
+
+
+
+
+TGraphErrors* getNormalizedGraph( TGraphErrors* graph ) {
+
+  TGraphErrors* newgraph = new TGraphErrors(0);
+
+  // first find yNorm
+  float xMin = 1000.;
+  float yNorm = -1.;
+  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+
+    double x, y;
+    graph->GetPoint( iPoint, x, y );
+
+    if( x<xMin ) {
+      xMin = x;
+      yNorm = y;
+    }
+
+  }
+
+
+  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+
+    double x, y;
+    graph->GetPoint( iPoint, x, y );
+
+    newgraph->SetPoint ( iPoint, x, y/yNorm );
+    newgraph->SetPointError( iPoint, 0., graph->GetErrorY( iPoint ) );
+
+  }
+
+  return newgraph;
+
+} 
