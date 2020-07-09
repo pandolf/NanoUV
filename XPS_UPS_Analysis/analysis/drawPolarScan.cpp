@@ -45,7 +45,7 @@ int main() {
     iss >> theta >> i_on >> sigma_i_on >> flux_on >> i_off >> sigma_i_off >> flux_off;
 
 
-    theta -= 270.;
+    theta -= 266.;
 
     float angle = acos( sin(54.*PI/180.)*cos((45.+theta)*PI/180.))*180./PI;
 
