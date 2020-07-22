@@ -261,7 +261,7 @@ void drawAllGraphs( const std::string& name ) {
   c1->Clear();
   c1->SetLogy();
 
-  TH2D* h2_axes2_log = new TH2D( "axes2_log", "", 10, 4.5, 10.5, 10, 70., 3.*yMax );
+  TH2D* h2_axes2_log = new TH2D( "axes2_log", "", 10, 4.5, 10.5, 10, 30., 3.*yMax );
   //TH2D* h2_axes2 = new TH2D( "axes2", "", 10, 4.5, 10.5, 10, 3000., 99999. );
   h2_axes2_log->SetXTitle( "LED Amplitude [a.u.]" );
   h2_axes2_log->SetYTitle( "Number of Photons" );
@@ -274,9 +274,9 @@ void drawAllGraphs( const std::string& name ) {
 
   legend2->Draw("same");
 
-  gr_N_kPhotons_hv750->Draw("P same");
-  gr_N_kPhotons_hv800->Draw("P same");
   gr_N_kPhotons_hv850->Draw("P same");
+  gr_N_kPhotons_hv800->Draw("P same");
+  gr_N_kPhotons_hv750->Draw("P same");
 
   NanoUVCommon::addNanoUVLabel( c1, 4 );
 
