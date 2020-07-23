@@ -4,7 +4,7 @@ CFLAGS = -Wall -c -g -fpermissive
 #ROOFIT_INCLUDE := $(shell cd $(CMSSW_BASE); scram tool info roofitcore | grep INCLUDE= | sed 's|INCLUDE=||')
 #ROOFIT_LIBDIR := $(shell cd $(CMSSW_BASE); scram tool info roofitcore | grep LIBDIR= | sed 's|LIBDIR=||')
 
-INCLUDES = -I. -I.. -I$(ROOTSYS)/include  -I../CommonTools/ -I../CommonTools/interface/ -I../interface/  #-I$(ROOFIT_INCLUDE)/ C-I$(CMSSW_BASE)/src -I$(CMSSW_BASE)/src/NanoUVCommonTools  
+INCLUDES = -I. -I.. -I$(ROOTSYS)/include  -I../../CommonTools/ -I../../CommonTools/interface/ -I../interface/  #-I$(ROOFIT_INCLUDE)/ C-I$(CMSSW_BASE)/src -I$(CMSSW_BASE)/src/NanoUVCommonTools  
 
 ROOTSYS ?= ERROR_RootSysIsNotDefined
 
@@ -15,6 +15,10 @@ EXTRALIBS := -L$(ROOTSYS)/lib -lHtml -lMathCore -lGenVector -lMinuit -lTreePlaye
 
 measFileToTree: measFileToTree.cpp 
 	$(CC) -Wall $(INCLUDES) -o measFileToTree measFileToTree.cpp $(ROOTFLAG) $(EXTRALIBS)
+
+
+drawFe55: drawFe55.cpp NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawFe55 drawFe55.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
 
 
