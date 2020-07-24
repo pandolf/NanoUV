@@ -23,7 +23,7 @@ int main() {
 
 
   TH1D* h1_vamp = new TH1D( "vamp", "", 400, 0.5, 0.9 );
-  TH1D* h1_energy = new TH1D( "energy", "", 1000, 5., 7.5);
+  TH1D* h1_energy = new TH1D( "energy", "", 1250, 5., 7.5);
 
   int nentries = tree->GetEntries();
 
