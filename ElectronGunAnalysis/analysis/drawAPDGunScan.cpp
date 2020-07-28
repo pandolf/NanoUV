@@ -193,6 +193,13 @@ int main( int argc, char* argv[] ) {
 
   std::cout << "xFitMin = " << xFitMin << std::endl;
   std::cout << "xFitMax = " << xFitMax << std::endl;
+
+  TFile* fitResultsFile = TFile::Open( Form("%s/fitResults.root", scans[0]->outdir().c_str()), "RECREATE" );
+  fitResultsFile->cd();
+  f1_line->Write();
+  fitResultsFile->Close();
+
+  std::cout << "-> Saved fit results in: " << fitResultsFile->GetName() << std::endl;
   
   return 0;
 
