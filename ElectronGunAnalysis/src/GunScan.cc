@@ -284,11 +284,12 @@ void GunScan::loadScan() {
     ifs >> x_gun >> i_apd;
 
     int iPoint = graph_->GetN();
-    graph_->SetPoint( iPoint, x_gun*201/gunEnergy_, -i_apd*1E9 ); // make positive and convert to nA
+    graph_->SetPoint( iPoint, this->convertGunPosition(x_gun), -i_apd*1E9 ); // make positive and convert to nA
 
   }
 
 }
+
 
 
 

@@ -62,6 +62,8 @@ class GunScan {
 
   static std::vector<GunScan*> loadScans( const std::string& scansFileName, float gunEnergy=-1., float APDhv=-1. ); // default = all
 
+  float convertGunPosition( float x ) const { return x*201./gunEnergy_; }
+
   float getCurrentFromScan();
   float getCurrentFromScan( float& currentError );
 
