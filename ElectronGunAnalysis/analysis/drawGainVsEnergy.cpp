@@ -43,9 +43,9 @@ int main() {
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, 0., 1200., 10, 0., 500. );
-  h2_axes->SetXTitle( "Electron Energy [eV]" );
-  h2_axes->SetYTitle( "Gain" );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, 0., 1100., 10, 0., 500. );
+  h2_axes->SetXTitle( "Electron energy [eV]" );
+  h2_axes->SetYTitle( "G" );
   h2_axes->Draw();
 
   graph->Draw("P same");
