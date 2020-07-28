@@ -22,6 +22,9 @@ drawCurrent: drawCurrent.cpp NanoUVCommon.o
 drawAPDGunScan: drawAPDGunScan.cpp NanoUVCommon.o GunScan.o
 	$(CC) -Wall $(INCLUDES) -o drawAPDGunScan drawAPDGunScan.cpp NanoUVCommon.o GunScan.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawGainVsEnergy: drawGainVsEnergy.cpp NanoUVCommon.o 
+	$(CC) -Wall $(INCLUDES) -o drawGainVsEnergy drawGainVsEnergy.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+
 drawBaseline: drawBaseline.cpp NanoUVCommon.o GunScan.o
 	$(CC) -Wall $(INCLUDES) -o drawBaseline drawBaseline.cpp NanoUVCommon.o GunScan.o $(ROOTFLAG) $(EXTRALIBS)
 
