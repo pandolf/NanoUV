@@ -163,8 +163,11 @@ int main( int argc, char* argv[] ) {
 
   float yMin = (currentMethod=="integral") ? 30. : 10.;
   if( gunEnergy == 500. ) yMin /=10.;
+  if( gunEnergy == 90.  ) yMin /=500.;
 
-  TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, 0.01, xMax_log, 10, yMin, yMax_log );
+  float xMin_log = 0.01;
+
+  TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, xMin_log, xMax_log, 10, yMin, yMax_log );
   h2_axes_log->SetXTitle( "I_{gun} [pA]" );
   h2_axes_log->SetYTitle( "I_{apd} [pA]" );
   h2_axes_log->Draw();
