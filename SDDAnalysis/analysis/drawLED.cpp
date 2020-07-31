@@ -9,6 +9,7 @@
 #include "TF1.h"
 #include "TH1D.h"
 #include "TH2D.h"
+#include "TGraphErrors.h"
 
 
 
@@ -43,6 +44,10 @@ int main( int argc, char* argv[] ) {
 
   }
 
+  std::string outdir( Form("plots/%s", ledType.c_str()) );
+  system( Form("mkdir -p %s", outdir.c_str()) );
+
+  TGraphErrors* graph = new TGraphErrors(0);
 
 
   for( unsigned i=0; i<ag.size(); ++i ) {
@@ -107,18 +112,35 @@ int main( int argc, char* argv[] ) {
     TF1* f1_gaus = new TF1( Form("gaus_%s_a%.0f_g%.0f", ledType.c_str(), a, g), "gaus", f1_gaus0->GetParameter(1)-1.5*f1_gaus0->GetParameter(2), f1_gaus0->GetParameter(1)+2.5*f1_gaus0->GetParameter(2) );
     h1_vamp->Fit( f1_gaus, "R" );
 
-    TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
+    TCanvas* c1 = new TCanvas( Form("c1_%s_a%.0f_g%.0f", ledType.c_str(), a, g), "", 600, 600 );
     c1->cd();
  
     TH2D* h2_axes = new TH2D( Form("axes_%s_a%.0f_g%.0f", ledType.c_str(), a, g), "", 10, f1_gaus0->GetParameter(1)*0.9, f1_gaus0->GetParameter(1)*1.05, 10, 0., 1000. );
     h2_axes->Draw();
     h1_vamp->Draw("same");
 
-    c1->SaveAs( "test.pdf" );
+    c1->SaveAs( Form( "%s/vamp_a%.0f_g%.0f.pdf", outdir.c_str(), a, g) );
 
-    exit(1);
+    graph->SetPoint     ( i,  a, f1_gaus->GetParameter(1)/g );
+    graph->SetPointError( i, 0., f1_gaus->GetParameter(2)/g );
 
   } // for ag
+
+
+  TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
+  c2->cd();
+
+  TH2D* h2_axes_2 = new TH2D( "axes", "", 10, 3.5, 10.5, 10, 0., 1. );
+  h2_axes_2->Draw();
+
+  graph->SetMarkerStyle(20);
+  graph->SetMarkerColor(kGray+3);
+  graph->SetLineColor(kGray+3);
+  graph->SetMarkerSize(1.5);
+
+  graph->Draw("P same");
+
+  c2->SaveAs("test.pdf");
 
   return 0;
 
