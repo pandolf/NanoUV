@@ -15,7 +15,7 @@ int main() {
 
   NanoUVCommon::setStyle();
 
-  TFile* file = TFile::Open( "Run_0_Measurements_Only_7_23_2020.root" );
+  TFile* file = TFile::Open( "data/Fe55/Run_0_Measurements_Only_7_23_2020.root" );
   TTree* tree = (TTree*)file->Get("tree");
 
   float vamp;
@@ -54,13 +54,16 @@ int main() {
   c1->SaveAs("amp.pdf");
 
 
-  float ka_peak = f1_gaus->GetParameter(1);
+  float ka_peak  = f1_gaus->GetParameter(1);
+  float ka_sigma = f1_gaus->GetParameter(2);
+
+  float calibration = 5.9/ka_peak; // ADC to keV
 
   for( unsigned iEntry=0; iEntry<nentries; ++iEntry ) {
 
     tree->GetEntry(iEntry);
 
-    h1_energy->Fill( vamp*5.9/ka_peak );
+    h1_energy->Fill( vamp*calibration );
 
   }
 
@@ -75,10 +78,12 @@ int main() {
   label_kalpha->SetTextSize(0.035);
   label_kalpha->SetTextColor(46);
   label_kalpha->SetFillColor(0);
-  label_kalpha->AddText( Form("K#alpha FWHM = %.1f eV", 2.355*f1_gaus->GetParameter(2)*5900./ka_peak) );
+  label_kalpha->AddText( Form("K#alpha FWHM = %.1f eV", 2.355*ka_sigma*calibration*1000.) );
   label_kalpha->Draw("same");
 
   c1->SaveAs("energy.pdf");
+
+  std::cout << "ADC to keV: " << calibration << std::endl;
 
   return 0;
 
