@@ -34,6 +34,9 @@ checkFitSyst: checkFitSyst.cpp NanoUVCommon.o GunScan.o
 checkCurrentSyst: checkCurrentSyst.cpp NanoUVCommon.o GunScan.o
 	$(CC) -Wall $(INCLUDES) -o checkCurrentSyst checkCurrentSyst.cpp NanoUVCommon.o GunScan.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawAllSystCurrent: drawAllSystCurrent.cpp NanoUVCommon.o 
+	$(CC) -Wall $(INCLUDES) -o drawAllSystCurrent drawAllSystCurrent.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 GunScan.o: ../../ElectronGunAnalysis/src/GunScan.cc NanoUVCommon.o
