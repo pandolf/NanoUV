@@ -64,12 +64,12 @@ Commercial APDs typically cover the silicon sensor with a protective layer (or `
 
 \begin{figure}[tb]
   \centering
-%\includegraphics[width=0.49\textwidth]{figures/schema}
- \caption{Diagram of the electrical circuit used to power the APD and readout its bias current with the Keithley 6485 picoammeter.
+\includegraphics[width=0.69\textwidth]{figures/circuit}
+ \caption{Schematic diagram of the operation and read-out of the APD.
   \label{fig:schema}}
 \end{figure}
 
-The APD is powered with a Silena 7712 power supply, at a nominal working bias of $V_{apd} = 350$~V. Throughout this paper all APD measurements are performed with a Keithley 6485 picoammeter connected to the bias pin of the APD, as shown in the diagram shown in Figure~\ref{fig:schema}. These are therefore measurements of the bias current of the APD, not of its output. This allows us to operate the APD even without electronics dedicated to the shaping and acquisition of its output, which is a feature which could be attractive when designing a simple light-weight detector, such as the NanoUV concept. 
+The APD is powered by a Silena 7712 power supply, at a nominal working bias of $V_{apd} = 350$~V. Throughout this paper all APD measurements are performed with a Keithley 6485 picoammeter connected to the ground pin of the APD, as shown in the diagram shown in Figure~\ref{fig:schema}. 
 
 \begin{figure}[tb]
   \centering
@@ -156,7 +156,7 @@ A similar 2-dimensional scan was performed while operating the APD at the nomina
 
 \section{Results}
 
-To measure the APD response to the gun current, we perform equatorial beam sweeps for multiple gun currents in the range $0.1 \div 10$~pA. To check the current stability, for each gun current setting the gun current is measured with the Faraday cup before and after the APD sweep. The uncertainty on the gun current is taken as either half of the absolute difference between these two measurements, or 0.5\% of their average value, whichever is largest.
+To measure the APD response to the gun current, we perform equatorial beam sweeps for multiple gun currents in the range $0.1 \div 100$~pA. To check the current stability, for each gun current setting the gun current is measured with the Faraday cup before and after the APD sweep. The uncertainty on the gun current is taken as either half of the absolute difference between these two measurements, or 0.5\% of their average value, whichever is largest.
 
 The APD current is extracted from the sweep profiles. Once the dark-current contribution is subtracted as described in the previous section, the maximum current is identified, and only points which have a current larger than 50\% of the maximum are considered. The APD current $I_{apd}$ is taken as the average of these points. The uncertainty on $I_{apd}$ is taken by propagating to the average a single-point uncertainty, which in turn is taken as the quadrature sum of the resolution (0.1~pA) plus the systematic uncertainty on the background subtraction (1.22~pA).
 
