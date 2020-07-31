@@ -20,6 +20,9 @@ measFileToTree: measFileToTree.cpp
 drawFe55: drawFe55.cpp NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawFe55 drawFe55.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawLED: drawLED.cpp NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawLED drawLED.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 NanoUVCommon.o: ../../CommonTools/src/NanoUVCommon.cc 
