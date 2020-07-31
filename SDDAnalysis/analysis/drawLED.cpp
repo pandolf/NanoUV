@@ -25,13 +25,19 @@ int main( int argc, char* argv[] ) {
 
   }
 
+  float adc2kev = 8.12501; // from drawFe55
+
   std::string ledType(argv[1]);
 
   std::vector< std::pair<float, float> > ag; 
+  float energy;
+
 
   if( ledType=="SP5605" ) ledType = "SP5605_SN030";
 
   if( ledType=="SP5605_SN030" ) {
+
+    energy = 5.; // in eV
 
     ag.push_back( std::pair<float,float>(10., 4.) );
     ag.push_back( std::pair<float,float>( 9., 4.) );
@@ -121,8 +127,10 @@ int main( int argc, char* argv[] ) {
 
     c1->SaveAs( Form( "%s/vamp_a%.0f_g%.0f.pdf", outdir.c_str(), a, g) );
 
-    graph->SetPoint     ( i,  a, f1_gaus->GetParameter(1)/g );
-    graph->SetPointError( i, 0., f1_gaus->GetParameter(2)/g );
+    float k = (adc2kev)*4./g; // Fe55 was taken at gain = 4 (?)
+    //float k = (adc2kev/energy)*4./g; // Fe55 was taken at gain = 4 (?)
+    graph->SetPoint     ( i,  a, f1_gaus->GetParameter(1)*k );
+    graph->SetPointError( i, 0., f1_gaus->GetParameter(2)*k );
 
   } // for ag
 
@@ -130,7 +138,9 @@ int main( int argc, char* argv[] ) {
   TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
   c2->cd();
 
-  TH2D* h2_axes_2 = new TH2D( "axes", "", 10, 3.5, 10.5, 10, 0., 1. );
+  TH2D* h2_axes_2 = new TH2D( "axes", "", 10, 3.5, 10.5, 10, 0., 19. );
+  h2_axes_2->SetYTitle( "SDD amplitude [keV]" );
+  h2_axes_2->SetXTitle( "LED amplitude" );
   h2_axes_2->Draw();
 
   graph->SetMarkerStyle(20);
