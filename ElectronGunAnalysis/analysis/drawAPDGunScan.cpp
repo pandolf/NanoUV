@@ -116,7 +116,7 @@ int main( int argc, char* argv[] ) {
     xFitMin = 0.;
     xFitMax = 15.;
   }
-  TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", xFitMin, xFitMax );
+  TF1* f1_line = new TF1( "lineScan", "[0] + [1]*x", 0., xMax );
   gr_iapd_vs_igun->Fit( f1_line, "QR0" );
 
   TPaveText* fitResults = new TPaveText( 0.6, 0.2, 0.9, 0.44, "brNDC" );
@@ -124,8 +124,13 @@ int main( int argc, char* argv[] ) {
   fitResults->SetFillColor(0);
   fitResults->SetTextColor(46);
   fitResults->AddText( "I_{apd} = I_{0} + G#timesI_{gun}" );
-  fitResults->AddText( Form("I_{0} = %.1f #pm %.1f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
-  fitResults->AddText( Form("G = %.1f #pm %.1f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
+  if( gunEnergy==90. ) {
+    fitResults->AddText( Form("I_{0} = %.2f #pm %.2f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
+    fitResults->AddText( Form("G = %.3f #pm %.3f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
+  } else {
+    fitResults->AddText( Form("I_{0} = %.1f #pm %.1f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
+    fitResults->AddText( Form("G = %.1f #pm %.1f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
+  }
   fitResults->AddText( Form("#chi^{2} / NDF = %.2f / %d", f1_line->GetChisquare(), f1_line->GetNDF() ) );
   fitResults->Draw("same");
 
@@ -163,9 +168,9 @@ int main( int argc, char* argv[] ) {
 
   float yMin = (currentMethod=="integral") ? 30. : 10.;
   if( gunEnergy == 500. ) yMin /=10.;
-  if( gunEnergy == 90.  ) yMin /=500.;
+  if( gunEnergy == 90.  ) yMin /=300.;
 
-  float xMin_log = 0.01;
+  float xMin_log = (gunEnergy==90.) ? 0.04 : 0.01;
 
   TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, xMin_log, xMax_log, 10, yMin, yMax_log );
   h2_axes_log->SetXTitle( "I_{gun} [pA]" );
@@ -200,6 +205,7 @@ int main( int argc, char* argv[] ) {
   TFile* fitResultsFile = TFile::Open( Form("%s/fitResults.root", scans[0]->outdir().c_str()), "RECREATE" );
   fitResultsFile->cd();
   f1_line->Write();
+  gr_iapd_vs_igun->Write();
   fitResultsFile->Close();
 
   std::cout << "-> Saved fit results in: " << fitResultsFile->GetName() << std::endl;
