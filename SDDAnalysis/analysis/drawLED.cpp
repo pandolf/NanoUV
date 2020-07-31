@@ -30,14 +30,11 @@ int main( int argc, char* argv[] ) {
   std::string ledType(argv[1]);
 
   std::vector< std::pair<float, float> > ag; 
-  float energy;
 
 
   if( ledType=="SP5605" ) ledType = "SP5605_SN030";
 
   if( ledType=="SP5605_SN030" ) {
-
-    energy = 5.; // in eV
 
     ag.push_back( std::pair<float,float>(10., 4.) );
     ag.push_back( std::pair<float,float>( 9., 4.) );
@@ -47,6 +44,27 @@ int main( int argc, char* argv[] ) {
     //ag.push_back( std::pair<float,float>( 6., 12.) );
     ag.push_back( std::pair<float,float>( 5.,12.) );
     ag.push_back( std::pair<float,float>( 4.,40.) );
+
+  } else if( ledType=="SP5601_SN134" ) {
+
+    ag.push_back( std::pair<float,float>(10., 12.) );
+    ag.push_back( std::pair<float,float>( 9., 40.) );
+    ag.push_back( std::pair<float,float>( 8.,120.) );
+    ag.push_back( std::pair<float,float>( 7.,120.) );
+ 
+  } else if( ledType=="SP5601_SN243" ) {
+
+    ag.push_back( std::pair<float,float>(10.,  12.) );
+    ag.push_back( std::pair<float,float>( 9.,  12.) );
+    //ag.push_back( std::pair<float,float>( 9.,  40.) );
+    ag.push_back( std::pair<float,float>( 8.,  40.) );
+    //ag.push_back( std::pair<float,float>( 8., 120.) );
+    ag.push_back( std::pair<float,float>( 7., 120.) );
+
+  } else {
+
+    std::cout << "Unkown LED type. Exiting." << std::endl;
+    exit(1);
 
   }
 
@@ -64,6 +82,7 @@ int main( int argc, char* argv[] ) {
     TChain* chain = new TChain("tree");
 
     //TFile* file = TFile::Open( Form("data/LED_%s/Run_A%.0f_G%.0f_Measurements_Only_7_23_2020.root", ledType.c_str(), a, g) );
+    std::cout <<  Form("data/LED_%s/Run_A%.0f_G%.0f_Measurements_Only_7_23_2020.root/tree", ledType.c_str(), a, g) << std::endl;
     chain->Add( Form("data/LED_%s/Run_A%.0f_G%.0f_Measurements_Only_7_23_2020.root/tree"  , ledType.c_str(), a, g) );
     chain->Add( Form("data/LED_%s/Run_A%.0f_G%.0f_Measurements_Only_7_23_2020_2.root/tree", ledType.c_str(), a, g) );
 
@@ -135,6 +154,7 @@ int main( int argc, char* argv[] ) {
   } // for ag
 
 
+
   TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
   c2->cd();
 
@@ -150,7 +170,7 @@ int main( int argc, char* argv[] ) {
 
   graph->Draw("P same");
 
-  c2->SaveAs("test.pdf");
+  c2->SaveAs( Form("%s/s_vs_ampl.pdf", outdir.c_str()) );
 
   return 0;
 
