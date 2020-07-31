@@ -45,7 +45,11 @@ int main( int argc, char* argv[] ) {
 
   NanoUVCommon::setStyle();
 
-  std::vector< GunScan* > scans  = GunScan::loadScans( "data/2020_02/scans.txt", gunEnergy, APDhv );
+  std::vector< GunScan* > scans;
+  if( gunEnergy==90. )
+    scans  = GunScan::loadScans( "data/2020_07/scans.txt", gunEnergy, APDhv );
+  else
+    scans  = GunScan::loadScans( "data/2020_02/scans.txt", gunEnergy, APDhv );
 
   TGraphErrors* gr_syst     = new TGraphErrors(0);
   TGraphErrors* gr_systCorr = new TGraphErrors(0);
