@@ -478,8 +478,8 @@ float GunScan::getCurrentFromScan() {
 float GunScan::getCurrentFromScan( float& currentError ) {
 
   float current = 0.; // in nA
-  //float keithleyErr = 1./1000.; // the Keithley picoammeter was unfortunately saved truncating at less uncertainty
-  float keithleyErr = 0.01/1000.; // Keithley uncertainty 0.01 pA, converted in nA
+  float keithleyErr = 0.01/1000.; // Keithley uncertainty 0.01 pA, converted in nA (starting from 2020_07 we saved the full amount of digits)
+  if( gunEnergy_==500. || gunEnergy_==900. ) keithleyErr = 1./1000.; // the Keithley picoammeter was unfortunately saved truncating at less uncertainty for the 500 and 900 eV runs (2020_02)
   float systErr = 1.349/1000.; //systematic on fit 1.349 pA per bin, converted in nA, from checkSystFit.cpp
 
   if( currentMethod_ == "max" ) {
