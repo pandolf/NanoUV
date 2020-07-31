@@ -320,11 +320,8 @@ std::vector< GunScan* > GunScan::loadScans( const std::string& scansFile, float 
     std::istringstream iss(line);
     iss >> this_scanName >> this_gunEnergy >> this_APDhv >> this_iGunBefore >> this_iGunAfter;
 
-    // correcting for the different zeros at different dynamic ranges (measured values)
-    if( this_iGunBefore < 2. ) this_iGunBefore += 0.0052; 
-    else                       this_iGunBefore -= 0.028; 
-    if( this_iGunAfter  < 2. ) this_iGunAfter  += 0.0052;
-    else                       this_iGunAfter  -= 0.028; 
+    correctCurrentZero( this_iGunBefore, scansFile );
+    correctCurrentZero( this_iGunAfter , scansFile );
 
     bool gunEnergyOK = (gunEnergy<0.) || (gunEnergy>=0. && this_gunEnergy==gunEnergy);
     bool APDhvOK     = (APDhv    <0.) || (APDhv    >=0. && this_APDhv    ==APDhv    );
@@ -338,6 +335,26 @@ std::vector< GunScan* > GunScan::loadScans( const std::string& scansFile, float 
   std::cout << std::endl << std::endl;
 
   return scans;
+
+}
+
+    
+void GunScan::correctCurrentZero( float& current, const std::string& scansFile ) {
+  
+  // correcting for the different zeros at different dynamic ranges (measured values)
+
+  TString scansFile_tstr(scansFile);
+  if( scansFile_tstr.Contains("2020_02") ) {
+
+    if( current < 1.3 ) current += 0.0052; 
+    else                current -= 0.028; 
+
+  } else if( scansFile_tstr.Contains("2020_07") ) {
+
+    if( current < 1.0 ) current -= 0.002; 
+    else                current -= 0.001; 
+
+  }
 
 }
 
@@ -461,8 +478,8 @@ float GunScan::getCurrentFromScan() {
 float GunScan::getCurrentFromScan( float& currentError ) {
 
   float current = 0.; // in nA
-  float keithleyErr = 1./1000.; // the Keithley picoammeter was unfortunately saved truncating at less uncertainty
-  //float keithleyErr = 0.01/1000.; // Keithley uncertainty 0.01 pA, converted in nA
+  //float keithleyErr = 1./1000.; // the Keithley picoammeter was unfortunately saved truncating at less uncertainty
+  float keithleyErr = 0.01/1000.; // Keithley uncertainty 0.01 pA, converted in nA
   float systErr = 1.349/1000.; //systematic on fit 1.349 pA per bin, converted in nA, from checkSystFit.cpp
 
   if( currentMethod_ == "max" ) {
