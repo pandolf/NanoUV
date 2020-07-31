@@ -27,7 +27,9 @@ int main( int argc, char* argv[] ) {
   if( fileName.rfind("data/",0)==0 )
     fileName.erase(0, 5);
 
-  std::ifstream fs(Form("data/%s", fileName.c_str()));
+  std::string fullFileName( Form("data/%s", fileName.c_str()) );
+  
+  std::ifstream fs(fullFileName.c_str());
   if( !fs.good() ) {
     std::cout << "-> No file called '" << fileName << "' found in 'data/'. Exiting." << std::endl;
     exit(1);
@@ -37,8 +39,8 @@ int main( int argc, char* argv[] ) {
 
   size_t pos = 0;
   std::string outfileName;
-  if((pos = fileName.find(".")) != std::string::npos) {
-    std::string prefix = fileName.substr(0, pos);
+  if((pos = fullFileName.find(".")) != std::string::npos) {
+    std::string prefix = fullFileName.substr(0, pos);
     outfileName = prefix + ".root";
   }
 
