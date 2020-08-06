@@ -1,0 +1,26 @@
+./measFileToTree data/LED_SP5601_SN134/Run_A10_G12_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5601_SN134/Run_A7_G120_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5601_SN134/Run_A8_G120_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5601_SN134/Run_A9_G40_Measurements_Only_7_23_2020.dat
+
+./measFileToTree data/LED_SP5601_SN243/Run_A10_G12_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5601_SN243/Run_A7_G120_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5601_SN243/Run_A8_G120_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5601_SN243/Run_A8_G40_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5601_SN243/Run_A9_G12_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5601_SN243/Run_A9_G40_Measurements_Only_7_23_2020.dat
+
+./measFileToTree data/LED_SP5605_SN030/Run_A10_G4_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A4_G40_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A5_G12_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A6_G12_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A6_G12_Measurements_Only_7_23_2020_2.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A6_G12_Measurements_Only_7_23_2020_3.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A6_G4_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A6_G4_Measurements_Only_7_23_2020_2.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A7_G4_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A7_G4_Measurements_Only_7_23_2020_2.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A8_G4_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A8_G4_Measurements_Only_7_23_2020_2.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A9_G4_Measurements_Only_7_23_2020.dat
+./measFileToTree data/LED_SP5605_SN030/Run_A9_G4_Measurements_Only_7_23_2020_2.dat
