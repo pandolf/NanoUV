@@ -1,0 +1,23 @@
++++ ISTRUZIONI SDD
+
+
+
+
+ACCENSIONE:
+
+- accendere LV. prima positivo poi negativo. controllare che positivo tira 0.02 e negativo tira 0.01. (se accendi negativo prima di positivo, il positivo tira 0.00 e non funzionera')
+
+- accendere rack HV
+
+- accendere HV
+
+
+
+
+SPEGNIMENTO:
+
+- spegnere HV
+
+- spegnere HV rack
+
+- spegnere LV (ordine non importa ma prima negativo e poi positivo e' meglio)
