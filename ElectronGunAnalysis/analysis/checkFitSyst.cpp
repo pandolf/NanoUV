@@ -44,7 +44,8 @@ int main( int argc, char* argv[] ) {
   TGraphErrors* gr_syst = new TGraphErrors(0);
 
   // will need also later (after loop)
-  TPaveText* label_settings = new TPaveText( 0.21, 0.7, 0.48, 0.77, "brNDC" );
+  TPaveText* label_settings = new TPaveText( 0.21, 0.8, 0.48, 0.87, "brNDC" );
+  //TPaveText* label_settings = new TPaveText( 0.21, 0.7, 0.48, 0.77, "brNDC" );
   label_settings->SetTextSize( 0.035 );
   label_settings->SetTextColor( 46 );
   label_settings->SetFillColor(0);
@@ -125,8 +126,8 @@ int main( int argc, char* argv[] ) {
     h2_axes->SetYTitle("APD Current [nA]");
     h2_axes->Draw();
 
-    TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
-    label->Draw("same");  
+    //TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
+    //label->Draw("same");  
     gPad->RedrawAxis();
 
     label_settings->Draw("same");
@@ -184,9 +185,11 @@ int main( int argc, char* argv[] ) {
   gr_syst->SetLineColor(kGray+3);
   gr_syst->Draw("Psame");
 
-  NanoUVCommon::addNanoUVLabel( c2, 2 );
+  //NanoUVCommon::addNanoUVLabel( c2, 2 );
 
   label_settings->Draw("same");
+
+  gPad->RedrawAxis();
 
   c2->SaveAs( Form("systFit_APDhv%.0f.pdf", APDhv) );
 
@@ -210,8 +213,11 @@ int main( int argc, char* argv[] ) {
   legend1->AddEntry((TObject*)0 , Form("RMS = %.3f #pm %.3f pA", h1_systTot->GetRMS(), h1_systTot->GetRMSError()), "" );
   legend1->Draw("same");
 
-  NanoUVCommon::addNanoUVLabel( c3, 2 );
+  //NanoUVCommon::addNanoUVLabel( c3, 2 );
+  
   label_settings->Draw("same");
+
+  gPad->RedrawAxis();
 
   c3->SaveAs( Form("systHistTot_APDhv%.0f.pdf", APDhv) );
 
