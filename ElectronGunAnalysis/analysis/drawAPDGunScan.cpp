@@ -91,7 +91,8 @@ int main( int argc, char* argv[] ) {
   h2_axes->SetYTitle( "I_{apd} [pA]" );
   h2_axes->Draw();
 
-  TPaveText* label_settings = new TPaveText( 0.23, 0.65, 0.5, 0.77, "brNDC" );
+  TPaveText* label_settings = new TPaveText( 0.23, 0.75, 0.5, 0.87, "brNDC" );
+  //TPaveText* label_settings = new TPaveText( 0.23, 0.65, 0.5, 0.77, "brNDC" );
   label_settings->SetTextSize( 0.035 );
   label_settings->SetFillColor(0);
   label_settings->AddText( Form("E_{e} = %.0f eV", gunEnergy) );
@@ -127,6 +128,9 @@ int main( int argc, char* argv[] ) {
   if( gunEnergy==90. ) {
     fitResults->AddText( Form("I_{0} = %.2f #pm %.2f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
     fitResults->AddText( Form("G = %.3f #pm %.3f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
+  } else if( gunEnergy==500. ) {
+    fitResults->AddText( Form("I_{0} = %.2f #pm %.2f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
+    fitResults->AddText( Form("G = %.2f #pm %.2f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
   } else {
     fitResults->AddText( Form("I_{0} = %.1f #pm %.1f pA", f1_line->GetParameter(0), f1_line->GetParError(0) ) );
     fitResults->AddText( Form("G = %.1f #pm %.1f", f1_line->GetParameter(1), f1_line->GetParError(1) ) );
@@ -135,10 +139,8 @@ int main( int argc, char* argv[] ) {
   fitResults->Draw("same");
 
 
-  TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
-  label->Draw("same");  
+  //NanoUVCommon::addNanoUVLabel( c1, 2, "HPK S11625-30N" );
   gPad->RedrawAxis();
-
 
   f1_line->SetLineWidth(2);
   f1_line->SetLineColor(46);
@@ -179,9 +181,8 @@ int main( int argc, char* argv[] ) {
 
   label_settings->Draw("same");
 
-  label->Draw("same");
+  //NanoUVCommon::addNanoUVLabel( c1, 2, "HPK S11625-30N" );
   gPad->RedrawAxis();
-
 
   TF1* f1_lineLog = new TF1( "lineScan_log", "[0] + [1]*x", 0., xMax_log );
   f1_lineLog->SetParameter( 0, f1_line->GetParameter(0) );
