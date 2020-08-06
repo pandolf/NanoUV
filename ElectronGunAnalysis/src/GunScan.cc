@@ -726,11 +726,12 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
   h2_axes->SetYTitle("APD Current [nA]");
   h2_axes->Draw();
 
-  TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
-  label->Draw("same");  
+  //TPaveText* label = NanoUVCommon::getNanoUVLabel(2);
+  //label->Draw("same");  
   gPad->RedrawAxis();
 
-  TPaveText* label_settings = new TPaveText( 0.21, 0.6, 0.48, 0.77, "brNDC" );
+  TPaveText* label_settings = new TPaveText( 0.21, 0.7, 0.48, 0.87, "brNDC" );
+  //TPaveText* label_settings = new TPaveText( 0.21, 0.6, 0.48, 0.77, "brNDC" );
   label_settings->SetTextSize( 0.035 );
   label_settings->SetTextColor( 46 );
   label_settings->SetFillColor(0);
@@ -779,7 +780,7 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
   graph_corr_->SetLineColor(kGray+3);
   graph_corr_->Draw("P same");
 
-  label->Draw("same");  
+  //label->Draw("same");  
   gPad->RedrawAxis();
 
   c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.pdf", dataDir_.c_str(), gunEnergy(), APDhv(), scanName_.c_str()));
