@@ -20,7 +20,7 @@ int main( int argc, char* argv[] ) {
 
   if( argc<2 ) {
 
-    std::cout << "USAGE: ./drawLED [ledType=SP5605_SN030, ]" << std::endl;
+    std::cout << "USAGE: ./drawLED [ledType= SP5605_SN030, SP5601_SN134, SP5601_SN243]" << std::endl;
     exit(1);
 
   }
@@ -140,7 +140,7 @@ int main( int argc, char* argv[] ) {
     TCanvas* c1 = new TCanvas( Form("c1_%s_a%.0f_g%.0f", ledType.c_str(), a, g), "", 600, 600 );
     c1->cd();
  
-    TH2D* h2_axes = new TH2D( Form("axes_%s_a%.0f_g%.0f", ledType.c_str(), a, g), "", 10, f1_gaus0->GetParameter(1)*0.9, f1_gaus0->GetParameter(1)*1.05, 10, 0., 1000. );
+    TH2D* h2_axes = new TH2D( Form("axes_%s_a%.0f_g%.0f", ledType.c_str(), a, g), "", 10, f1_gaus0->GetParameter(1)*0.5, f1_gaus0->GetParameter(1)*1.5, 10, 0., 1.2*h1_vamp->GetMaximum() );
     h2_axes->Draw();
     h1_vamp->Draw("same");
 
