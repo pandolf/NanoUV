@@ -159,8 +159,7 @@ int main( int argc, char* argv[] ) {
 
     c1->SaveAs( Form( "%s/vamp_a%.0f_g%.0f.pdf", outdir.c_str(), a, g) );
 
-    float k = (adc2kev)*4./g; // Fe55 was taken at gain = 4 (?)
-    //float k = (adc2kev/energy)*4./g; // Fe55 was taken at gain = 4 (?)
+    float k = (adc2kev)*40./g; // Fe55 was taken at gain = 40
     gr_kev_vs_ampl->SetPoint     ( i,  a, f1_gaus->GetParameter(1)*k );
     gr_kev_vs_ampl->SetPointError( i, 0., f1_gaus->GetParameter(2)*k );
 
