@@ -16,6 +16,12 @@ EXTRALIBS := -L$(ROOTSYS)/lib -lHtml -lMathCore -lGenVector -lMinuit -lTreePlaye
 measFileToTree: measFileToTree.cpp 
 	$(CC) -Wall $(INCLUDES) -o measFileToTree measFileToTree.cpp $(ROOTFLAG) $(EXTRALIBS)
 
+asciiFileToTree: asciiFileToTree.cpp 
+	$(CC) -Wall $(INCLUDES) -o asciiFileToTree asciiFileToTree.cpp $(ROOTFLAG) $(EXTRALIBS)
+
+drawPulseShape: drawPulseShape.cpp 
+	$(CC) -Wall $(INCLUDES) -o drawPulseShape drawPulseShape.cpp $(ROOTFLAG) $(EXTRALIBS)
+
 
 drawFe55: drawFe55.cpp NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawFe55 drawFe55.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
