@@ -8,6 +8,9 @@
 
 
 
+bool SAVEFULLSHAPE = false;
+
+
 
 int main( int argc, char* argv[] ) {
 
@@ -40,6 +43,7 @@ int main( int argc, char* argv[] ) {
   std::string outfileName;
   if((pos = fullFileName.find(".")) != std::string::npos) {
     std::string prefix = fullFileName.substr(0, pos);
+    if( SAVEFULLSHAPE ) prefix = prefix + "_SHAPE";
     outfileName = prefix + ".root";
   }
 
@@ -55,6 +59,7 @@ int main( int argc, char* argv[] ) {
   float letime   ;
   float tetime   ;
   float ratecount;
+  float delta    ; // last sample minus first sample
   float pshape   [1024];
 
   tree->Branch( "ev"       , &ev      , "ev/I"            );
@@ -64,8 +69,11 @@ int main( int argc, char* argv[] ) {
   tree->Branch( "letime"   , &letime   , "letime/F"   );
   tree->Branch( "tetime"   , &tetime   , "tetime/F"   );
   tree->Branch( "ratecount", &ratecount, "ratecount/F");
-  tree->Branch( "pshape"   ,  pshape   , "pshape[1024]/F");
+  tree->Branch( "delta"    , &delta    , "delta/F"    );
+  if( SAVEFULLSHAPE )
+    tree->Branch( "pshape"   ,  pshape   , "pshape[1024]/F");
 
+  
 
   std::string line;
   bool wasReadingEvent = false;
@@ -112,6 +120,8 @@ int main( int argc, char* argv[] ) {
   
         for( unsigned i=0; i<words.size(); ++i ) 
           pshape[i] = atof(words[i].c_str());
+
+        delta = pshape[1023] - pshape[0];
 
         readyForPulseShape = false;
    
