@@ -20,11 +20,11 @@ class NanoUVCommon {
 
   static std::vector<int> colors();
 
-  static void addNanoUVLabel( TCanvas* c1, int quadrant=4 );
-  static void addNanoUVLabel( TCanvas* c1, float xmin, float ymin, float xmax, float ymax );
+  static void addNanoUVLabel( TCanvas* c1, int quadrant=4, const std::string& text="NanoUV" );
+  static void addNanoUVLabel( TCanvas* c1, float xmin, float ymin, float xmax, float ymax, const std::string& text="NanoUV" );
 
-  static TPaveText* getNanoUVLabel( int quadrant );
-  static TPaveText* getNanoUVLabel( float xmin, float ymin, float xmax, float ymax );
+  static TPaveText* getNanoUVLabel( int quadrant, const std::string& text="NanoUV" );
+  static TPaveText* getNanoUVLabel( float xmin, float ymin, float xmax, float ymax, const std::string& text="NanoUV" );
 
   static float integrateSignal( TGraph* graph, bool invertPolarity=false );
   static float ampMaxSignal( TGraph* graph, bool invertPolarity=false );

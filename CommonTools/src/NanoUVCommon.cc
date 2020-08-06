@@ -42,23 +42,9 @@ std::vector<int> NanoUVCommon::colors() {
 //}
 
 
-void NanoUVCommon::addNanoUVLabel( TCanvas* c1, int quadrant ) {
+void NanoUVCommon::addNanoUVLabel( TCanvas* c1, int quadrant, const std::string& text ) {
 
-  TPaveText* label = NanoUVCommon::getNanoUVLabel( quadrant );
-
-  c1->cd();
-
-  label->Draw();
-
-  gPad->RedrawAxis();
-
-}
-
-
-
-void NanoUVCommon::addNanoUVLabel( TCanvas* c1, float xmin, float ymin, float xmax, float ymax ) {
-
-  TPaveText* label = NanoUVCommon::getNanoUVLabel( xmin, ymin, xmax, ymax );
+  TPaveText* label = NanoUVCommon::getNanoUVLabel( quadrant, text );
 
   c1->cd();
 
@@ -70,16 +56,30 @@ void NanoUVCommon::addNanoUVLabel( TCanvas* c1, float xmin, float ymin, float xm
 
 
 
-TPaveText* NanoUVCommon::getNanoUVLabel( int quadrant ) {
+void NanoUVCommon::addNanoUVLabel( TCanvas* c1, float xmin, float ymin, float xmax, float ymax, const std::string& text ) {
+
+  TPaveText* label = NanoUVCommon::getNanoUVLabel( xmin, ymin, xmax, ymax, text );
+
+  c1->cd();
+
+  label->Draw();
+
+  gPad->RedrawAxis();
+
+}
+
+
+
+TPaveText* NanoUVCommon::getNanoUVLabel( int quadrant, const std::string& text ) {
 
   if( quadrant==4 )
-    return NanoUVCommon::getNanoUVLabel( 0.7 , 0.2, 0.9 , 0.25 );
+    return NanoUVCommon::getNanoUVLabel( 0.7 , 0.2, 0.9 , 0.25, text );
   else if( quadrant==2 )
-    return NanoUVCommon::getNanoUVLabel( 0.22, 0.83, 0.42, 0.88 );
+    return NanoUVCommon::getNanoUVLabel( 0.22, 0.83, 0.42, 0.88, text );
   else if( quadrant==3 )
-    return NanoUVCommon::getNanoUVLabel( 0.22, 0.2, 0.42, 0.25 );
+    return NanoUVCommon::getNanoUVLabel( 0.22, 0.2, 0.42, 0.25, text );
   else if( quadrant==1 )
-    return NanoUVCommon::getNanoUVLabel( 0.7 , 0.83, 0.9 , 0.88 );
+    return NanoUVCommon::getNanoUVLabel( 0.7 , 0.83, 0.9 , 0.88, text );
   else {
     std::cout << "[NanoUVCommon::addNanoUVLabel] Quadrant '" << quadrant << "' not implemented yet!" << std::endl;
     return 0;
@@ -88,19 +88,20 @@ TPaveText* NanoUVCommon::getNanoUVLabel( int quadrant ) {
 }
 
 
-TPaveText* NanoUVCommon::getNanoUVLabel( float xmin, float ymin, float xmax, float ymax ) {
+TPaveText* NanoUVCommon::getNanoUVLabel( float xmin, float ymin, float xmax, float ymax, const std::string& text ) {
 
-  //TPaveText* label_top = new TPaveText(0.154,0.953,0.275,0.955, "brNDC");
-  //TPaveText* label_top = new TPaveText(0.4,0.953,0.98,0.955, "brNDC");
-  TPaveText* label_top = new TPaveText(xmin, ymin, xmax, ymax, "brNDC");
-  label_top->SetBorderSize(0);
-  label_top->SetFillColor(kWhite);
-  label_top->SetTextSize(0.06);
-  //label_top->SetTextAlign(31); // align right
-  label_top->SetTextFont(72);
-  label_top->AddText( "NanoUV" );
+  TPaveText* label = new TPaveText(xmin, ymin, xmax, ymax, "brNDC");
+  label->SetBorderSize(0);
+  label->SetFillColor(kWhite);
+  if( text=="NanoUV" ) {
+    label->SetTextSize(0.06);
+    label->SetTextFont(72);
+  } else {
+    label->SetTextSize(0.04);
+  }
+  label->AddText( text.c_str() );
 
-  return label_top;
+  return label;
 
 }
 
