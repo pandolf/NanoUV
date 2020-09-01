@@ -21,21 +21,27 @@ int main() {
   TTree* tree     = (TTree*)file    ->Get("tree");
   TTree* tree_LiF = (TTree*)file_LiF->Get("tree");
 
-  float xMin = -209.;
-  float xMax = -151.;
+  std::string varName = "vcharge";
+  //std::string varName = "vamp";
+
+  float xMin = (varName=="vcharge") ? -209. : -1.2;
+  float xMax = (varName=="vcharge") ? -151. : -1.0;
 
   TH1D* h1_vcharge     = new TH1D("h"    , "", 100, xMin, xMax);
   TH1D* h1_vcharge_LiF = new TH1D("h_LiF", "", 100, xMin, xMax);
 
-  tree    ->Project( "h"    , "vcharge" );
-  tree_LiF->Project( "h_LiF", "vcharge" );
+  tree    ->Project( "h"    , varName.c_str() );
+  tree_LiF->Project( "h_LiF", varName.c_str() );
 
 
   TCanvas* c1 = new TCanvas("c1", "", 600, 600);
   c1->cd();
 
   TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., 1.3*h1_vcharge->GetMaximum() );
-  h2_axes->SetXTitle( "PMT Charge [au]");
+  if( varName == "vcharge" )
+    h2_axes->SetXTitle( "PMT Charge [au]");
+  else
+    h2_axes->SetXTitle( "PMT Amplitude [au]");
   h2_axes->SetYTitle( "Entries" );
   h2_axes->Draw("");
 
