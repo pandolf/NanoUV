@@ -29,6 +29,9 @@ drawFe55: drawFe55.cpp NanoUVCommon.o
 drawLED: drawLED.cpp NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawLED drawLED.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawPMT_LiF: drawPMT_LiF.cpp NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawPMT_LiF drawPMT_LiF.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 NanoUVCommon.o: ../../CommonTools/src/NanoUVCommon.cc 
