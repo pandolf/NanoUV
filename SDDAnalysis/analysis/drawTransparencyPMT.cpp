@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "TFile.h"
 #include "TH2D.h"
 #include "TH1D.h"
@@ -8,6 +10,7 @@
 #include "interface/NanoUVCommon.h"
 
 
+void drawTransparency(  const std::string& fileName1, const std::string& fileName2, const std::string& name, const std::string& legendName );
 
 
 int main() {
@@ -15,8 +18,17 @@ int main() {
 
   NanoUVCommon::setStyle();
 
-  TFile* file     = TFile::Open("data/PMT_LEDUV/Run_HV700_A10_Measurements_Only_9_1_2020.root");
-  TFile* file_LiF = TFile::Open("data/PMT_LEDUV/Run_HV700_A10_LiF_Measurements_Only_9_1_2020.root");
+  drawTransparency( "Run_HV700_A10_Measurements_Only_9_1_2020", "Run_HV700_A10_LiF_Measurements_Only_9_1_2020", "LiF", "LiF window (2 mm)" ) ;
+
+  return 0;
+
+}
+
+
+void drawTransparency(  const std::string& fileName1, const std::string& fileName2, const std::string& name, const std::string& legendName ) {
+
+  TFile* file     = TFile::Open( Form("data/PMT_LEDUV/%s.root", fileName1.c_str()));
+  TFile* file_LiF = TFile::Open( Form("data/PMT_LEDUV/%s.root", fileName2.c_str()));
 
   TTree* tree     = (TTree*)file    ->Get("tree");
   TTree* tree_LiF = (TTree*)file_LiF->Get("tree");
@@ -27,17 +39,17 @@ int main() {
   float xMin = (varName=="vcharge") ? -209. : -1.2;
   float xMax = (varName=="vcharge") ? -151. : -1.0;
 
-  TH1D* h1_vcharge     = new TH1D("h"    , "", 100, xMin, xMax);
-  TH1D* h1_vcharge_LiF = new TH1D("h_LiF", "", 100, xMin, xMax);
+  TH1D* h1_vcharge     = new TH1D( Form("h_%s"    , name.c_str()), "", 100, xMin, xMax);
+  TH1D* h1_vcharge_LiF = new TH1D( Form("h_%s_LiF", name.c_str()), "", 100, xMin, xMax);
 
-  tree    ->Project( "h"    , varName.c_str() );
-  tree_LiF->Project( "h_LiF", varName.c_str() );
+  tree    ->Project( h1_vcharge    ->GetName(), varName.c_str() );
+  tree_LiF->Project( h1_vcharge_LiF->GetName(), varName.c_str() );
 
 
   TCanvas* c1 = new TCanvas("c1", "", 600, 600);
   c1->cd();
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., 1.3*h1_vcharge->GetMaximum() );
+  TH2D* h2_axes = new TH2D( Form("axes_%s", name.c_str()), "", 10, xMin, xMax, 10, 0., 1.3*h1_vcharge->GetMaximum() );
   if( varName == "vcharge" )
     h2_axes->SetXTitle( "PMT Charge [au]");
   else
@@ -58,7 +70,7 @@ int main() {
   legend->SetFillColor(0);
   legend->SetTextSize(0.035);
   legend->AddEntry( h1_vcharge, "Hamamatsu R7378A", "L" );
-  legend->AddEntry( h1_vcharge_LiF, "+ LiF window (2 mm)", "L" );
+  legend->AddEntry( h1_vcharge_LiF, Form("+ %s", legendName.c_str()), "L" );
   legend->Draw("same");
 
   TPaveText* label_led = new TPaveText( 0.2, 0.79, 0.44, 0.89, "brNDC" );
@@ -70,17 +82,24 @@ int main() {
   label_led->AddText( "#lambda = 248 nm (E = 5 eV)");
   label_led->Draw("same");
 
+  float transparency = h1_vcharge_LiF->GetMean()/h1_vcharge->GetMean();
+
   TPaveText* label_LiF = new TPaveText( 0.6, 0.3, 0.78, 0.4, "brNDC" );
   label_LiF->SetFillColor(0);
   label_LiF->SetTextSize(0.04);
-  label_LiF->AddText( Form("T(LiF) = %.1f%%", 100.*h1_vcharge_LiF->GetMean()/h1_vcharge->GetMean()) );
+  label_LiF->AddText( Form("T = %.1f%%", 100.*transparency) );
   label_LiF->Draw("same");
 
+  std::cout << std::endl;
+  std::cout << Form("-> Transparency of %s: %.1f%%", legendName.c_str(), 100.*transparency) << std::endl;
 
   gPad->RedrawAxis();
 
-  c1->SaveAs( "PMT_LiF.pdf" );
+  c1->SaveAs( Form("PMT_%s.pdf", name.c_str()) );
 
-  return 0;
+  delete c1;
+  delete h2_axes;
+  delete h1_vcharge;
+  delete h1_vcharge_LiF;
 
 } 
