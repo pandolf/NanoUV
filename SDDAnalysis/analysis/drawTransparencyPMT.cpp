@@ -10,7 +10,10 @@
 #include "interface/NanoUVCommon.h"
 
 
+
 void drawTransparency(  const std::string& fileName1, const std::string& fileName2, const std::string& name, const std::string& legendName );
+
+
 
 
 int main() {
@@ -19,10 +22,13 @@ int main() {
   NanoUVCommon::setStyle();
 
   drawTransparency( "Run_HV700_A10_Measurements_Only_9_1_2020", "Run_HV700_A10_LiF_Measurements_Only_9_1_2020", "LiF", "LiF window (2 mm)" ) ;
+  drawTransparency( "Run_HV700_A10_Measurements_Only_9_2_2020", "Run_HV700_A10_Fused_Measurements_Only_9_2_2020", "Fused", "fused silica (500 #mum)" ) ;
 
   return 0;
 
 }
+
+
 
 
 void drawTransparency(  const std::string& fileName1, const std::string& fileName2, const std::string& name, const std::string& legendName ) {
@@ -36,11 +42,11 @@ void drawTransparency(  const std::string& fileName1, const std::string& fileNam
   std::string varName = "vcharge";
   //std::string varName = "vamp";
 
-  float xMin = (varName=="vcharge") ? -209. : -1.2;
+  float xMin = (varName=="vcharge") ? -249. : -1.2;
   float xMax = (varName=="vcharge") ? -151. : -1.0;
 
-  TH1D* h1_vcharge     = new TH1D( Form("h_%s"    , name.c_str()), "", 100, xMin, xMax);
-  TH1D* h1_vcharge_LiF = new TH1D( Form("h_%s_LiF", name.c_str()), "", 100, xMin, xMax);
+  TH1D* h1_vcharge     = new TH1D( Form("h_%s"    , name.c_str()), "", 200, xMin, xMax);
+  TH1D* h1_vcharge_LiF = new TH1D( Form("h_%s_LiF", name.c_str()), "", 200, xMin, xMax);
 
   tree    ->Project( h1_vcharge    ->GetName(), varName.c_str() );
   tree_LiF->Project( h1_vcharge_LiF->GetName(), varName.c_str() );
@@ -49,7 +55,7 @@ void drawTransparency(  const std::string& fileName1, const std::string& fileNam
   TCanvas* c1 = new TCanvas("c1", "", 600, 600);
   c1->cd();
 
-  TH2D* h2_axes = new TH2D( Form("axes_%s", name.c_str()), "", 10, xMin, xMax, 10, 0., 1.3*h1_vcharge->GetMaximum() );
+  TH2D* h2_axes = new TH2D( Form("axes_%s", name.c_str()), "", 10, h1_vcharge->GetMean()*1.07, xMax, 10, 0., 1.3*h1_vcharge->GetMaximum() );
   if( varName == "vcharge" )
     h2_axes->SetXTitle( "PMT Charge [au]");
   else
