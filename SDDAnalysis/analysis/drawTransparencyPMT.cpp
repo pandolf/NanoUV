@@ -21,8 +21,10 @@ int main() {
 
   NanoUVCommon::setStyle();
 
-  drawTransparency( "Run_HV700_A10_Measurements_Only_9_1_2020", "Run_HV700_A10_LiF_Measurements_Only_9_1_2020", "LiF", "LiF window (2 mm)" ) ;
-  drawTransparency( "Run_HV700_A10_Measurements_Only_9_2_2020", "Run_HV700_A10_Fused_Measurements_Only_9_2_2020", "Fused", "fused silica (500 #mum)" ) ;
+  drawTransparency( "Run_HV700_A10_Measurements_Only_9_1_2020"   , "Run_HV700_A10_LiF_Measurements_Only_9_1_2020"      , "LiF"  , "LiF window (2 mm)"       ) ;
+  drawTransparency( "Run_HV700_A10_Measurements_Only_9_2_2020"   , "Run_HV700_A10_Fused_Measurements_Only_9_2_2020"    , "Fused", "fused silica (500 #mum)" ) ;
+  drawTransparency( "Run_HV700_A10_Measurements_Only_9_21_2020"  , "Run_HV700_A10_Fused2mm_Measurements_Only_9_21_2020", "Fused2mm", "fused silica (2 mm)"  ) ;
+  drawTransparency( "Run_HV700_A10_Measurements_Only_9_21_2020_2", "Run_HV700_A10_Fused4mm_Measurements_Only_9_21_2020", "Fused4mm", "fused silica (4 mm)"  ) ;
 
   return 0;
 
@@ -97,7 +99,7 @@ void drawTransparency(  const std::string& fileName1, const std::string& fileNam
   label_LiF->Draw("same");
 
   std::cout << std::endl;
-  std::cout << Form("-> Transparency of %s: %.1f%%", legendName.c_str(), 100.*transparency) << std::endl;
+  std::cout << Form("-> Transparency of %s: %.1f%%  (1-T=%.1f%%)", legendName.c_str(), 100.*transparency, 100.*(1.-transparency)) << std::endl;
 
   gPad->RedrawAxis();
 
