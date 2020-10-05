@@ -12,6 +12,7 @@
 
 
 void drawTransparency(  const std::string& fileName1, const std::string& fileName2, const std::string& name, const std::string& legendName );
+float getGainFromFileName( const std::string& fileName );
 
 
 
@@ -22,9 +23,11 @@ int main() {
   NanoUVCommon::setStyle();
 
   drawTransparency( "Run_HV700_A10_Measurements_Only_9_1_2020"   , "Run_HV700_A10_LiF_Measurements_Only_9_1_2020"      , "LiF"  , "LiF window (2 mm)"       ) ;
-  drawTransparency( "Run_HV700_A10_Measurements_Only_9_2_2020"   , "Run_HV700_A10_Fused_Measurements_Only_9_2_2020"    , "Fused", "fused silica (500 #mum)" ) ;
+  drawTransparency( "Run_HV700_A10_Measurements_Only_9_23_2020"   , "Run_HV700_A10_Fused500um_Measurements_Only_9_23_2020"    , "Fused", "fused silica (500 #mum)" ) ;
+//  drawTransparency( "Run_HV700_A10_Measurements_Only_9_2_2020"   , "Run_HV700_A10_Fused_Measurements_Only_9_2_2020"    , "Fused", "fused silica (500 #mum)" ) ;
   drawTransparency( "Run_HV700_A10_Measurements_Only_9_21_2020"  , "Run_HV700_A10_Fused2mm_Measurements_Only_9_21_2020", "Fused2mm", "fused silica (2 mm)"  ) ;
   drawTransparency( "Run_HV700_A10_Measurements_Only_9_21_2020_2", "Run_HV700_A10_Fused4mm_Measurements_Only_9_21_2020", "Fused4mm", "fused silica (4 mm)"  ) ;
+  drawTransparency( "Run_HV700_A10_G10_Measurements_Only_10_5_2020", "Run_HV700_A10_G300_Fused2mm_Fused500um_CNT50um_Measurements_Only_10_5_2020", "Fused2p5mm_CNT", "fused silica (2.5 mm) + CNT (50 #mum)"  ) ;
 
   return 0;
 
@@ -35,6 +38,10 @@ int main() {
 
 void drawTransparency(  const std::string& fileName1, const std::string& fileName2, const std::string& name, const std::string& legendName ) {
 
+
+  float gain1 = getGainFromFileName(fileName1);
+  float gain2 = getGainFromFileName(fileName2);
+  
   TFile* file     = TFile::Open( Form("data/PMT_LEDUV/%s.root", fileName1.c_str()));
   TFile* file_LiF = TFile::Open( Form("data/PMT_LEDUV/%s.root", fileName2.c_str()));
 
@@ -111,3 +118,25 @@ void drawTransparency(  const std::string& fileName1, const std::string& fileNam
   delete h1_vcharge_LiF;
 
 } 
+
+
+
+float getGainFromFileName( const std::string& fileName ) {
+
+  float gain = 1.;
+
+  TString fileName_tstr(fileName);
+
+  if     ( fileName_tstr.Contains("_G10_"  ) ) gain = 10.;
+  else if( fileName_tstr.Contains("_G30_"  ) ) gain = 30.;
+  else if( fileName_tstr.Contains("_G100_" ) ) gain = 100.;
+  else if( fileName_tstr.Contains("_G300_" ) ) gain = 300.;
+  else if( fileName_tstr.Contains("_G1000_") ) gain = 1000.;
+  else if( fileName_tstr.Contains("_G3000_") ) gain = 3000.;
+
+  if( gain!= 1. ) 
+    std::cout << std::endl << "-> Setting gain G = " << gain << " for file: " << fileName << std::endl;
+
+  return gain;
+
+}
