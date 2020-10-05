@@ -51,20 +51,32 @@ void drawTransparency(  const std::string& fileName1, const std::string& fileNam
   std::string varName = "vcharge";
   //std::string varName = "vamp";
 
-  float xMin = (varName=="vcharge") ? -249. : -1.2;
-  float xMax = (varName=="vcharge") ? -151. : -1.0;
+  float var;
+  tree->SetBranchAddress( varName.c_str(), &var );
+  tree->GetEntry(0);
+
+  TH1D* h1_vcharge_tmp     = new TH1D( Form("h_%s_tmp"    , name.c_str()), "", 200, 0., 20000.);
+  TH1D* h1_vcharge_LiF_tmp = new TH1D( Form("h_%s_LiF_tmp", name.c_str()), "", 200, 0., 20000.);
+
+  // first project just to understand variable ranges
+  tree    ->Project( h1_vcharge_tmp    ->GetName(), Form("-%s", varName.c_str())); // minus sign because variable is negative!
+  tree_LiF->Project( h1_vcharge_LiF_tmp->GetName(), Form("-%f*%s", gain1/gain2, varName.c_str()));
+
+
+  float xMin = h1_vcharge_LiF_tmp->GetMean()*0.5;
+  float xMax = h1_vcharge_tmp->GetMean()*1.1;
 
   TH1D* h1_vcharge     = new TH1D( Form("h_%s"    , name.c_str()), "", 200, xMin, xMax);
   TH1D* h1_vcharge_LiF = new TH1D( Form("h_%s_LiF", name.c_str()), "", 200, xMin, xMax);
 
-  tree    ->Project( h1_vcharge    ->GetName(), varName.c_str() );
-  tree_LiF->Project( h1_vcharge_LiF->GetName(), varName.c_str() );
+  tree    ->Project( h1_vcharge    ->GetName(), Form("-%s", varName.c_str())); // minus sign because variable is negative!
+  tree_LiF->Project( h1_vcharge_LiF->GetName(), Form("-%f*%s", gain1/gain2, varName.c_str()));
 
 
   TCanvas* c1 = new TCanvas("c1", "", 600, 600);
   c1->cd();
 
-  TH2D* h2_axes = new TH2D( Form("axes_%s", name.c_str()), "", 10, h1_vcharge->GetMean()*1.07, xMax, 10, 0., 1.3*h1_vcharge->GetMaximum() );
+  TH2D* h2_axes = new TH2D( Form("axes_%s", name.c_str()), "", 10, xMin, xMax, 10, 0., 1.3*h1_vcharge_LiF->GetMaximum() );
   if( varName == "vcharge" )
     h2_axes->SetXTitle( "PMT Charge [au]");
   else
