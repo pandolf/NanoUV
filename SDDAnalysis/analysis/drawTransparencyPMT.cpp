@@ -28,6 +28,7 @@ int main() {
   drawTransparency( "Run_HV700_A10_Measurements_Only_9_21_2020"  , "Run_HV700_A10_Fused2mm_Measurements_Only_9_21_2020", "Fused2mm", "fused silica (2 mm)"  ) ;
   drawTransparency( "Run_HV700_A10_Measurements_Only_9_21_2020_2", "Run_HV700_A10_Fused4mm_Measurements_Only_9_21_2020", "Fused4mm", "fused silica (4 mm)"  ) ;
   drawTransparency( "Run_HV700_A10_G10_Measurements_Only_10_5_2020", "Run_HV700_A10_G300_Fused2mm_Fused500um_CNT50um_Measurements_Only_10_5_2020", "Fused2p5mm_CNT", "fused silica (2.5 mm) + CNT (50 #mum)"  ) ;
+  drawTransparency( "Run_HV700_A7_G30_Measurements_Only_10_6_2020_2", "Run_HV700_A7_G10_Measurements_Only_10_6_2020_2", "test_gain", "test gain"  ) ;
 
   return 0;
 
@@ -38,6 +39,7 @@ int main() {
 
 void drawTransparency(  const std::string& fileName1, const std::string& fileName2, const std::string& name, const std::string& legendName ) {
 
+  std::cout << std::endl;
 
   float gain1 = getGainFromFileName(fileName1);
   float gain2 = getGainFromFileName(fileName2);
@@ -48,8 +50,8 @@ void drawTransparency(  const std::string& fileName1, const std::string& fileNam
   TTree* tree     = (TTree*)file    ->Get("tree");
   TTree* tree_LiF = (TTree*)file_LiF->Get("tree");
 
-  std::string varName = "vcharge";
-  //std::string varName = "vamp";
+  //std::string varName = "vcharge";
+  std::string varName = "vamp";
 
   float var;
   tree->SetBranchAddress( varName.c_str(), &var );
@@ -61,6 +63,9 @@ void drawTransparency(  const std::string& fileName1, const std::string& fileNam
   // first project just to understand variable ranges
   tree    ->Project( h1_vcharge_tmp    ->GetName(), Form("-%s", varName.c_str())); // minus sign because variable is negative!
   tree_LiF->Project( h1_vcharge_LiF_tmp->GetName(), Form("-%f*%s", gain1/gain2, varName.c_str()));
+
+std::cout << h1_vcharge_tmp->GetMean() << std::endl;
+std::cout << h1_vcharge_LiF_tmp->GetMean() << std::endl;
 
 
   float xMin = h1_vcharge_LiF_tmp->GetMean()*0.5;
@@ -147,7 +152,7 @@ float getGainFromFileName( const std::string& fileName ) {
   else if( fileName_tstr.Contains("_G3000_") ) gain = 3000.;
 
   if( gain!= 1. ) 
-    std::cout << std::endl << "-> Setting gain G = " << gain << " for file: " << fileName << std::endl;
+    std::cout << "-> Setting gain G = " << gain << " for file: " << fileName << std::endl;
 
   return gain;
 
