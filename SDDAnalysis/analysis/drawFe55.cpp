@@ -15,6 +15,11 @@ int main() {
 
   NanoUVCommon::setStyle();
 
+  std::string outdir = "plots/Fe55";
+
+  system(Form("mkdir -p %s", outdir.c_str()));
+
+
   TFile* file = TFile::Open( "data/Fe55/Run_0_Measurements_Only_7_23_2020.root" );
   TTree* tree = (TTree*)file->Get("tree");
 
@@ -47,11 +52,11 @@ int main() {
   TCanvas* c1 = new TCanvas( "c1", "", 600., 600. );
   c1->cd();
 
-  h1_vamp->SetXTitle("Amplitude");
+  h1_vamp->SetXTitle("Amplitude [V]");
   h1_vamp->SetYTitle("Entries");
   h1_vamp->Draw();
 
-  c1->SaveAs("amp.pdf");
+  c1->SaveAs(Form("%s/amp.pdf", outdir.c_str()) );
 
 
   float ka_peak  = f1_gaus->GetParameter(1);
@@ -74,14 +79,21 @@ int main() {
   h1_energy->SetYTitle( Form("Entries / %.1f eV", h1_energy->GetBinWidth(1)*1000.) );
   h1_energy->Draw();
 
+  TPaveText* label_sdd = new TPaveText( 0.6, 0.75, 0.9, 0.9, "brNDC" );
+  label_sdd->SetTextSize(0.035);
+  label_sdd->SetFillColor(0);
+  label_sdd->AddText( "FBK SDD + MIXED Module (PoliMi)" );
+  //label_sdd->Draw("same");
+
   TPaveText* label_kalpha = new TPaveText( 0.6, 0.65, 0.9, 0.75, "brNDC" );
   label_kalpha->SetTextSize(0.035);
   label_kalpha->SetTextColor(46);
   label_kalpha->SetFillColor(0);
+  label_kalpha->AddText( "^{55}Fe Source" );
   label_kalpha->AddText( Form("K#alpha FWHM = %.1f eV", 2.355*ka_sigma*calibration*1000.) );
   label_kalpha->Draw("same");
 
-  c1->SaveAs("energy.pdf");
+  c1->SaveAs(Form("%s/energy.pdf", outdir.c_str()) );
 
   std::cout << "ADC to keV: " << calibration << std::endl;
 
