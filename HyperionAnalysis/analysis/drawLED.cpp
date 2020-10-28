@@ -189,7 +189,7 @@ int main( int argc, char* argv[] ) {
 
   c2->Clear();
 
-  TH2D* h2_axes_3 = new TH2D( "axes_3", "", 10, 3.5, 10.5, 10, 0., 80000. );
+  TH2D* h2_axes_3 = new TH2D( "axes_3", "", 10, 3.5, 10.5, 10, 0., 40000. );
   h2_axes_3->SetYTitle( "Number of photons" );
   h2_axes_3->SetXTitle( "LED amplitude" );
   h2_axes_3->Draw();
