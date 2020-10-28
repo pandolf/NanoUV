@@ -5,11 +5,11 @@
 
 ACCENSIONE:
 
-- accendere LV. prima positivo poi negativo. controllare che positivo tira 0.02 e negativo tira 0.01. (se accendi negativo prima di positivo, il positivo tira 0.00 e non funzionera')
+- accendere LV. prima positivo (DESTRA) poi negativo (SINISTRA). controllare che positivo tira 0.02 e negativo tira 0.01. (se accendi negativo prima di positivo, il positivo tira 0.00 e non funzionera')
 
 - accendere rack HV
 
-- accendere HV
+- accendere HV (canale A, dovrebbe essere a -100 V)
 
 
 
