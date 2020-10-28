@@ -29,6 +29,7 @@ int main() {
   drawTransparency( "Run_HV700_A10_Measurements_Only_9_21_2020_2", "Run_HV700_A10_Fused4mm_Measurements_Only_9_21_2020", "Fused4mm", "fused silica (4 mm)"  ) ;
   drawTransparency( "Run_HV700_A10_G10_Measurements_Only_10_5_2020", "Run_HV700_A10_G300_Fused2mm_Fused500um_CNT50um_Measurements_Only_10_5_2020", "Fused2p5mm_CNT", "fused silica (2.5 mm) + CNT (50 #mum)"  ) ;
   drawTransparency( "Run_HV700_A7_G30_Measurements_Only_10_6_2020_2", "Run_HV700_A7_G10_Measurements_Only_10_6_2020_2", "test_gain", "test gain"  ) ;
+  drawTransparency( "Run_A10_HV700_G30_Measurements_Only_10_27_2020", "Run_A10_HV700_G300_BoSiGlass1mm_ITO_Measurements_Only_10_27_2020", "BoSiGlass1mm_ITO", "BoSi glass (1 mm) + ITO"  ) ;
 
   return 0;
 
