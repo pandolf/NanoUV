@@ -62,7 +62,7 @@ int main() {
   float ka_peak  = f1_gaus->GetParameter(1);
   float ka_sigma = f1_gaus->GetParameter(2);
 
-  float calibration = 5.9/ka_peak; // ADC to keV
+  float calibration = 5.9/ka_peak; // Volts to keV
 
   for( unsigned iEntry=0; iEntry<nentries; ++iEntry ) {
 
@@ -95,7 +95,8 @@ int main() {
 
   c1->SaveAs(Form("%s/energy.pdf", outdir.c_str()) );
 
-  std::cout << "ADC to keV: " << calibration << std::endl;
+  std::cout << " 1 Volt = " << calibration << " keV" << std::endl;
+  std::cout << " 1 mV = " << calibration << " eV" << std::endl;
 
   return 0;
 
