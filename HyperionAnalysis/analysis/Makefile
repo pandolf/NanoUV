@@ -32,6 +32,9 @@ drawLED: drawLED.cpp NanoUVCommon.o
 drawTransparencyPMT: drawTransparencyPMT.cpp NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawTransparencyPMT drawTransparencyPMT.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawAPDvsL: drawAPDvsL.cpp NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawAPDvsL drawAPDvsL.cpp NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 NanoUVCommon.o: ../../CommonTools/src/NanoUVCommon.cc 
