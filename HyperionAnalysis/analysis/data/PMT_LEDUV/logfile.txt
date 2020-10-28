@@ -1,0 +1,409 @@
+INFO:17h:21min:40s: Board Serial Number: 2.2.
+INFO:17h:21min:41s: Please wait until the end of the initialization...
+INFO:17h:21min:42s: Firmware version from system FPGA is: V2-1.5.
+INFO:17h:21min:42s: Firmware version from FE Board[0] is: V2-7.3 with type SAMLONG_B.
+INFO:17h:21min:42s: Firmware version from Front-End block 0 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 1 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 2 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 3 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from FE Board[1] is: V2-7.3 with type SAMLONG_B.
+INFO:17h:21min:42s: Firmware version from Front-End block 0 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 1 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 2 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 3 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from FE Board[2] is: V2-7.3 with type SAMLONG_B.
+INFO:17h:21min:42s: Firmware version from Front-End block 0 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 1 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 2 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 3 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from FE Board[3] is: V2-7.3 with type SAMLONG_B.
+INFO:17h:21min:42s: Firmware version from Front-End block 0 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 1 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 2 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 3 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from system FPGA is: V2-1.5.
+INFO:17h:21min:42s: Firmware version from FE Board[0] is: V2-7.3 with type SAMLONG_B.
+INFO:17h:21min:42s: Firmware version from Front-End block 0 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 1 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 2 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 3 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from FE Board[1] is: V2-7.3 with type SAMLONG_B.
+INFO:17h:21min:42s: Firmware version from Front-End block 0 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 1 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 2 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 3 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from FE Board[2] is: V2-7.3 with type SAMLONG_B.
+INFO:17h:21min:42s: Firmware version from Front-End block 0 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 1 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 2 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 3 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from FE Board[3] is: V2-7.3 with type SAMLONG_B.
+INFO:17h:21min:42s: Firmware version from Front-End block 0 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 1 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 2 is: V2-7.3.
+INFO:17h:21min:42s: Firmware version from Front-End block 3 is: V2-7.3.
+INFO:17h:21min:42s: Reading EEPROM of type 1 with index 0,0.
+INFO:17h:21min:42s: Board Serial Number : 2.32 read from EEPROM
+INFO:17h:21min:42s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:42s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:42s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:42s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:42s: Reading EEPROM of type 2 with index 0,0.
+INFO:17h:21min:42s: Board Serial Number : 2.32 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 0,1.
+INFO:17h:21min:43s: Board Serial Number : 2.32 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 0,2.
+INFO:17h:21min:43s: Board Serial Number : 2.32 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 0,3.
+INFO:17h:21min:43s: Board Serial Number : 2.32 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 1 with index 1,0.
+INFO:17h:21min:43s: Board Serial Number : 2.22 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 1,0.
+INFO:17h:21min:43s: Board Serial Number : 2.22 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 1,1.
+INFO:17h:21min:43s: Board Serial Number : 2.22 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 1,2.
+INFO:17h:21min:43s: Board Serial Number : 2.22 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 1,3.
+INFO:17h:21min:43s: Board Serial Number : 2.22 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 1 with index 2,0.
+INFO:17h:21min:43s: Board Serial Number : 2.24 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 2,0.
+INFO:17h:21min:43s: Board Serial Number : 2.24 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 2,1.
+INFO:17h:21min:43s: Board Serial Number : 2.24 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 2,2.
+INFO:17h:21min:43s: Board Serial Number : 2.24 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 2,3.
+INFO:17h:21min:43s: Board Serial Number : 2.24 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 1 with index 3,0.
+INFO:17h:21min:43s: Board Serial Number : 2.25 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 3,0.
+INFO:17h:21min:43s: Board Serial Number : 2.25 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 3,1.
+INFO:17h:21min:43s: Board Serial Number : 2.25 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:43s: Reading EEPROM of type 2 with index 3,2.
+INFO:17h:21min:43s: Board Serial Number : 2.25 read from EEPROM
+INFO:17h:21min:43s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:43s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:43s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:44s: Reading EEPROM of type 2 with index 3,3.
+INFO:17h:21min:44s: Board Serial Number : 2.25 read from EEPROM
+INFO:17h:21min:44s: Board Setup Reg = 9 read from EEPROM
+INFO:17h:21min:44s: Board Gain= 1.000000 read from EEPROM
+INFO:17h:21min:44s: Offset Gain= 1.000000 read from EEPROM
+INFO:17h:21min:44s: INL calibration information successfully read from EEPROM.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 0.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 1.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 2.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 3.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 4.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 5.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 6.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 7.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 8.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 9.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 10.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 11.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 12.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 13.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 14.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 15.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 16.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 17.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 18.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 19.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 20.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 21.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 22.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 23.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 24.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 25.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 26.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 27.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 28.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 29.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 30.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 31.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 32.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 33.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 34.
+INFO:17h:21min:44s: Trigger DACs Offsets successfully loaded from EEPROM with samIndex = 35.
+INFO:17h:21min:44s: All Trigger DACs Offsets successfully read from EEPROM.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 0.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 1.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 2.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 3.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 4.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 5.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 6.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 7.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 8.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 9.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 10.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 11.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 12.
+INFO:17h:21min:44s: SAM DACs Offsets successfully read from EEPROM with samIndex = 13.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 14.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 15.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 16.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 17.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 18.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 19.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 20.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 21.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 22.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 23.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 24.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 25.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 26.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 27.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 28.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 29.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 30.
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 31.
+INFO:17h:21min:45s: feFpgaIndex = 4 !
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 32.
+INFO:17h:21min:45s: feFpgaIndex = 4 !
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 33.
+INFO:17h:21min:45s: feFpgaIndex = 4 !
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 34.
+INFO:17h:21min:45s: feFpgaIndex = 4 !
+INFO:17h:21min:45s: SAM DACs Offsets successfully read from EEPROM with samIndex = 35.
+INFO:17h:21min:45s: All SAM DACs Offsets successfully read from EEPROM.
+INFO:17h:21min:45s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 0.
+INFO:17h:21min:46s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 1.
+INFO:17h:21min:46s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 2.
+INFO:17h:21min:46s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 3.
+INFO:17h:21min:46s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 4.
+INFO:17h:21min:46s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 5.
+INFO:17h:21min:46s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 6.
+INFO:17h:21min:46s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 7.
+INFO:17h:21min:46s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 8.
+INFO:17h:21min:46s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 9.
+INFO:17h:21min:47s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 10.
+INFO:17h:21min:47s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 11.
+INFO:17h:21min:47s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 12.
+INFO:17h:21min:47s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 13.
+INFO:17h:21min:47s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 14.
+INFO:17h:21min:47s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 15.
+INFO:17h:21min:47s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 16.
+INFO:17h:21min:47s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 17.
+INFO:17h:21min:47s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 18.
+INFO:17h:21min:47s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 19.
+INFO:17h:21min:48s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 20.
+INFO:17h:21min:48s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 21.
+INFO:17h:21min:48s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 22.
+INFO:17h:21min:48s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 23.
+INFO:17h:21min:48s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 24.
+INFO:17h:21min:48s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 25.
+INFO:17h:21min:48s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 26.
+INFO:17h:21min:48s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 27.
+INFO:17h:21min:48s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 28.
+INFO:17h:21min:49s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 29.
+INFO:17h:21min:49s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 30.
+INFO:17h:21min:49s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 31.
+INFO:17h:21min:49s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 32.
+INFO:17h:21min:49s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 33.
+INFO:17h:21min:49s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 34.
+INFO:17h:21min:49s: Pedestal Calibration values successfully loaded from EEPROM with samIndex = 35.
+INFO:17h:21min:49s: All pedestal values successfully read from EEPROM.
+INFO:17h:21min:49s: INL Calibration values successfully loaded from EEPROM with samIndex = 0.
+INFO:17h:21min:49s: INL Calibration values successfully loaded from EEPROM with samIndex = 1.
+INFO:17h:21min:50s: INL Calibration values successfully loaded from EEPROM with samIndex = 2.
+INFO:17h:21min:50s: INL Calibration values successfully loaded from EEPROM with samIndex = 3.
+INFO:17h:21min:50s: INL Calibration values successfully loaded from EEPROM with samIndex = 4.
+INFO:17h:21min:50s: INL Calibration values successfully loaded from EEPROM with samIndex = 5.
+INFO:17h:21min:50s: INL Calibration values successfully loaded from EEPROM with samIndex = 6.
+INFO:17h:21min:50s: INL Calibration values successfully loaded from EEPROM with samIndex = 7.
+INFO:17h:21min:50s: INL Calibration values successfully loaded from EEPROM with samIndex = 8.
+INFO:17h:21min:50s: INL Calibration values successfully loaded from EEPROM with samIndex = 9.
+INFO:17h:21min:50s: INL Calibration values successfully loaded from EEPROM with samIndex = 10.
+INFO:17h:21min:50s: INL Calibration values successfully loaded from EEPROM with samIndex = 11.
+INFO:17h:21min:51s: INL Calibration values successfully loaded from EEPROM with samIndex = 12.
+INFO:17h:21min:51s: INL Calibration values successfully loaded from EEPROM with samIndex = 13.
+INFO:17h:21min:51s: INL Calibration values successfully loaded from EEPROM with samIndex = 14.
+INFO:17h:21min:51s: INL Calibration values successfully loaded from EEPROM with samIndex = 15.
+INFO:17h:21min:51s: INL Calibration values successfully loaded from EEPROM with samIndex = 16.
+INFO:17h:21min:51s: INL Calibration values successfully loaded from EEPROM with samIndex = 17.
+INFO:17h:21min:51s: INL Calibration values successfully loaded from EEPROM with samIndex = 18.
+INFO:17h:21min:51s: INL Calibration values successfully loaded from EEPROM with samIndex = 19.
+INFO:17h:21min:51s: INL Calibration values successfully loaded from EEPROM with samIndex = 20.
+INFO:17h:21min:52s: INL Calibration values successfully loaded from EEPROM with samIndex = 21.
+INFO:17h:21min:52s: INL Calibration values successfully loaded from EEPROM with samIndex = 22.
+INFO:17h:21min:52s: INL Calibration values successfully loaded from EEPROM with samIndex = 23.
+INFO:17h:21min:52s: INL Calibration values successfully loaded from EEPROM with samIndex = 24.
+INFO:17h:21min:52s: INL Calibration values successfully loaded from EEPROM with samIndex = 25.
+INFO:17h:21min:52s: INL Calibration values successfully loaded from EEPROM with samIndex = 26.
+INFO:17h:21min:52s: INL Calibration values successfully loaded from EEPROM with samIndex = 27.
+INFO:17h:21min:52s: INL Calibration values successfully loaded from EEPROM with samIndex = 28.
+INFO:17h:21min:52s: INL Calibration values successfully loaded from EEPROM with samIndex = 29.
+INFO:17h:21min:53s: INL Calibration values successfully loaded from EEPROM with samIndex = 30.
+INFO:17h:21min:53s: INL Calibration values successfully loaded from EEPROM with samIndex = 31.
+INFO:17h:21min:53s: INL Calibration values successfully loaded from EEPROM with samIndex = 32.
+INFO:17h:21min:53s: INL Calibration values successfully loaded from EEPROM with samIndex = 33.
+INFO:17h:21min:53s: INL Calibration values successfully loaded from EEPROM with samIndex = 34.
+INFO:17h:21min:53s: INL Calibration values successfully loaded from EEPROM with samIndex = 35.
+INFO:17h:21min:53s: All INL values successfully read from EEPROM.
+INFO:17h:21min:53s: End of registers' initialization.
+INFO:17h:21min:53s: End of DACs' initialization.
+INFO:17h:21min:53s: End of Hardware Setup. 
+INFO:17h:21min:53s: System is ready !
+INFO:17h:22min:13s: Reading setup from file 'c:\Program Files (x86)\WaveCatcher_64ch\Setup\Setup_SDD_Canberra_LEDUV.dat'.
+INFO:17h:22min:14s: Setup values succesfully restored !
+INFO:17h:22min:20s: Run started in continuous mode.
+INFO:17h:48min:14s: Run stopped.
+INFO:17h:48min:14s: Run is over.
+INFO:17h:48min:14s: Run started in continuous mode.
+INFO:17h:48min:18s: Run stopped.
+INFO:17h:48min:18s: Run is over.
+INFO:17h:48min:18s: Run started in continuous mode.
+INFO:17h:48min:24s: Run stopped.
+INFO:17h:48min:24s: Run is over.
+INFO:17h:48min:25s: Run started in continuous mode.
+INFO:17h:48min:46s: Run stopped.
+INFO:17h:48min:46s: Run is over.
+INFO:17h:48min:46s: Run started in continuous mode.
+INFO:17h:48min:59s: Run stopped.
+INFO:17h:48min:59s: Run is over.
+INFO:17h:49min:0s: Run started in continuous mode.
+INFO:17h:49min:18s: Run stopped.
+INFO:17h:49min:18s: Run is over.
+INFO:17h:49min:19s: Run started in continuous mode.
+INFO:17h:50min:13s: Run stopped.
+INFO:17h:50min:13s: Run is over.
+INFO:17h:50min:13s: Run started in continuous mode.
+INFO:17h:50min:23s: Run stopped.
+INFO:17h:50min:24s: Run is over.
+INFO:17h:50min:24s: Run started in continuous mode.
+INFO:17h:51min:1s: Run stopped.
+INFO:17h:51min:1s: Run is over.
+INFO:17h:51min:1s: Run started in continuous mode.
+INFO:17h:52min:23s: Run stopped.
+INFO:17h:52min:23s: Run is over.
+INFO:17h:52min:23s: Run started in continuous mode.
+INFO:17h:52min:32s: Run stopped.
+INFO:17h:52min:33s: Run is over.
+INFO:17h:52min:33s: Run started in continuous mode.
+INFO:17h:52min:40s: Run stopped.
+INFO:17h:52min:40s: Run is over.
+INFO:17h:52min:40s: Run started in continuous mode.
+INFO:17h:52min:51s: Run stopped.
+INFO:17h:52min:51s: Run is over.
+INFO:17h:52min:51s: Run started in continuous mode.
+INFO:17h:53min:4s: Run stopped.
+INFO:17h:53min:4s: Run is over.
+INFO:17h:53min:4s: Run started in continuous mode.
+INFO:17h:53min:6s: Run stopped.
+INFO:17h:53min:6s: Run is over.
+INFO:17h:53min:6s: Run started in continuous mode.
+INFO:17h:53min:11s: Run stopped.
+INFO:17h:53min:12s: Run is over.
+INFO:17h:53min:12s: Run started in continuous mode.
+INFO:17h:53min:16s: Run stopped.
+INFO:17h:53min:16s: Run is over.
+INFO:17h:53min:16s: Run started in continuous mode.
+INFO:17h:56min:8s: Run stopped.
+INFO:17h:56min:8s: Run is over.
+INFO:17h:56min:8s: Run started in continuous mode.
+INFO:17h:56min:16s: Run stopped.
+INFO:17h:56min:16s: Run is over.
+INFO:17h:56min:35s: Setup data successfully saved in file 'c:\Program Files (x86)\WaveCatcher_64ch\Setup\Setup_PMT_LEDUV.dat'.
+INFO:17h:56min:50s: Adding Charge and Time option to saved waveforms is ON.
+INFO:17h:56min:54s: Saving all measurements to file option is ON.
+INFO:17h:58min:25s: Opened File for Saving Run Data : c:\Program Files (x86)\WaveCatcher_64ch\Run_Data\PMT_LEDUV\Run_HV700_A10_Data_9_1_2020_Ascii.dat
+INFO:17h:58min:39s: Measurements are currently performed by software.
+Select firmware measurements to increase the readout speed.
+Do not forget to adapt the measurement parameters to your needs.
+INFO:17h:58min:39s: Run started with 10000 events required.
+INFO:17h:58min:53s: Run stopped.
+INFO:17h:58min:53s: Data saved in file 'c:\Program Files (x86)\WaveCatcher_64ch\Run_Data\PMT_LEDUV\Run_HV700_A10_Data_9_1_2020_Ascii.dat' successfully.
+INFO:17h:58min:53s: Data saved in file 'c:\Program Files (x86)\WaveCatcher_64ch\Run_Data\PMT_LEDUV\Run_HV700_A10_Measurements_Only_9_1_2020.dat' successfully.
+INFO:17h:58min:54s: Data saved in file 'c:\Program Files (x86)\WaveCatcher_64ch\Run_Data\PMT_LEDUV\Run_HV700_A10_Data_9_1_2020_Ascii.dat' successfully.
+INFO:17h:58min:54s: Data saved in file 'c:\Program Files (x86)\WaveCatcher_64ch\Run_Data\PMT_LEDUV\Run_HV700_A10_Measurements_Only_9_1_2020.dat' successfully.
+INFO:17h:58min:54s: Run is over.
+INFO:18h:4min:55s: Run started in continuous mode.
+INFO:18h:5min:5s: Run stopped.
+INFO:18h:5min:6s: Run is over.
+INFO:18h:5min:19s: Run started with 10000 events required.
+INFO:18h:5min:24s: Run stopped.
+INFO:18h:5min:24s: Run is over.
+INFO:18h:5min:40s: Saving all measurements to file option is ON.
+INFO:18h:5min:44s: Adding Charge and Time option to saved waveforms is ON.
+INFO:18h:5min:59s: Opened File for Saving Run Data : c:\Program Files (x86)\WaveCatcher_64ch\Run_Data\PMT_LEDUV\Run_HV700_A10_LiF_Data_9_1_2020_Ascii.dat
+INFO:18h:6min:15s: Measurements are currently performed by software.
+Select firmware measurements to increase the readout speed.
+Do not forget to adapt the measurement parameters to your needs.
+INFO:18h:6min:15s: Run started with 10000 events required.
+INFO:18h:6min:29s: Run stopped.
+INFO:18h:6min:29s: Data saved in file 'c:\Program Files (x86)\WaveCatcher_64ch\Run_Data\PMT_LEDUV\Run_HV700_A10_LiF_Data_9_1_2020_Ascii.dat' successfully.
+INFO:18h:6min:29s: Data saved in file 'c:\Program Files (x86)\WaveCatcher_64ch\Run_Data\PMT_LEDUV\Run_HV700_A10_LiF_Measurements_Only_9_1_2020.dat' successfully.
