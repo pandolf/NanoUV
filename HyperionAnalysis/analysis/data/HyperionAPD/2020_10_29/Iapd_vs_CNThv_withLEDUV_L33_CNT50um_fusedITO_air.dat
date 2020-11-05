@@ -1,0 +1,11 @@
+#APDhv 380
+#L 33
+#p_before 1000
+#p_after 1000
+#picoamm keysight
+#led SP6505
+#DeltaV [V]	I(apd) LED OFF [nA]	σ(I(apd)) LED OFF [nA]	I(apd) LED ON [nA]	σ(I(apd)) LED ON [nA]
+0	90.9941	0.0856	91.1745	0.0838
+0	90.9316	0.0824	91.1164	0.0818
+0	90.8913	0.0797	91.0735	0.0772
+0	90.8201	0.0836	91.0019	0.0837
