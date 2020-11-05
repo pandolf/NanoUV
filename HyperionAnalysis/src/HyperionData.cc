@@ -72,7 +72,7 @@ HyperionData::HyperionData( const std::string& fileName ) {
 
 
 
-TGraphErrors* HyperionData::getGraphFromColumns( const std::string& name, int columnMeans, int columnErrors ) const {
+TGraphErrors* HyperionData::getGraphFromColumns( const std::string& name, int columnMeans, int columnErrors, int nMeasurements ) const {
 
   if( data_.size() == 0 ) {
     std::cout << "[HyperionData::getGraphFromColumns] Can't produce a graph, data is empty!" << std::endl;
@@ -98,8 +98,10 @@ TGraphErrors* HyperionData::getGraphFromColumns( const std::string& name, int co
   for( unsigned iPoint=0; iPoint<data_[0].size(); ++iPoint ) {
 
     graph->SetPoint( iPoint, data_[0][iPoint], data_[columnMeans][iPoint] );
-    if( columnErrors>=0 ) 
-      graph->SetPoint( iPoint, 0., data_[columnErrors][iPoint] );
+    if( columnErrors>=0 ) {
+      if( nMeasurements>0 ) graph->SetPointError( iPoint, 0., data_[columnErrors][iPoint]/sqrt(nMeasurements) );
+      else                  graph->SetPointError( iPoint, 0., data_[columnErrors][iPoint] );
+    }
 
   } // for iPoints
 

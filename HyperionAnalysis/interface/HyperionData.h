@@ -20,7 +20,7 @@ class HyperionData {
   float p_before()      const { return p_before_; };
   float p_after()       const { return p_after_ ; };
 
-  TGraphErrors* getGraphFromColumns( const std::string& name, int columnMeans, int columnErrors=-1 ) const;
+  TGraphErrors* getGraphFromColumns( const std::string& name, int columnMeans, int columnErrors=-1, int nMeasurements=1000 ) const;
 
 
  private:
