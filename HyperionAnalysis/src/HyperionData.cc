@@ -9,6 +9,9 @@
 
 HyperionData::HyperionData( const std::string& fileName ) {
 
+
+  std::cout << "-> Reading data from file: " << fileName << std::endl;
+
   std::ifstream ifs(fileName.c_str());
 
   std::string line;
@@ -18,7 +21,12 @@ HyperionData::HyperionData( const std::string& fileName ) {
 
     line.erase(std::remove(line.begin(), line.end(), '\n'), line.end());
 
-    std::string delimiter = " ";
+    TString line_tstr(line);
+    if( line_tstr.Length()<4 ) continue;
+
+    bool isDataLine = !(line_tstr.BeginsWith("#"));
+
+    std::string delimiter = (isDataLine) ? "\t" : " ";
     size_t pos = 0;
     std::vector<std::string> words;
     std::string word;
@@ -27,11 +35,10 @@ HyperionData::HyperionData( const std::string& fileName ) {
       line.erase(0, pos + delimiter.length());
       words.push_back(word);
     }
-    words.push_back(word);
+    words.push_back(line);
 
-    TString line_tstr(line);
 
-    if( line_tstr.BeginsWith("#") ) {
+    if( !isDataLine ) {
 
       if( words[0] == "#p_before" ) p_before_ = std::atof( words[1].c_str() );
       if( words[0] == "#p_after"  ) p_after_  = std::atof( words[1].c_str() );
@@ -42,7 +49,6 @@ HyperionData::HyperionData( const std::string& fileName ) {
 
     }
 
-    if( line_tstr.Length()<4 ) continue;
   
     // from now on it's the data table
 
@@ -73,14 +79,16 @@ TGraphErrors* HyperionData::getGraphFromColumns( const std::string& name, int co
     return 0;
   }
 
-  if( columnMeans > data_.size()-1 ) {
+  if( columnMeans > (data_.size()-1) ) {
     std::cout << "[HyperionData::getGraphFromColumns] Requested column (" << columnMeans << ") is out of range!" << std::endl;
     return 0;
   }
 
-  if( columnErrors > data_.size()-1 ) {
-    std::cout << "[HyperionData::getGraphFromColumns] Requested errors column (" << columnErrors << ") is out of range!" << std::endl;
-    return 0;
+  if( columnErrors>=0 ) {
+    if( columnErrors > (data_.size()-1) ) {
+      std::cout << "[HyperionData::getGraphFromColumns] Requested errors column (" << columnErrors << ") is out of range!" << std::endl;
+      return 0;
+    }
   }
 
 
