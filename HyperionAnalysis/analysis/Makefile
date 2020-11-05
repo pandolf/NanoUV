@@ -40,6 +40,9 @@ drawAPDvsL: drawAPDvsL.cpp NanoUVCommon.o
 NanoUVCommon.o: ../../CommonTools/src/NanoUVCommon.cc 
 	$(CC) -Wall $(INCLUDES) -c ../../CommonTools/src/NanoUVCommon.cc $(ROOTFLAG) $(EXTRALIBS)
 
+HyperionData.o: ../src/HyperionData.cc 
+	$(CC) -Wall $(INCLUDES) -c ../src/HyperionData.cc $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 clean:
