@@ -105,6 +105,9 @@ TGraphErrors* HyperionData::getGraphFromColumns( const std::string& name, int co
 
   } // for iPoints
 
+  graph->SetMarkerStyle(20);
+  graph->SetMarkerSize(1.5);
+
   return graph;
 
 }
