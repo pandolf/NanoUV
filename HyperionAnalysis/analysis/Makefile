@@ -39,6 +39,9 @@ drawAPDvsL: drawAPDvsL.cpp NanoUVCommon.o
 drawBaseline_vs_L: drawBaseline_vs_L.cpp NanoUVCommon.o HyperionData.o
 	$(CC) -Wall $(INCLUDES) -o drawBaseline_vs_L drawBaseline_vs_L.cpp NanoUVCommon.o HyperionData.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawIapd_vs_CNThv: drawIapd_vs_CNThv.cpp NanoUVCommon.o HyperionData.o
+	$(CC) -Wall $(INCLUDES) -o drawIapd_vs_CNThv drawIapd_vs_CNThv.cpp NanoUVCommon.o HyperionData.o $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 NanoUVCommon.o: ../../CommonTools/src/NanoUVCommon.cc 
