@@ -17,6 +17,7 @@ class HyperionData {
 
   std::string picoamm() const { return picoamm_ ; };
   std::string led()     const { return led_     ; };
+  float led_freq()      const { return led_freq_; };
   float p_before()      const { return p_before_; };
   float p_after()       const { return p_after_ ; };
   float p_ave()         const { return 0.5*(p_after_+p_before_) ; };
@@ -27,11 +28,12 @@ class HyperionData {
 
  private:
 
-  std::string picoamm_;
-  std::string led_;
-  float p_before_;
-  float p_after_;
-  float L_;
+  std::string picoamm_; // "keithley" or "keysight"
+  std::string led_; // "SP6505" (UV) or "SP6501" (visible) or "off"
+  float led_freq_; // in kHz
+  float p_before_; // in mbar
+  float p_after_;  // in mbar
+  float L_;        // in mm
 
   std::vector< std::vector<float> > data_; // each column is a separate vector
 

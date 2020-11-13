@@ -43,7 +43,9 @@ HyperionData::HyperionData( const std::string& fileName ) {
       if( words[0] == "#p_before" ) p_before_ = std::atof( words[1].c_str() );
       if( words[0] == "#p_after"  ) p_after_  = std::atof( words[1].c_str() );
       if( words[0] == "#led"      ) led_      = words[1];
+      if( words[0] == "#led_freq" ) led_freq_ = std::atof( words[1].c_str() ); // in kHz
       if( words[0] == "#picoamm"  ) picoamm_  = words[1];
+      if( words[0] == "#L"        ) L_        = std::atof( words[1].c_str() );
 
       continue; // other than setting the above, skip lines which start with #
 
