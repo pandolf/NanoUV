@@ -1,0 +1,9 @@
+#APDhv 380
+#L 34
+#p_before 8.38E-6
+#p_before 7.88E-6
+#picoamm keysight
+#led off
+#∆V [V]>----I(apd) [nA]>σ( I(apd) ) [nA]
+0	81.5161	0.09
+-100	258.8858	115.1497
