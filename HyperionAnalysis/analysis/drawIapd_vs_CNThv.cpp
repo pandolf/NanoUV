@@ -173,9 +173,16 @@ void drawAll( const std::string& name ) {
     delete c2;
     delete h2_axes2;
 
+    float m = f1_line->GetParameter(1);
+    float q = f1_line->GetParameter(0);
+
+    float err_m = f1_line->GetParError(1);
+    float err_q = f1_line->GetParError(0);
+
     // L = d0-d
-    float d0     = f1_line->GetParameter(0);
-    float err_d0 = f1_line->GetParError(0);
+    float d0     = -q/m;
+    float err_d0 = sqrt( err_q*err_q/(m*m) + q*q*err_m*err_m/(m*m*m*m) );
+
     // DeltaV/d = E
     float E     = f1_line->GetParameter(1);
     float err_E = f1_line->GetParError(1);
