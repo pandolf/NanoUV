@@ -7,9 +7,13 @@
 #include "TH2D.h"
 #include "TGraphErrors.h"
 #include "TLegend.h"
+#include "TFile.h"
+#include "TF1.h"
 
 
 void drawAll( const std::string& name );
+float findVfixedThreshold( TGraphErrors* graph, float threshold, float& err_deltaV );
+float interpolate( float this_x, float this_y, float next_x, float next_y, float threshold );
 
 
 int main() {
@@ -85,6 +89,8 @@ void drawAll( const std::string& name ) {
   reds.push_back( kRed+2 );
   reds.push_back( kRed+3 );
 
+  TGraphErrors* gr_deltaV_vs_L = new TGraphErrors(0);
+
   for( unsigned i=0; i<v_hd.size(); ++i ) {
 
     TGraphErrors* graph = v_hd[i].getGraphFromColumns( Form("graph_%d", i), 1, 2, 1 );
@@ -92,6 +98,16 @@ void drawAll( const std::string& name ) {
     graph->SetLineColor  ( reds[i] );
     graph->Draw("PL same");
     legend->AddEntry( graph, Form("L = %.1f mm", v_hd[i].L()), "P" );
+
+    float err_deltaV = 0.;
+    float deltaV = findVfixedThreshold( graph, 200., err_deltaV );
+
+    std::cout << "L: " << v_hd[i].L() << "   found deltaV: " << deltaV << std::endl;
+
+    if( deltaV<0. ) {
+      gr_deltaV_vs_L->SetPoint     ( i, v_hd[i].L(), deltaV );
+      gr_deltaV_vs_L->SetPointError( i, 0., err_deltaV );
+    }
 
   }
 
@@ -101,8 +117,55 @@ void drawAll( const std::string& name ) {
 
   c1->SaveAs( Form("Iapd_vs_CNThv_%s.pdf", name.c_str()) );
 
+
+  // find E
+
+  TF1* f1_line = new TF1( "line", "[0] + [1]*x", 25., 36. );
+  gr_deltaV_vs_L->Fit( f1_line, "R" );
+
   delete h2_axes;
   delete c1;
   delete legend;
+
+}
+
+
+
+float findVfixedThreshold( TGraphErrors* graph, float threshold, float& err_deltaV ) {
+
+  float deltaV = 9999.;
+
+  for( unsigned iPoint = 0; iPoint<graph->GetN()-1; ++iPoint ) {
+
+    double this_x, this_y;
+    graph->GetPoint ( iPoint, this_x, this_y );
+    double err_thisy = graph->GetErrorY( iPoint );
+
+    double next_x, next_y;
+    graph->GetPoint ( iPoint+1, next_x, next_y );
+    double err_nexty = graph->GetErrorY( iPoint+1 );
+
+    if( (this_y>threshold && next_y<threshold) || (this_y<threshold && next_y>threshold) ) {
+
+      deltaV = interpolate( this_x, this_y, next_x, next_y, threshold );
+      float deltaVup = interpolate( this_x, this_y+err_thisy, next_x, next_y+err_nexty, threshold );
+      float deltaVdn = interpolate( this_x, this_y-err_thisy, next_x, next_y-err_nexty, threshold );
+      err_deltaV = 0.5*(abs(deltaVup-deltaV) + abs(deltaVdn-deltaV));
+      break;
+
+    }
+
+  } // for iPoints
+
+  return deltaV;
+
+}
+    
+
+float interpolate( float this_x, float this_y, float next_x, float next_y, float threshold ) {
+
+  float m = (next_y-this_y)/(next_x-this_x);
+  float deltaV =  (threshold-this_y)/m + this_x;
+  return deltaV;
 
 }
