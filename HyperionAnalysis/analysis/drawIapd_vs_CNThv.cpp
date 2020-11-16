@@ -93,6 +93,7 @@ void drawAll( const std::string& name ) {
   reds.push_back( kRed+2 );
   reds.push_back( kRed+3 );
 
+  double baseline;
 
   for( unsigned i=0; i<v_hd.size(); ++i ) {
 
@@ -101,6 +102,12 @@ void drawAll( const std::string& name ) {
     graph->SetLineColor  ( reds[i] );
     graph->Draw("PL same");
     legend->AddEntry( graph, Form("L = %.1f mm", v_hd[i].L()), "P" );
+
+    // save baseline (will be needed later)
+    if( i==v_hd.size()-1 ) {
+      double dummyx;
+      graph->GetPoint( 0, dummyx, baseline);
+    }
 
   }
 
@@ -114,17 +121,27 @@ void drawAll( const std::string& name ) {
   // now look for E
 
   std::vector<float> thresholds;
-  thresholds.push_back( 125. );
-  thresholds.push_back( 200. );
-  thresholds.push_back( 300. );
-  thresholds.push_back( 400. );
-  thresholds.push_back( 500. );
+  if( name == "CNT50um_fusedITO" ) {
+    thresholds.push_back( 125. );
+    thresholds.push_back( 200. );
+    thresholds.push_back( 300. );
+    thresholds.push_back( 400. );
+    thresholds.push_back( 500. );
+  } else if( name == "NanoFusilli_boroSiGlass" ) {
+    thresholds.push_back( 200. );
+    thresholds.push_back( 500. );
+    thresholds.push_back( 1000. );
+    thresholds.push_back( 1500. );
+    thresholds.push_back( 2000. );
+  }
 
   TGraphErrors* gr_d0_vs_thresh = new TGraphErrors(0);
   TGraphErrors* gr_E_vs_thresh  = new TGraphErrors(0);
+  TGraphErrors* gr_thresh_vs_E  = new TGraphErrors(0);
 
   gr_d0_vs_thresh->SetName("d0_vs_thresh");
   gr_E_vs_thresh ->SetName("E_vs_thresh");
+  gr_thresh_vs_E ->SetName("thresh_vs_E");
 
   for( unsigned ithresh=0; ithresh<thresholds.size(); ++ithresh ) {
 
@@ -134,6 +151,8 @@ void drawAll( const std::string& name ) {
     gr_deltaV_vs_L->SetName( Form( "deltaV_vs_L_th%.0f", thresholds[ithresh]) );
 
     for( unsigned i=0; i<v_hd.size(); ++i ) {
+
+      if( name=="NanoFusilli_boroSiGlass" && v_hd[i].L()<32. ) continue;
 
       float err_deltaV = 0.;
       float deltaV = findVfixedThreshold( v_hd[i].getGraphFromColumns( Form("graph_%d", i), 1, 2, 1 ), thresholds[ithresh], err_deltaV );
@@ -156,6 +175,7 @@ void drawAll( const std::string& name ) {
     gr_deltaV_vs_L->SetMarkerStyle(20);
     gr_deltaV_vs_L->SetMarkerSize(1.5);
     gr_deltaV_vs_L->SetMarkerColor(46);
+    gr_deltaV_vs_L->SetLineColor(46);
     gr_deltaV_vs_L->Fit( f1_line, "X" );
 
     TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
@@ -184,29 +204,120 @@ void drawAll( const std::string& name ) {
     float err_d0 = sqrt( err_q*err_q/(m*m) + q*q*err_m*err_m/(m*m*m*m) );
 
     // DeltaV/d = E
-    float E     = f1_line->GetParameter(1);
-    float err_E = f1_line->GetParError(1);
+    float E     = m; // in V/mm
+    float err_E = err_m;
 
     gr_d0_vs_thresh->SetPoint     ( ithresh, thresholds[ithresh], d0 ); 
-    gr_d0_vs_thresh->SetPointError( ithresh, 0., err_d0 );
+    gr_d0_vs_thresh->SetPointError( ithresh, 1., err_d0 );
 
     gr_E_vs_thresh->SetPoint      ( ithresh, thresholds[ithresh], E ); 
-    gr_E_vs_thresh->SetPointError ( ithresh, 0., err_E );
+    gr_E_vs_thresh->SetPointError ( ithresh, 1., err_E );
+
+    gr_thresh_vs_E->SetPoint      ( ithresh, E, thresholds[ithresh] );
+    gr_thresh_vs_E->SetPointError ( ithresh, err_E, 1. );
 
   }
 
-  
-TFile* file = new TFile( "test.root", "recreate" );
-file->cd();
-gr_d0_vs_thresh->Write();
-gr_E_vs_thresh->Write();
-file->Close();
-exit(1);
+
+  TCanvas* c3 = new TCanvas( "c3", "", 600, 600 );
+  c3->cd();
+
+//  float xMin3 = 0.;
+//  float xMax3 = 1000.;
+//
+//  TH2D* h2_axes3 = new TH2D( "axes3", "", 10, xMin3, xMax3, 10, 0., 600. );
+//  h2_axes3->SetXTitle( "E [V/mm]" );
+//  h2_axes3->SetYTitle( "Threshold [V]" );
+//  h2_axes3->Draw();
+//
+//  TF1* f1_line2 = new TF1("line2", "[0]+[1]*x");
+//  f1_line2->SetLineColor(46);
+//  f1_line2->SetLineWidth(2);
+//  gr_thresh_vs_E->SetMarkerStyle(20);
+//  gr_thresh_vs_E->SetMarkerColor(46);
+//  gr_thresh_vs_E->SetLineColor  (46);
+//  gr_thresh_vs_E->SetMarkerSize(1.5);
+//  gr_thresh_vs_E->Fit( f1_line2, "X" );
+//
+//  gr_thresh_vs_E->Draw("Psame");
+//
+//  TLine* line_baseline = new TLine( xMin3, baseline, xMax3, baseline );
+//  line_baseline->SetLineColor( kGray+2 );
+//  line_baseline->SetLineWidth( 3 );
+//  line_baseline->SetLineStyle( 2 );
+//  line_baseline->Draw("same");
+//
+////float minE = f1_line2->Eval(baseline);
+//
+////TLine* line_minE = new TLine( 0., minE, baseline, minE );
+////line_minE->SetLineColor( 38 );
+////line_minE->SetLineWidth( 3 );
+////line_minE->SetLineStyle( 2 );
+////line_minE->Draw("same");
+//
+//  gPad->RedrawAxis();
+//
+//  c3->SaveAs( Form("%s/thresh_vs_E.pdf", outdir.c_str()) );
+ 
+
+
+  float xMax3 = thresholds[thresholds.size()-1]*1.2;
+  float yMin3 = 0.;
+  float yMax3 = 1000.;
+
+  TH2D* h2_axes3 = new TH2D( "axes3", "", 10, 0., xMax3, 10, yMin3, yMax3 );
+  h2_axes3->SetXTitle( "Threshold [V]" );
+  h2_axes3->SetYTitle( "E [V/mm]" );
+  h2_axes3->Draw();
+
+  TF1* f1_line2 = new TF1("line2", "[0]+[1]*x");
+  f1_line2->SetLineColor(46);
+  f1_line2->SetLineWidth(2);
+  gr_E_vs_thresh->SetMarkerStyle(20);
+  gr_E_vs_thresh->SetMarkerColor(46);
+  gr_E_vs_thresh->SetLineColor  (46);
+  gr_E_vs_thresh->SetMarkerSize(1.5);
+  gr_E_vs_thresh->Fit( f1_line2, "X" );
+
+  gr_E_vs_thresh->Draw("Psame");
+
+  TLine* line_baseline = new TLine( baseline, yMin3, baseline, yMax3 );
+  line_baseline->SetLineColor( kGray+2 );
+  line_baseline->SetLineWidth( 3 );
+  line_baseline->SetLineStyle( 2 );
+  line_baseline->Draw("same");
+
+  float minE = f1_line2->Eval(baseline);
+
+  TLine* line_minE = new TLine( 0., minE, baseline, minE );
+  line_minE->SetLineColor( 29 );
+  line_minE->SetLineWidth( 3 );
+  line_minE->SetLineStyle( 2 );
+  line_minE->Draw("same");
+
+  //TPaveText* label_name = new TPaveText( 0.4, 0.75, 0.9, 0.9, "brNDC" );
+  //label_name->SetFillColor(0);
+  //label_name->SetTextSize(0.035);
+  //label_name->AddText( "ITO(500nm) + Fused Silica(2mm) + CNT(50#mum)");
+  //label_name->Draw("same");
+
+  gPad->RedrawAxis();
+
+  c3->SaveAs( Form("%s/E_vs_thresh.pdf", outdir.c_str()) );
+ 
+//TFile* file = new TFile( "test.root", "recreate" );
+//file->cd();
+//gr_d0_vs_thresh->Write();
+//gr_E_vs_thresh->Write();
+//file->Close();
+//exit(1);
 
 
   delete h2_axes;
   delete c1;
   delete legend;
+  delete h2_axes3;
+  delete c3;
 
 }
 
