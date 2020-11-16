@@ -11,11 +11,55 @@
 #include "TF1.h"
 
 
+
+TGraphErrors* getDiff_vs_CNThv( const std::string& fileName, float xMin, float xMax );
+
+
 int main() {
 
   NanoUVCommon::setStyle();
 
-  HyperionData hd("data/HyperionAPD/2020_10_29/Iapd_vs_CNThv_withLEDUV_L33_CNT50um_fusedITO.dat");
+  float xMin = -1400.;
+  float xMax = 99.;
+
+  TGraphErrors* gr_vacuum = getDiff_vs_CNThv( "data/HyperionAPD/2020_10_29/Iapd_vs_CNThv_withLEDUV_L33_CNT50um_fusedITO.dat", xMin, xMax );
+  TGraphErrors* gr_air    = getDiff_vs_CNThv( "data/HyperionAPD/2020_10_29/Iapd_vs_CNThv_withLEDUV_L33_CNT50um_fusedITO_air.dat", xMin, xMax );
+
+  TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
+
+  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., 1. );
+  h2_axes->SetXTitle( "#DeltaV [V]" );
+  h2_axes->SetYTitle( "I_{apd} [nA]");
+  h2_axes->Draw();
+
+  gr_vacuum->SetMarkerColor( 46 );
+  gr_vacuum->SetLineColor( 46 );
+
+  gr_air->SetMarkerColor( 38 );
+  gr_air->SetLineColor( 38 );
+
+  gr_air->Draw("p same");
+  gr_vacuum->Draw("p same");
+
+  TLegend* legend = new TLegend( 0.6, 0.73, 0.9, 0.87 );
+  legend->SetTextSize(0.035);
+  legend->SetFillColor(0);
+  legend->AddEntry( gr_air, gr_air->GetName(), "P" );
+  legend->AddEntry( gr_vacuum, gr_vacuum->GetName(), "P" );
+  legend->Draw("psame");
+
+  gPad->RedrawAxis();
+
+  c1->SaveAs( "plots/CNT50um_fusedITO/Iapd_vs_CNThv_withLEDUV_L33_diff.pdf" );
+  
+  return 0;
+
+}
+
+
+TGraphErrors* getDiff_vs_CNThv( const std::string& fileName, float xMin, float xMax ) {
+
+  HyperionData hd(fileName.c_str());
 
   TGraphErrors* gr_ledON  = hd.getGraphFromColumns( "gr_ledON" , 3, 4, 1 ); 
   TGraphErrors* gr_ledOFF = hd.getGraphFromColumns( "gr_ledOFF", 1, 2, 1 ); 
@@ -32,9 +76,6 @@ int main() {
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
 
-  float xMin = -1400.;
-  float xMax = 99.;
-
   TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 98., 102. );
   h2_axes->SetXTitle( "#DeltaV [V]" );
   h2_axes->SetYTitle( "I_{apd} [nA]");
@@ -50,9 +91,19 @@ int main() {
   legend->AddEntry( gr_ledON , "UV LED: ON ", "P" );
   legend->Draw("psame");
 
+  std::string pressureText(Form( "p = %s mbar", NanoUVCommon::scientific(hd.p()).c_str() ));
+
+  std::string suffix = (hd.p()>100.) ? "_air" : "_vacuum";
+
+  TPaveText* label_p = new TPaveText( 0.25, 0.75, 0.55, 0.85, "brNDC" );
+  label_p->SetFillColor(0);
+  label_p->SetTextSize(0.035);
+  label_p->AddText( pressureText.c_str() );
+  label_p->Draw("same");
+
   gPad->RedrawAxis();
 
-  c1->SaveAs( "plots/CNT50um_fusedITO/Iapd_vs_CNThv_withLEDUV_L33.pdf" );
+  c1->SaveAs( Form("plots/CNT50um_fusedITO/Iapd_vs_CNThv_withLEDUV_L33%s.pdf", suffix.c_str() ) );
 
 
   TGraphErrors* gr_diff = new TGraphErrors(0);
@@ -76,26 +127,12 @@ int main() {
   gr_diff->SetMarkerSize(1.5);
   gr_diff->SetMarkerColor(kGray+3);
   gr_diff->SetLineColor(kGray+3);
-
-  c1->Clear();
-
-  
-  TH2D* h2_axes2 = new TH2D( "axes2", "", 10, xMin, xMax, 10, 0., 1. );
-  h2_axes2->SetXTitle( "#DeltaV [V]" );
-  h2_axes2->SetYTitle( "I_{apd}(ON) - I_{apd}(OFF) [nA]");
-  h2_axes2->Draw();
-
-  gr_diff->Draw("Psame");
-
-  gPad->RedrawAxis();
-
-  c1->SaveAs( "plots/CNT50um_fusedITO/Iapd_vs_CNThv_withLEDUV_L33_diff.pdf" );
+  gr_diff->SetName( pressureText.c_str() );
 
   delete c1;
   delete h2_axes;
-  delete h2_axes2;
 
-  return 0;
+  return gr_diff;
 
 }
 
