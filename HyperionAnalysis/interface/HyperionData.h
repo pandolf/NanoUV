@@ -20,7 +20,7 @@ class HyperionData {
   float led_freq()      const { return led_freq_; };
   float p_before()      const { return p_before_; };
   float p_after()       const { return p_after_ ; };
-  float p_ave()         const { return 0.5*(p_after_+p_before_) ; };
+  float p()             const { return 0.5*(p_after_+p_before_) ; };
   float L()             const { return L_; };
 
   TGraphErrors* getGraphFromColumns( const std::string& name, int columnMeans, int columnErrors=-1, int nMeasurements=1000 ) const;
