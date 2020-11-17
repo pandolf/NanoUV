@@ -181,7 +181,7 @@ void drawAll( const std::string& name ) {
     TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
     c2->cd();
 
-    TH2D* h2_axes2 = new TH2D( "axes", "", 10, -40., -20., 10, 0., 2000. );
+    TH2D* h2_axes2 = new TH2D( "axes", "", 10, -37., -30., 10, 0., 2000. );
     h2_axes2->SetXTitle( "-L [mm]" );
     h2_axes2->SetYTitle( "#DeltaV [V]" );
     h2_axes2->Draw();
@@ -200,7 +200,7 @@ void drawAll( const std::string& name ) {
     float err_q = f1_line->GetParError(0);
 
     // L = d0-d
-    float d0     = -q/m;
+    float d0     = q/m;
     float err_d0 = sqrt( err_q*err_q/(m*m) + q*q*err_m*err_m/(m*m*m*m) );
 
     // DeltaV/d = E
@@ -311,6 +311,23 @@ void drawAll( const std::string& name ) {
 //gr_E_vs_thresh->Write();
 //file->Close();
 //exit(1);
+
+  c3->Clear();
+
+  TH2D* h2_axes4 = new TH2D("axes4", "", 10, 0., xMax3, 10, 30., 45. );
+  h2_axes4->SetXTitle( "Threshold [V]" );
+  h2_axes4->SetYTitle( "d_{0} [mm]" );
+  h2_axes4->Draw();
+
+  gr_d0_vs_thresh->SetMarkerStyle(20);
+  gr_d0_vs_thresh->SetMarkerColor(46);
+  gr_d0_vs_thresh->SetLineColor  (46);
+  gr_d0_vs_thresh->SetMarkerSize(1.5);
+  gr_d0_vs_thresh->Draw("Psame");
+
+  gPad->RedrawAxis();
+
+  c3->SaveAs( Form("%s/d0_vs_thresh.pdf", outdir.c_str()) );
 
 
   delete h2_axes;
