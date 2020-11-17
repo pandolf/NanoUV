@@ -1,7 +1,7 @@
 #APDhv 380
 #L 33
-#p_before 8.6-7
-#p_after 8.6-7
+#p_before 8.6E-7
+#p_after 8.6E-7
 #picoamm keysight
 #led SP6505
 #DeltaV [V]	I(apd) LED OFF [nA]	σ(I(apd)) LED OFF [nA]	I(apd) LED ON [nA]	σ(I(apd)) LED ON [nA]
