@@ -266,7 +266,7 @@ void drawAll( const std::string& name ) {
   float yMax3 = 1000.;
 
   TH2D* h2_axes3 = new TH2D( "axes3", "", 10, 0., xMax3, 10, yMin3, yMax3 );
-  h2_axes3->SetXTitle( "Threshold [V]" );
+  h2_axes3->SetXTitle( "I_{apd} Threshold [nA]" );
   h2_axes3->SetYTitle( "E [V/mm]" );
   h2_axes3->Draw();
 
@@ -334,6 +334,7 @@ void drawAll( const std::string& name ) {
   delete c1;
   delete legend;
   delete h2_axes3;
+  delete h2_axes4;
   delete c3;
 
 }
