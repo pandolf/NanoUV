@@ -315,7 +315,7 @@ void drawAll( const std::string& name ) {
   c3->Clear();
 
   TH2D* h2_axes4 = new TH2D("axes4", "", 10, 0., xMax3, 10, 30., 45. );
-  h2_axes4->SetXTitle( "Threshold [V]" );
+  h2_axes4->SetXTitle( "I_{apd} Threshold [nA]" );
   h2_axes4->SetYTitle( "d_{0} [mm]" );
   h2_axes4->Draw();
 
