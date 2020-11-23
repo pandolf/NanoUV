@@ -63,6 +63,17 @@ void drawAll( const std::string& name ) {
     xMin = -2100.;
     yMax = 1200.;
 
+  } else if( name=="CNT50um_fused_A" ) {
+
+    v_hd.push_back( HyperionData("data/HyperionAPD/2020_11_20/Iapd_vs_CNThv_L33_CNT50um_fused_A.dat"  ) );
+    v_hd.push_back( HyperionData("data/HyperionAPD/2020_11_20/Iapd_vs_CNThv_L33p5_CNT50um_fused_A.dat") );
+    v_hd.push_back( HyperionData("data/HyperionAPD/2020_11_20/Iapd_vs_CNThv_L34_CNT50um_fused_A.dat"  ) );
+    v_hd.push_back( HyperionData("data/HyperionAPD/2020_11_20/Iapd_vs_CNThv_L34p5_CNT50um_fused_A.dat") );
+    v_hd.push_back( HyperionData("data/HyperionAPD/2020_11_20/Iapd_vs_CNThv_L35_CNT50um_fused_A.dat"  ) );
+
+    xMin = -2100.;
+    yMax = 1200.;
+
   } else if (name=="NanoFusilli_boroSiGlass" ) {
 
     v_hd.push_back( HyperionData("data/HyperionAPD/2020_10_30/Iapd_vs_CNThv_L31p5_NanoFusilli_boroSiGlass.dat") );
