@@ -10,6 +10,13 @@
 HyperionData::HyperionData( const std::string& fileName ) {
 
 
+  // default values
+  led_ = "off";
+  cnt_sample_ = "none";
+  p_before_ = 1000.;
+  p_after_ = 1000.;
+
+
   std::cout << "-> Reading data from file: " << fileName << std::endl;
 
   std::ifstream ifs(fileName.c_str());
