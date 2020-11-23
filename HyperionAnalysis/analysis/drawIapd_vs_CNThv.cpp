@@ -22,6 +22,8 @@ int main() {
   NanoUVCommon::setStyle();
 
   drawAll( "CNT50um_fusedITO" );
+  drawAll( "CNT50um_fusedITO_B" );
+  drawAll( "CNT50um_fused_A" );
   drawAll( "NanoFusilli_boroSiGlass" );
 
   return 0;
@@ -46,6 +48,17 @@ void drawAll( const std::string& name ) {
     v_hd.push_back( HyperionData("data/HyperionAPD/2020_10_29/Iapd_vs_CNThv_L34_CNT50um_fusedITO.dat"  ) );
     v_hd.push_back( HyperionData("data/HyperionAPD/2020_10_29/Iapd_vs_CNThv_L34p5_CNT50um_fusedITO.dat") );
     v_hd.push_back( HyperionData("data/HyperionAPD/2020_10_29/Iapd_vs_CNThv_L35_CNT50um_fusedITO.dat"  ) );
+
+    xMin = -2100.;
+    yMax = 1200.;
+
+  } else if( name=="CNT50um_fusedITO_B" ) {
+
+    v_hd.push_back( HyperionData("data/HyperionAPD/2020_11_20/Iapd_vs_CNThv_L33_CNT50um_fusedITO_B.dat"  ) );
+    v_hd.push_back( HyperionData("data/HyperionAPD/2020_11_20/Iapd_vs_CNThv_L33p5_CNT50um_fusedITO_B.dat") );
+    v_hd.push_back( HyperionData("data/HyperionAPD/2020_11_20/Iapd_vs_CNThv_L34_CNT50um_fusedITO_B.dat"  ) );
+    v_hd.push_back( HyperionData("data/HyperionAPD/2020_11_20/Iapd_vs_CNThv_L34p5_CNT50um_fusedITO_B.dat") );
+    v_hd.push_back( HyperionData("data/HyperionAPD/2020_11_20/Iapd_vs_CNThv_L35_CNT50um_fusedITO_B.dat"  ) );
 
     xMin = -2100.;
     yMax = 1200.;
@@ -148,6 +161,16 @@ void drawAll( const std::string& name ) {
     thresholds.push_back( 200. );
     thresholds.push_back( 300. );
     thresholds.push_back( 400. );
+  } else if( name == "CNT50um_fusedITO_B" ) {
+    thresholds.push_back( 25. );
+    thresholds.push_back( 100. );
+    thresholds.push_back( 200. );
+    thresholds.push_back( 300. );
+  } else if( name == "CNT50um_fused_A" ) {
+    thresholds.push_back( 25. );
+    thresholds.push_back( 100. );
+    thresholds.push_back( 200. );
+    thresholds.push_back( 300. );
   } else if( name == "NanoFusilli_boroSiGlass" ) {
     thresholds.push_back( 100. );
     thresholds.push_back( 500. );
@@ -276,7 +299,7 @@ void drawAll( const std::string& name ) {
   std::cout << std::endl;
   std::cout << "========================================" << std::endl;
   std::cout << std::endl;
-  std::cout << " -> " << name << " emit for E > " << f1_line2->Eval(0.) << " V/mm" << std::endl;
+  std::cout << " -> " << name << " emit for E > " << f1_line2->GetParameter(0) << " +/- " << f1_line2->GetParError(0) << " V/mm" << std::endl;
   std::cout << std::endl;
   std::cout << "========================================" << std::endl;
   std::cout << std::endl;
@@ -306,6 +329,8 @@ void drawAll( const std::string& name ) {
   delete legend;
   delete h2_axes3;
   delete h2_axes4;
+  delete c1_subtr;
+  delete h2_axes_subtr;
   delete c3;
 
 }
