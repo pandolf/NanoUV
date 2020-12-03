@@ -6,12 +6,20 @@
 #include "TTree.h"
 #include "TCanvas.h"
 #include "TF1.h"
+#include "TH2D.h"
 #include "TH1D.h"
 
 
 
 
-int main() {
+int main( int argc, char* argv[] ) {
+
+  if( argc==1 ) {
+    std::cout << "USAGE: ./drawFe55 [fileName]" << std::endl;
+    exit(1);
+  }
+
+  std::string fileName(argv[1]);
 
   NanoUVCommon::setStyle();
 
@@ -20,14 +28,14 @@ int main() {
   system(Form("mkdir -p %s", outdir.c_str()));
 
 
-  TFile* file = TFile::Open( "data/Fe55/Run_0_Measurements_Only_7_23_2020.root" );
+  TFile* file = TFile::Open( fileName.c_str() );
   TTree* tree = (TTree*)file->Get("tree");
 
   float vamp;
   tree->SetBranchAddress( "vamp", &vamp );
 
 
-  TH1D* h1_vamp = new TH1D( "vamp", "", 400, 0.5, 0.9 );
+  TH1D* h1_vamp = new TH1D( "vamp", "", 1000, 0., 2. );
   TH1D* h1_energy = new TH1D( "energy", "", 1250, 5., 7.5);
 
   int nentries = tree->GetEntries();
@@ -41,9 +49,10 @@ int main() {
 
   }
 
+  float x_peak = h1_vamp->GetBinCenter( h1_vamp->GetMaximumBin() );
 
-  TF1* f1_gaus = new TF1( "ka_gaus", "gaus", 0.71, 0.75 );
-  f1_gaus->SetParameter( 1, 0.725 );
+  TF1* f1_gaus = new TF1( "ka_gaus", "gaus", 0.968*x_peak, 1.032*x_peak );
+  f1_gaus->SetParameter( 1, x_peak );
   f1_gaus->SetLineColor(46);
   f1_gaus->SetLineWidth(2);
 
@@ -52,9 +61,12 @@ int main() {
   TCanvas* c1 = new TCanvas( "c1", "", 600., 600. );
   c1->cd();
 
-  h1_vamp->SetXTitle("Amplitude [V]");
-  h1_vamp->SetYTitle("Entries");
-  h1_vamp->Draw();
+  TH2D* h2_axes = new TH2D( "axes", "", 10, 0.5*x_peak, 1.3*x_peak, 10, 0., h1_vamp->GetMaximum()*1.2 );
+  h2_axes->SetXTitle("Amplitude [V]");
+  h2_axes->SetYTitle("Entries");
+  h2_axes->Draw();
+
+  h1_vamp->Draw("same");
 
   c1->SaveAs(Form("%s/amp.pdf", outdir.c_str()) );
 
