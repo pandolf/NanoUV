@@ -21,6 +21,12 @@ int main( int argc, char* argv[] ) {
 
   std::string fileName(argv[1]);
 
+  TString fileName_tstr(fileName);
+  int gain = 1;
+  if     ( fileName_tstr.Contains("_G100_") ) gain = 100;
+  else if( fileName_tstr.Contains("_G30_" ) ) gain = 30;
+  else if( fileName_tstr.Contains("_G10_" ) ) gain = 10;
+
   NanoUVCommon::setStyle();
 
   std::string outdir = "plots/Fe55";
@@ -68,7 +74,7 @@ int main( int argc, char* argv[] ) {
 
   h1_vamp->Draw("same");
 
-  c1->SaveAs(Form("%s/amp.pdf", outdir.c_str()) );
+  c1->SaveAs(Form("%s/amp_G%d.pdf", outdir.c_str(), gain) );
 
 
   float ka_peak  = f1_gaus->GetParameter(1);
@@ -105,10 +111,14 @@ int main( int argc, char* argv[] ) {
   label_kalpha->AddText( Form("K#alpha FWHM = %.1f eV", 2.355*ka_sigma*calibration*1000.) );
   label_kalpha->Draw("same");
 
-  c1->SaveAs(Form("%s/energy.pdf", outdir.c_str()) );
+  c1->SaveAs(Form("%s/energy_G%d.pdf", outdir.c_str(), gain) );
 
+  std::cout << std::endl;
+  std::cout << "-----------------------------------------" << std::endl;
+  std::cout << " GAIN = " << gain << std::endl;
   std::cout << " 1 Volt = " << calibration << " keV" << std::endl;
   std::cout << " 1 mV = " << calibration << " eV" << std::endl;
+  std::cout << "-----------------------------------------" << std::endl;
 
   return 0;
 
