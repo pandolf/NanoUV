@@ -45,8 +45,8 @@ drawIapd_vs_CNThv: drawIapd_vs_CNThv.cpp NanoUVCommon.o HyperionData.o
 drawIapd_vs_CNThv_withLEDUV: drawIapd_vs_CNThv_withLEDUV.cpp NanoUVCommon.o HyperionData.o
 	$(CC) -Wall $(INCLUDES) -o drawIapd_vs_CNThv_withLEDUV drawIapd_vs_CNThv_withLEDUV.cpp NanoUVCommon.o HyperionData.o $(ROOTFLAG) $(EXTRALIBS)
 
-drawFieldEmissionSDD: drawFieldEmissionSDD.cpp NanoUVCommon.o HyperionData.o
-	$(CC) -Wall $(INCLUDES) -o drawFieldEmissionSDD drawFieldEmissionSDD.cpp NanoUVCommon.o HyperionData.o $(ROOTFLAG) $(EXTRALIBS)
+drawFieldEmissionSDD: drawFieldEmissionSDD.cpp NanoUVCommon.o HyperionData.o SDD.o
+	$(CC) -Wall $(INCLUDES) -o drawFieldEmissionSDD drawFieldEmissionSDD.cpp NanoUVCommon.o HyperionData.o SDD.o $(ROOTFLAG) $(EXTRALIBS)
 
 
 
@@ -55,6 +55,9 @@ NanoUVCommon.o: ../../CommonTools/src/NanoUVCommon.cc
 
 HyperionData.o: ../src/HyperionData.cc 
 	$(CC) -Wall $(INCLUDES) -c ../src/HyperionData.cc $(ROOTFLAG) $(EXTRALIBS)
+
+SDD.o: ../src/SDD.cc 
+	$(CC) -Wall $(INCLUDES) -c ../src/SDD.cc $(ROOTFLAG) $(EXTRALIBS)
 
 
 
