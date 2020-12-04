@@ -5,6 +5,7 @@
 #include "TTree.h"
 #include "TH1D.h"
 #include "TH2D.h"
+#include "TF1.h"
 #include "TCanvas.h"
 #include "TLegend.h"
 #include "TGraphErrors.h"
@@ -42,6 +43,10 @@ int main() {
   colors.push_back( kGray+3 );
   colors.push_back( kPink+1 );
   colors.push_back( 30 );
+  colors.push_back( kRed+3 );
+  colors.push_back( kYellow+1 );
+  colors.push_back( kGreen+2 );
+  colors.push_back( kCyan );
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
@@ -53,7 +58,7 @@ int main() {
   h2_axes->SetYTitle( "Normalized to Unity" );
   h2_axes->Draw();
 
-  TLegend* legend = new TLegend( 0.2, 0.6, 0.5, 0.9, "LED frequency" );
+  TLegend* legend = new TLegend( 0.2, 0.4, 0.5, 0.9, "LED frequency" );
   legend->SetFillColor(0);
   legend->SetTextSize(0.035);
   
@@ -75,11 +80,20 @@ int main() {
 
     legend->AddEntry( h1, Form("%.0f kHz", it->first), "L" );
 
-    gr_nPhPerShot_vs_freq->SetPoint     ( i, it->first, h1->GetMean()*1000./5. );
+    float xPeak = h1->GetBinCenter( h1->GetMaximumBin() );
+
+    TF1* f1 = new TF1( Form("gaus_%.0fkHz", it->first), "gaus" );
+    f1->SetRange( xPeak*0.95, xPeak*1.05 );
+    h1->Fit( f1, "R0" );
+
+    gr_nPhPerShot_vs_freq->SetPoint     ( i, it->first, f1->GetParameter(1)*1000./5. );
     gr_nPhPerShot_vs_freq->SetPointError( i, it->first*0.01, h1->GetRMS()*1000./5. );
 
-    gr_nPhPerSec_vs_freq->SetPoint     ( i, it->first, it->first*h1->GetMean()*1000000./5./1000000. ); // in MHz
-    gr_nPhPerSec_vs_freq->SetPointError( i, it->first*0.01, it->first*h1->GetMeanError()*1000000./5./1000000. );
+    //gr_nPhPerShot_vs_freq->SetPoint     ( i, it->first, h1->GetMean()*1000./5. );
+    //gr_nPhPerShot_vs_freq->SetPointError( i, it->first*0.01, h1->GetRMS()*1000./5. );
+
+    gr_nPhPerSec_vs_freq->SetPoint     ( i, it->first, it->first*h1->GetMean()/5./1000. ); // in 10^9 Hz
+    gr_nPhPerSec_vs_freq->SetPointError( i, it->first*0.01, it->first*h1->GetMeanError()/5./1000. );
 
     i++;
 
@@ -111,8 +125,10 @@ int main() {
 
   c1->Clear();
 
-  TH2D* h2_axes_3 = new TH2D( "axes_3", "", 10, 0.5, 1800., 10, 0., 10000. );
-  h2_axes_3->SetYTitle( "Number of photons hitting SDD [MHz]" );
+  c1->SetLogy();
+
+  TH2D* h2_axes_3 = new TH2D( "axes_3", "", 10, 0.5, 1800., 10, 0.001, 10. );
+  h2_axes_3->SetYTitle( "Number of photons hitting SDD / 10^{9} [Hz]" );
   h2_axes_3->SetXTitle( "LED repetition frequency [kHz]" );
   h2_axes_3->Draw();
 
