@@ -16,7 +16,7 @@ std::string outdir = "plots/FieldEmissCNT";
 
 
 void comparePressureGauge( const std::string& file_pON, const std::string& file_pOFF );
-TH1D* fillFromTree( TTree* tree, const std::string& var, int nBins=200, float xMin=0., float xMax=4.5 );
+TH1D* fillFromTree( TTree* tree, const std::string& var, int nBins=200, float xMin=0., float xMax=4.5, float k=0. );
 void compareTriggerThreshold( const std::string& fileName1, const std::string& fileName2, const std::string& fileName3 );
 void drawFieldEmissionVsHV();
 
@@ -87,7 +87,9 @@ void comparePressureGauge( const std::string& fileName_pON, const std::string& f
   
 
 
-TH1D* fillFromTree( TTree* tree, const std::string& name, int nBins, float xMin, float xMax ) {
+TH1D* fillFromTree( TTree* tree, const std::string& name, int nBins, float xMin, float xMax, float k ) {
+
+  if( k==0. ) k = CALIBRATION;
 
   TH1D* h1 = new TH1D( name.c_str(), "", nBins, xMin, xMax );
 
@@ -100,7 +102,7 @@ TH1D* fillFromTree( TTree* tree, const std::string& name, int nBins, float xMin,
 
     tree->GetEntry( iEntry );
 
-    h1->Fill( var*CALIBRATION );
+    h1->Fill( var*k );
 
   } // for entries
 
@@ -153,13 +155,14 @@ void compareTriggerThreshold( const std::string& fileName1, const std::string& f
 void drawFieldEmissionVsHV() {
 
   std::map< int, std::string > files;
-  files[1800] = "data/HyperionSDD/Run_SDD_G100_HVcnt1800_L32_trigINT_pressureOFF_20k_Measurements_Only_12_3_2020.root";
-  files[1700] = "data/HyperionSDD/Run_SDD_G100_HVcnt1700_L32_trigINT_pressureOFF_20k_Measurements_Only_12_3_2020.root";
-  files[1750] = "data/HyperionSDD/Run_SDD_G100_HVcnt1750_L32_trigINT_pressureOFF_20k_Measurements_Only_12_3_2020.root";
-  files[1850] = "data/HyperionSDD/Run_SDD_G100_HVcnt1850_L32_trigINT_pressureOFF_20k_Measurements_Only_12_3_2020.root";
-  files[1900] = "data/HyperionSDD/Run_SDD_G100_HVcnt1900_L32_trigINT_pressureOFF_20k_Measurements_Only_12_3_2020.root";
-  files[1950] = "data/HyperionSDD/Run_SDD_G100_HVcnt1950_L32_trigINT_pressureOFF_20k_Measurements_Only_12_3_2020.root";
-  files[2000] = "data/HyperionSDD/Run_SDD_G100_HVcnt2000_L32_trigINT_pressureOFF_20k_Measurements_Only_12_3_2020.root";
+  files[1800] = "data/HyperionSDD/Run_SDD_G100_HVcnt1800_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
+  files[1650] = "data/HyperionSDD/Run_SDD_G100_HVcnt1650_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
+  files[1700] = "data/HyperionSDD/Run_SDD_G100_HVcnt1700_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
+  files[1750] = "data/HyperionSDD/Run_SDD_G100_HVcnt1750_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
+  files[1850] = "data/HyperionSDD/Run_SDD_G100_HVcnt1850_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
+  files[1900] = "data/HyperionSDD/Run_SDD_G100_HVcnt1900_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
+  files[1950] = "data/HyperionSDD/Run_SDD_G100_HVcnt1950_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
+  files[2000] = "data/HyperionSDD/Run_SDD_G100_HVcnt2000_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
   
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
@@ -170,13 +173,41 @@ void drawFieldEmissionVsHV() {
   h2_axes->SetYTitle( "Entries" );
   h2_axes->Draw();
 
+
+  TCanvas* c1_trunc = new TCanvas( "c1_trunc", "", 600, 600 );
+  c1_trunc->cd();
+
+  float xMin_trunc = 0.6;
+  float xMax_trunc = 3.;
+  TH2D* h2_axes_trunc = new TH2D( "axes_trunc", "", 10, xMin_trunc, xMax_trunc, 10, 0., 0.125 );
+  h2_axes_trunc->SetXTitle( "Energy [keV]" );
+  h2_axes_trunc->SetYTitle( "Normalized to Unity" );
+  h2_axes_trunc->Draw();
+
+
+
+  TCanvas* c1_rescale = new TCanvas( "c1_rescale", "", 600, 600 );
+  c1_rescale->cd();
+
+  float xMin_rescale = 0.6;
+  float xMax_rescale = 3.;
+  TH2D* h2_axes_rescale = new TH2D( "axes_rescale", "", 10, xMin_rescale, xMax_rescale, 10, 0., 0.125 );
+  h2_axes_rescale->SetXTitle( "Energy (rescaled to 1650V) [keV]" );
+  h2_axes_rescale->SetYTitle( "Normalized to Unity" );
+  h2_axes_rescale->Draw();
+
+
+
+
+
   std::vector<int> colors;
-  colors.push_back( kMagenta+1 );
+  colors.push_back( 15 );
+  colors.push_back( 46 );
   colors.push_back( 38 );
   colors.push_back( 28 );
   colors.push_back( 42 );
   colors.push_back( kGray+3 );
-  colors.push_back( 46 );
+  colors.push_back( kPink+1 );
   colors.push_back( 30 );
 
   TLegend* legend = new TLegend( 0.7, 0.5, 0.9, 0.9, "-#DeltaV(CNT-SDD)" );
@@ -185,29 +216,57 @@ void drawFieldEmissionVsHV() {
 
   int i=0;
 
-  for( unsigned iHV=1700; iHV<=2000; iHV+=50 ) {
+  for( unsigned iHV=1650; iHV<=2000; iHV+=50 ) {
 
     std::string fileName = files[iHV];
     TFile* file = TFile::Open(fileName.c_str());
     TTree* tree = (TTree*)file->Get("tree");
 
-    TH1D* h1 = fillFromTree( tree, Form("h1_%d", iHV), 100, 0., 5.5 );
+    TH1D* h1         = fillFromTree( tree, Form("h1_%d"      , iHV), 100, 0., 5.5 );
+    TH1D* h1_trunc   = fillFromTree( tree, Form("h1_trunc_%d", iHV), 50, xMin_trunc, xMax_trunc );
+    TH1D* h1_rescale = fillFromTree( tree, Form("h1_rescale_%d", iHV), 50, xMin_trunc, xMax_trunc, CALIBRATION*1650./((float)iHV) );
 
+    c1->cd();
     h1->SetLineWidth(3);
-    h1->SetLineColor(colors[i++]);
+    h1->SetLineColor(colors[i]);
     h1->Draw("same");
+
+    c1_trunc->cd();
+    h1_trunc->SetLineWidth(4);
+    h1_trunc->SetLineColor(colors[i]);
+    h1_trunc->DrawNormalized("same");
+
+    c1_rescale->cd();
+    h1_rescale->SetLineWidth(4);
+    h1_rescale->SetLineColor(colors[i]);
+    h1_rescale->DrawNormalized("same");
 
     legend->AddEntry( h1, Form("%d V", iHV), "L" );
 
+    i++;
+
   }
 
+  c1->cd();
   legend->Draw("same");
-
   gPad->RedrawAxis();
-
   c1->SaveAs( Form("%s/vsHV.pdf", outdir.c_str()) );
+
+  c1_trunc->cd();
+  legend->Draw("same");
+  gPad->RedrawAxis();
+  c1_trunc->SaveAs( Form("%s/vsHV_trunc.pdf", outdir.c_str()) );
+
+  c1_rescale->cd();
+  legend->Draw("same");
+  gPad->RedrawAxis();
+  c1_rescale->SaveAs( Form("%s/vsHV_rescale.pdf", outdir.c_str()) );
 
   delete c1;
   delete h2_axes;
+  delete c1_trunc;
+  delete h2_axes_trunc;
+  delete c1_rescale;
+  delete h2_axes_rescale;
 
 }
