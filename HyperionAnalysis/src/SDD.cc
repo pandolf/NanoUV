@@ -46,7 +46,10 @@ TH1D* SDD::fillFromTree( TTree* tree, const std::string& histoName, const std::s
 
     tree->GetEntry( iEntry );
 
-    h1->Fill( var*SDD::volt2keV(100, varName)*rescale );
+    float value = var*SDD::volt2keV(G, varName)*rescale;
+    if( value < 0. ) value = 0.;
+
+    h1->Fill( value );
 
   } // for entries
 
