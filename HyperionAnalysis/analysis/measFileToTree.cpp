@@ -107,6 +107,8 @@ int main( int argc, char* argv[] ) {
 
         wasReadingEvent = true;
 
+        if( atoi(words_cleaned[0].c_str())!=16 ) continue;  /// !!!!!!! Hardwiring Channel 16 !!!!!!!!!!!!!!!!!
+
         ch      = atoi(words_cleaned[0].c_str());
         //ev      = atoi(words_cleaned[1].c_str());
         base    = atof(words_cleaned[2].c_str());
