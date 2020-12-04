@@ -15,7 +15,6 @@ std::string outdir = "plots/FieldEmissCNT";
 
 
 void comparePressureGauge( const std::string& file_pON, const std::string& file_pOFF );
-TH1D* fillFromTree( TTree* tree, const std::string& varName, const std::string& var, int nBins=200, float xMin=0., float xMax=4.5, float k=1. );
 void compareTriggerThreshold( const std::string& fileName1, const std::string& fileName2, const std::string& fileName3 );
 void drawFieldEmissionVsHV( const std::string& varName );
 
@@ -50,8 +49,8 @@ void comparePressureGauge( const std::string& fileName_pON, const std::string& f
   TTree* tree_pON  = (TTree*)file_pON ->Get("tree");
   TTree* tree_pOFF = (TTree*)file_pOFF->Get("tree");
 
-  TH1D* h1_pON  = fillFromTree( tree_pON , "vamp", "pON"  );
-  TH1D* h1_pOFF = fillFromTree( tree_pOFF, "vamp", "pOFF" );
+  TH1D* h1_pON  = SDD::fillFromTree( tree_pON , "pON" , "vamp", 100 );
+  TH1D* h1_pOFF = SDD::fillFromTree( tree_pOFF, "pOFF", "vamp", 100 );
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
@@ -87,27 +86,6 @@ void comparePressureGauge( const std::string& fileName_pON, const std::string& f
   
 
 
-TH1D* fillFromTree( TTree* tree, const std::string& varName, const std::string& name, int nBins, float xMin, float xMax, float k ) {
-
-  TH1D* h1 = new TH1D( name.c_str(), "", nBins, xMin, xMax );
-
-  float var;
-  tree->SetBranchAddress( varName.c_str(), &var );
-
-  int nEntries = tree->GetEntries();
-
-  for( unsigned iEntry = 0; iEntry<nEntries; ++iEntry ) {
-
-    tree->GetEntry( iEntry );
-
-    h1->Fill( var*SDD::volt2keV(100, varName)*k );
-
-  } // for entries
-
-  return h1;
-
-}
-
 
 
 void compareTriggerThreshold( const std::string& fileName1, const std::string& fileName2, const std::string& fileName3 ) {
@@ -120,9 +98,9 @@ void compareTriggerThreshold( const std::string& fileName1, const std::string& f
   TTree* tree2 = (TTree*)file2->Get("tree");
   TTree* tree3 = (TTree*)file3->Get("tree");
 
-  TH1D* h1_1 = fillFromTree( tree1, "vamp", "h1_1" );
-  TH1D* h1_2 = fillFromTree( tree2, "vamp", "h1_2" );
-  TH1D* h1_3 = fillFromTree( tree3, "vamp", "h1_3" );
+  TH1D* h1_1 = SDD::fillFromTree( tree1, "h1_1", "vamp" );
+  TH1D* h1_2 = SDD::fillFromTree( tree2, "h1_2", "vamp" );
+  TH1D* h1_3 = SDD::fillFromTree( tree3, "h1_3", "vamp" );
 
   h1_1->SetLineColor(46);
   h1_1->SetLineWidth(3);
@@ -220,9 +198,9 @@ void drawFieldEmissionVsHV( const std::string& varName ) {
     TFile* file = TFile::Open(fileName.c_str());
     TTree* tree = (TTree*)file->Get("tree");
 
-    TH1D* h1         = fillFromTree( tree, varName, Form("h1_%d"      , iHV), 100, 0., 5.5 );
-    TH1D* h1_trunc   = fillFromTree( tree, varName, Form("h1_trunc_%d", iHV), 50, xMin_trunc, xMax_trunc );
-    TH1D* h1_rescale = fillFromTree( tree, varName, Form("h1_rescale_%d", iHV), 50, xMin_trunc, xMax_trunc, 1650./((float)iHV) );
+    TH1D* h1         = SDD::fillFromTree( tree, Form("h1_%d"        , iHV), varName, 100, 100, 0., 5.5 );
+    TH1D* h1_trunc   = SDD::fillFromTree( tree, Form("h1_trunc_%d"  , iHV), varName, 100, 50, xMin_trunc, xMax_trunc );
+    TH1D* h1_rescale = SDD::fillFromTree( tree, Form("h1_rescale_%d", iHV), varName, 100, 50, xMin_trunc, xMax_trunc, 1650./((float)iHV) );
 
     c1->cd();
     h1->SetLineWidth(3);

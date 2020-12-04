@@ -30,3 +30,28 @@ float SDD::volt2keV( int G, const std::string& var ) {
   return k;
 
 }
+
+
+
+TH1D* SDD::fillFromTree( TTree* tree, const std::string& histoName, const std::string& varName, int G, int nBins, float xMin, float xMax, float rescale ) {
+
+  TH1D* h1 = new TH1D( histoName.c_str(), "", nBins, xMin, xMax );
+
+  float var;
+  tree->SetBranchAddress( varName.c_str(), &var );
+
+  int nEntries = tree->GetEntries();
+
+  for( unsigned iEntry = 0; iEntry<nEntries; ++iEntry ) {
+
+    tree->GetEntry( iEntry );
+
+    h1->Fill( var*SDD::volt2keV(100, varName)*rescale );
+
+  } // for entries
+
+  return h1;
+
+}
+
+
