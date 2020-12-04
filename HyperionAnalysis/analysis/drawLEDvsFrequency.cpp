@@ -27,11 +27,11 @@ int main() {
   files[20]   = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_20kHz_Measurements_Only_12_4_2020.root";
   files[50]   = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_50kHz_Measurements_Only_12_4_2020.root";
   files[100]  = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_100kHz_Measurements_Only_12_4_2020.root";
-  //files[200]  = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_200kHz_Measurements_Only_12_4_2020.root";
-  //files[500]  = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_500kHz_Measurements_Only_12_4_2020.root";
-  //files[1000] = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_1MHz_Measurements_Only_12_4_2020.root";
-  //files[300]  = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_300kHz_Measurements_Only_12_4_2020.root";
-  //files[400]  = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_400kHz_Measurements_Only_12_4_2020.root";
+  files[200]  = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_200kHz_Measurements_Only_12_4_2020.root";
+  files[500]  = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_500kHz_Measurements_Only_12_4_2020.root";
+  files[1000] = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_1MHz_Measurements_Only_12_4_2020.root";
+  files[300]  = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_300kHz_Measurements_Only_12_4_2020.root";
+  files[400]  = "data/HyperionSDD/Run_SDD_G30_LEDUV_A10_400kHz_Measurements_Only_12_4_2020.root";
 
   std::vector<int> colors;
   colors.push_back( 15 );
@@ -46,7 +46,7 @@ int main() {
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
-  float xMax = 0.4;
+  float xMax = 40.;
 
   TH2D* h2_axes = new TH2D( "axes", "", 10, 0., xMax, 10, 0., 0.5 );
   h2_axes->SetXTitle( "Energy [keV]" );
@@ -76,10 +76,10 @@ int main() {
     legend->AddEntry( h1, Form("%.0f kHz", it->first), "L" );
 
     gr_nPhPerShot_vs_freq->SetPoint     ( i, it->first, h1->GetMean()*1000./5. );
-    gr_nPhPerShot_vs_freq->SetPointError( i, 5., h1->GetRMS()*1000./5. );
+    gr_nPhPerShot_vs_freq->SetPointError( i, it->first*0.01, h1->GetRMS()*1000./5. );
 
-    gr_nPhPerSec_vs_freq->SetPoint     ( i, it->first, it->first*h1->GetMean()*1000./5./1000000. ); // in MHz
-    gr_nPhPerSec_vs_freq->SetPointError( i, 5., it->first*h1->GetRMS()*1000./5./1000000. );
+    gr_nPhPerSec_vs_freq->SetPoint     ( i, it->first, it->first*h1->GetMean()*1000000./5./1000000. ); // in MHz
+    gr_nPhPerSec_vs_freq->SetPointError( i, it->first*0.01, it->first*h1->GetMeanError()*1000000./5./1000000. );
 
     i++;
 
@@ -93,8 +93,9 @@ int main() {
 
 
   c1->Clear();
+  c1->SetLogx();
 
-  TH2D* h2_axes_2 = new TH2D( "axes_2", "", 10, 0., 180., 10, 0., 100000. );
+  TH2D* h2_axes_2 = new TH2D( "axes_2", "", 10, 0.5, 1800., 10, 0., 10000. );
   h2_axes_2->SetYTitle( "Number of photons per bunch" );
   h2_axes_2->SetXTitle( "LED repetition frequency [kHz]" );
   h2_axes_2->Draw();
@@ -110,7 +111,7 @@ int main() {
 
   c1->Clear();
 
-  TH2D* h2_axes_3 = new TH2D( "axes_3", "", 10, 0., 180., 10, 0., 10000. );
+  TH2D* h2_axes_3 = new TH2D( "axes_3", "", 10, 0.5, 1800., 10, 0., 10000. );
   h2_axes_3->SetYTitle( "Number of photons hitting SDD [MHz]" );
   h2_axes_3->SetXTitle( "LED repetition frequency [kHz]" );
   h2_axes_3->Draw();
