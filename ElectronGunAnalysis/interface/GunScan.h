@@ -14,7 +14,7 @@ class GunScan {
 
  public:
 
-  GunScan( float gunEnergy, float APDhv, const std::string& data, const std::string& scanName, float iGunBefore, float iGunAfter=-1. );
+  GunScan( float gunEnergy, float APDhv, const std::string& data, const std::string& scanName, float iGunBefore, float iGunAfter=-1., const std::string& baselineFunc="pol3" );
   ~GunScan() {};
 
   // setters
@@ -60,7 +60,7 @@ class GunScan {
   void loadCurrentSyst();
   float getCurrentSyst() const;
 
-  static std::vector<GunScan*> loadScans( const std::string& scansFileName, float gunEnergy=-1., float APDhv=-1. ); // default = all
+  static std::vector<GunScan*> loadScans( const std::string& scansFileName, float gunEnergy=-1., float APDhv=-1., const std::string& baselineFunc="pol3" ); // default = all
   static void correctCurrentZero( float& current, const std::string& scansFile );
 
   float convertGunPosition( float x ) const { return x*201./gunEnergy_; }

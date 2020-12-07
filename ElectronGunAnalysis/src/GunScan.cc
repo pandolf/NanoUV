@@ -16,12 +16,16 @@
 
 
 
-GunScan::GunScan( float gunEnergy, float APDhv, const std::string& dataDir, const std::string& scanName, float iGunBefore, float iGunAfter ) {
+GunScan::GunScan( float gunEnergy, float APDhv, const std::string& dataDir, const std::string& scanName, float iGunBefore, float iGunAfter, const std::string& baselineFunc ) {
 
   gunEnergy_ = gunEnergy;
   APDhv_ = APDhv;
   dataDir_ = dataDir;
-  scanName_ = scanName;
+  
+  TString scanName_tstr(scanName);
+  if( scanName_tstr.EndsWith(".dat") ) scanName_ = scanName.substr(0, scanName.length()-4);
+  else scanName_ = scanName;
+
   iGunBefore_ = iGunBefore;
   iGunAfter_ = (iGunAfter>=0.) ? iGunAfter : iGunBefore;
 
@@ -29,7 +33,7 @@ GunScan::GunScan( float gunEnergy, float APDhv, const std::string& dataDir, cons
   currentEvalPoint_ = -6.;
   firstN_fit_ = 18;
   lastN_fit_ = 16;
-  baselineFunc_ = "pol3";
+  baselineFunc_ = baselineFunc;
 
   gr_currentSyst_ = 0;
 
@@ -245,9 +249,10 @@ float GunScan::gunCurrent() const {
 float GunScan::gunCurrentError() const {
 
   float diffCurrent = fabs(iGunBefore_-iGunAfter_)/2.;
-  float fixedPercent = 0.005*this->gunCurrent();
+  float accuracy = 0.01*this->gunCurrent() + 0.003;
+  //float accuracy = 0.005*this->gunCurrent();
 
-  float error = (diffCurrent>fixedPercent) ? diffCurrent : fixedPercent;
+  float error = (diffCurrent>accuracy) ? diffCurrent : accuracy;
 
   return error;
 
@@ -271,9 +276,12 @@ void GunScan::loadScan() {
 
   //if( graph_ != 0 ) delete graph_;
   graph_ = new TGraph(0);
-  graph_->SetName( Form( "gr_%s", scanName_.c_str()) );
+  if( this->baselineFunc()!="pol3" )
+    graph_->SetName( Form( "gr_%s_%s", scanName_.c_str(), baselineFunc_.c_str()) );
+  else
+    graph_->SetName( Form( "gr_%s", scanName_.c_str()) );
 
-  std::string fullFileName( Form("data/%s/%s", dataDir_.c_str(), scanName_.c_str()) );
+  std::string fullFileName( Form("data/%s/%s.dat", dataDir_.c_str(), scanName_.c_str()) );
   std::ifstream ifs( fullFileName.c_str() );
 
   std::cout << "-> Loading scan from file: " << fullFileName.c_str() << std::endl;
@@ -293,7 +301,7 @@ void GunScan::loadScan() {
 
 
 
-std::vector< GunScan* > GunScan::loadScans( const std::string& scansFile, float gunEnergy, float APDhv ) {
+std::vector< GunScan* > GunScan::loadScans( const std::string& scansFile, float gunEnergy, float APDhv, const std::string& baselineFunc ) {
 
   std::cout << "-> Loading scans from file: " << scansFile << std::endl;
   if( gunEnergy>=0. ) std::cout << "  -> Will load only scans with E(gun) = " << gunEnergy << " eV" << std::endl;
@@ -326,7 +334,7 @@ std::vector< GunScan* > GunScan::loadScans( const std::string& scansFile, float 
     bool gunEnergyOK = (gunEnergy<0.) || (gunEnergy>=0. && this_gunEnergy==gunEnergy);
     bool APDhvOK     = (APDhv    <0.) || (APDhv    >=0. && this_APDhv    ==APDhv    );
     if( gunEnergyOK && APDhvOK ) {
-      GunScan* this_gunScan = new GunScan( this_gunEnergy, this_APDhv, dataDir, this_scanName, this_iGunBefore, this_iGunAfter );
+      GunScan* this_gunScan = new GunScan( this_gunEnergy, this_APDhv, dataDir, this_scanName, this_iGunBefore, this_iGunAfter, baselineFunc );
       scans.push_back( this_gunScan );
      }
 
@@ -680,6 +688,8 @@ void GunScan::subtractBaseline() {
   graph_corr_ = new TGraph(0);
   graph_corr_->SetName( Form( "%s_corr", graph_->GetName() ) );
 
+std::cout << "graph_corr_ name: " << graph_corr_->GetName() << std::endl;
+
   for( int iPoint=0; iPoint<graph_->GetN(); ++iPoint ) {
 
     double x, y;
@@ -722,7 +732,7 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
 
 
   TH2D* h2_axes = new TH2D( Form("axes_%s", graph_->GetName()), "", 10, xMin, xMax, 10, y0 - 0.5*yDiff, y0 + 2.5*yDiff );
-  h2_axes->SetXTitle("Gun Position [mm]"); 
+  h2_axes->SetXTitle("Beam Position [mm]"); 
   h2_axes->SetYTitle("APD Current [nA]");
   h2_axes->Draw();
 
@@ -754,15 +764,20 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
   graph_->Draw("P same");
 
 
-  c1->SaveAs(Form("%s/scan_%s.pdf", this->outdir().c_str(), scanName_.c_str()));
-  c1->SaveAs(Form("%s/scan_%s.eps", this->outdir().c_str(), scanName_.c_str()));
+  if( this->baselineFunc()!="pol3" ) {
+    c1->SaveAs(Form("%s/scan_%s_%s.pdf", this->outdir().c_str(), scanName_.c_str(), baselineFunc_.c_str()));
+    c1->SaveAs(Form("%s/scan_%s_%s.eps", this->outdir().c_str(), scanName_.c_str(), baselineFunc_.c_str()));
+  } else {
+    c1->SaveAs(Form("%s/scan_%s.pdf", this->outdir().c_str(), scanName_.c_str()));
+    c1->SaveAs(Form("%s/scan_%s.eps", this->outdir().c_str(), scanName_.c_str()));
+  }
 
   c1->Clear();
 
   double yMax_corr = getYmax( graph_corr_ );
 
   TH2D* h2_axes_corr = new TH2D( Form("axes_corr_%s", graph_->GetName()), "", 10, xMin, xMax, 10, -0.5*yMax_corr, 2.5*yMax_corr );
-  h2_axes_corr->SetXTitle("Gun Position [mm]");
+  h2_axes_corr->SetXTitle("Beam Position [mm]");
   h2_axes_corr->SetYTitle("Corrected APD Current [nA]");
   h2_axes_corr->Draw();
 
@@ -783,12 +798,21 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
   //label->Draw("same");  
   gPad->RedrawAxis();
 
-  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.pdf", dataDir_.c_str(), gunEnergy(), APDhv(), scanName_.c_str()));
-  c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.eps", dataDir_.c_str(), gunEnergy(), APDhv(), scanName_.c_str()));
+  //c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.pdf", dataDir_.c_str(), gunEnergy(), APDhv(), scanName_.c_str()));
+  //c1->SaveAs(Form("plots/APDscans/%s/%.0feV/%.0fV/scanCorr_%s.eps", dataDir_.c_str(), gunEnergy(), APDhv(), scanName_.c_str()));
+
+  if( this->baselineFunc()!="pol3" ) {
+    c1->SaveAs(Form("%s/scanCorr_%s_%s.pdf", this->outdir().c_str(), scanName_.c_str(), baselineFunc_.c_str()));
+    c1->SaveAs(Form("%s/scanCorr_%s_%s.eps", this->outdir().c_str(), scanName_.c_str(), baselineFunc_.c_str()));
+  } else {
+    c1->SaveAs(Form("%s/scanCorr_%s.pdf", this->outdir().c_str(), scanName_.c_str()));
+    c1->SaveAs(Form("%s/scanCorr_%s.eps", this->outdir().c_str(), scanName_.c_str()));
+  }
 
 
   float iAPDError;
   float iAPD = this->getCurrentFromScan(iAPDError);
+
 
   iAPD      *= 1000; // convert to pA
   iAPDError *= 1000; // convert to pA
@@ -809,5 +833,6 @@ void GunScan::addPointToGraph( TGraphErrors* graph ) {
 
   delete c1;
   delete h2_axes;
+  delete h2_axes_corr;
 
 }
