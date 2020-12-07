@@ -128,7 +128,7 @@ int main() {
   c1->SetLogy();
 
   TH2D* h2_axes_3 = new TH2D( "axes_3", "", 10, 0.5, 1800., 10, 0.001, 10. );
-  h2_axes_3->SetYTitle( "Number of photons hitting SDD / 10^{9} [Hz]" );
+  h2_axes_3->SetYTitle( "Number of photons hitting SDD [GHz]" );
   h2_axes_3->SetXTitle( "LED repetition frequency [kHz]" );
   h2_axes_3->Draw();
 
