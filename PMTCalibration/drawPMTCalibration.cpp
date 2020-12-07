@@ -132,7 +132,7 @@ void drawAllGraphs( const std::string& name ) {
 
 
   TGraph* gr_gain = new TGraph(0);
-  gr_gain->SetPoint( gr_gain->GetN(), 500., 1E4 );
+  gr_gain->SetPoint( gr_gain->GetN(), 500., 1E4 );  // taken from datasheet
   gr_gain->SetPoint( gr_gain->GetN(), 550., 2E4 );
   gr_gain->SetPoint( gr_gain->GetN(), 600., 4E4 );
   gr_gain->SetPoint( gr_gain->GetN(), 650., 7E4 );
