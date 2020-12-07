@@ -52,8 +52,8 @@ int main() {
   legend->SetFillColor(0);
   legend->SetTextSize(0.035);
   legend->AddEntry( gr_air    , Form("1 atm"), "P" );
-  legend->AddEntry( gr_vacuum , Form("%.1fE-5 mbar", hd_vacuum .p_ave()/1E-5), "P" );
-  legend->AddEntry( gr_vacuum2, Form("%.1fE-6 mbar", hd_vacuum2.p_ave()/1E-6), "P" );
+  legend->AddEntry( gr_vacuum , Form("%s mbar", NanoUVCommon::scientific(hd_vacuum .p()).c_str()), "P" );
+  legend->AddEntry( gr_vacuum2, Form("%s mbar", NanoUVCommon::scientific(hd_vacuum2.p()).c_str()), "P" );
   legend->Draw("same");
 
   gr_vacuum->Draw("Psame");
