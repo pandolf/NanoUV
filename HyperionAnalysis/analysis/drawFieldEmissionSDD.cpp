@@ -168,7 +168,7 @@ void drawFieldEmissionVsHV( const std::string& varName ) {
   float xMin_rescale = 0.6;
   float xMax_rescale = 3.;
   TH2D* h2_axes_rescale = new TH2D( "axes_rescale", "", 10, xMin_rescale, xMax_rescale, 10, 0., 0.125 );
-  h2_axes_rescale->SetXTitle( "Energy (rescaled to 1650V) [keV]" );
+  h2_axes_rescale->SetXTitle( "Energy (rescaled to 1650V)" );
   h2_axes_rescale->SetYTitle( "Normalized to Unity" );
   h2_axes_rescale->Draw();
 
