@@ -173,6 +173,15 @@ void drawFieldEmissionVsHV( const std::string& varName ) {
   h2_axes_rescale->Draw();
 
 
+  TCanvas* c1_response = new TCanvas( "c1_response", "", 600, 600 );
+  c1_response->cd();
+
+  TH2D* h2_axes_response = new TH2D( "axes_response", "", 10, 0.2, 2.2, 10, 0., 0.125 );
+  h2_axes_response->SetXTitle( "Energy / #DeltaV" );
+  h2_axes_response->SetYTitle( "Normalized to Unity" );
+  h2_axes_response->Draw();
+
+
 
 
 
@@ -198,9 +207,10 @@ void drawFieldEmissionVsHV( const std::string& varName ) {
     TFile* file = TFile::Open(fileName.c_str());
     TTree* tree = (TTree*)file->Get("tree");
 
-    TH1D* h1         = SDD::fillFromTree( tree, Form("h1_%d"        , iHV), varName, 100, 100, 0., 5.5 );
-    TH1D* h1_trunc   = SDD::fillFromTree( tree, Form("h1_trunc_%d"  , iHV), varName, 100, 50, xMin_trunc, xMax_trunc );
-    TH1D* h1_rescale = SDD::fillFromTree( tree, Form("h1_rescale_%d", iHV), varName, 100, 50, xMin_trunc, xMax_trunc, 1650./((float)iHV) );
+    TH1D* h1          = SDD::fillFromTree( tree, Form("h1_%d"         , iHV), varName, 100, 100, 0., 5.5 );
+    TH1D* h1_trunc    = SDD::fillFromTree( tree, Form("h1_trunc_%d"   , iHV), varName, 100, 50, xMin_trunc, xMax_trunc );
+    TH1D* h1_rescale  = SDD::fillFromTree( tree, Form("h1_rescale_%d" , iHV), varName, 100, 50, xMin_trunc, xMax_trunc, 1650./((float)iHV) );
+    TH1D* h1_response = SDD::fillFromTree( tree, Form("h1_response_%d", iHV), varName, 100, 50, 0.2, 2.2, 1000./((float)iHV) );
 
     c1->cd();
     h1->SetLineWidth(3);
@@ -216,6 +226,11 @@ void drawFieldEmissionVsHV( const std::string& varName ) {
     h1_rescale->SetLineWidth(4);
     h1_rescale->SetLineColor(colors[i]);
     h1_rescale->DrawNormalized("same");
+
+    c1_response->cd();
+    h1_response->SetLineWidth(4);
+    h1_response->SetLineColor(colors[i]);
+    h1_response->DrawNormalized("same");
 
     legend->AddEntry( h1, Form("%d V", iHV), "L" );
 
@@ -238,11 +253,18 @@ void drawFieldEmissionVsHV( const std::string& varName ) {
   gPad->RedrawAxis();
   c1_rescale->SaveAs( Form("%s/%s_vsHV_rescale.pdf", outdir.c_str(), varName.c_str()) );
 
+  c1_response->cd();
+  legend->Draw("same");
+  gPad->RedrawAxis();
+  c1_response->SaveAs( Form("%s/%s_vsHV_response.pdf", outdir.c_str(), varName.c_str()) );
+
   delete c1;
   delete h2_axes;
   delete c1_trunc;
   delete h2_axes_trunc;
   delete c1_rescale;
   delete h2_axes_rescale;
+  delete c1_response;
+  delete h2_axes_response;
 
 }
