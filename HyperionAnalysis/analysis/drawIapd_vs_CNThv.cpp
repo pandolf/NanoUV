@@ -326,27 +326,72 @@ void drawAll( const std::string& name ) {
   h2_axes4->SetYTitle( "d_{0} [mm]" );
   h2_axes4->Draw();
 
+  TF1* f1_line3 = new TF1("line3", "[0]+[1]*x");
+  f1_line3->SetLineColor(46);
+  f1_line3->SetLineWidth(2);
   gr_d0_vs_thresh->SetMarkerStyle(20);
   gr_d0_vs_thresh->SetMarkerColor(46);
   gr_d0_vs_thresh->SetLineColor  (46);
   gr_d0_vs_thresh->SetMarkerSize(1.5);
+  gr_d0_vs_thresh->Fit( f1_line3, "X" );
   gr_d0_vs_thresh->Draw("Psame");
+
+  float d0 = f1_line3->GetParameter(0);
+
 
   gPad->RedrawAxis();
 
   c3->SaveAs( Form("%s/d0_vs_thresh.pdf", outdir.c_str()) );
 
 
+  // redraw plot with corrected legend
+  c1->Clear();
+  h2_axes->Draw();
+
+  TLegend* legend2 = new TLegend( 0.68, 0.6, 0.9, 0.9 );
+  legend2->SetFillColor(0);
+  legend2->SetTextSize(0.035);
+
+  for( unsigned i=0; i<v_hd.size(); ++i ) {
+
+    TGraphErrors* graph = v_hd[i].getGraphFromColumns( Form("graph_%d", i), 1, 2, 1 );
+    TGraphErrors* graph_subtr = subtractBaseline( graph );
+
+    c1->cd();
+    graph->SetMarkerColor( reds[i] );
+    graph->SetLineColor  ( reds[i] );
+    graph->Draw("PL same");
+
+    c1_subtr->cd();
+    graph_subtr->SetMarkerSize ( 1.5 );
+    graph_subtr->SetMarkerStyle( 20 );
+    graph_subtr->SetMarkerColor( reds[i] );
+    graph_subtr->SetLineColor  ( reds[i] );
+    graph_subtr->Draw("PL same");
+
+    legend2->AddEntry( graph, Form("d = %.1f mm", d0-v_hd[i].L()), "P" );
+
+  }
+
+  c1->cd();
+  legend2->Draw("same");
+  gPad->RedrawAxis();
+  c1->SaveAs( Form("%s/Iapd_vs_CNThv_%s_d.pdf", outdir.c_str(), name.c_str()) );
+
+
   delete h2_axes;
   delete c1;
   delete legend;
+  delete legend2;
   delete h2_axes3;
   delete h2_axes4;
   delete c1_subtr;
   delete h2_axes_subtr;
   delete c3;
 
+
 }
+
 
 
 
