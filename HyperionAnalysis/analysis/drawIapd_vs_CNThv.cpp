@@ -266,8 +266,8 @@ void drawAll( const std::string& name ) {
     float err_d0 = sqrt( err_q*err_q/(m*m) + q*q*err_m*err_m/(m*m*m*m) );
 
     // DeltaV/d = E
-    float E     = m; // in V/mm
-    float err_E = err_m;
+    float E     = m/1000.; // in V/mm
+    float err_E = err_m/1000.;
 
     gr_d0_vs_thresh->SetPoint     ( ithresh, thresholds[ithresh], d0 ); 
     gr_d0_vs_thresh->SetPointError( ithresh, 1., err_d0 );
@@ -287,11 +287,11 @@ void drawAll( const std::string& name ) {
 
   float xMax3 = thresholds[thresholds.size()-1]*1.2;
   float yMin3 = 0.;
-  float yMax3 = 1000.;
+  float yMax3 = 1.;
 
   TH2D* h2_axes3 = new TH2D( "axes3", "", 10, 0., xMax3, 10, yMin3, yMax3 );
   h2_axes3->SetXTitle( "I_{apd} Threshold (baseline subtracted) [nA]" );
-  h2_axes3->SetYTitle( "E [V/mm]" );
+  h2_axes3->SetYTitle( "E [V/#mum]" );
   h2_axes3->Draw();
 
   TF1* f1_line2 = new TF1("line2", "[0]+[1]*x");
@@ -312,7 +312,7 @@ void drawAll( const std::string& name ) {
   std::cout << std::endl;
   std::cout << "========================================" << std::endl;
   std::cout << std::endl;
-  std::cout << " -> " << name << " emit for E > " << f1_line2->GetParameter(0) << " +/- " << f1_line2->GetParError(0) << " V/mm" << std::endl;
+  std::cout << " -> " << name << " emit for E > " << f1_line2->GetParameter(0) << " +/- " << f1_line2->GetParError(0) << " V/um" << std::endl;
   std::cout << std::endl;
   std::cout << "========================================" << std::endl;
   std::cout << std::endl;
