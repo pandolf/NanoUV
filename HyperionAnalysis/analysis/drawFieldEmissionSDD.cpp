@@ -79,7 +79,6 @@ int main() {
 
 
   TGraphErrors* gr_peak_vs_HV = new TGraphErrors(0);
-  TGraphErrors* gr_response_vs_HV = new TGraphErrors(0);
 
   int i=0;
 
@@ -108,12 +107,6 @@ int main() {
     h1_response->SetLineColor(colors[i]);
     h1_response->DrawNormalized("same");
 
-    TF1* f1_response = new TF1( Form("f1_response_%d", iHV), "gaus", 0.2, 0.4 );
-    f1->SetParameter(1, h1_response->GetXaxis()->GetBinCenter(h1_response->GetMaximumBin()));
-    h1_response->Fit(f1_response, "0QR");
-    gr_response_vs_HV->SetPoint     ( i, iHV, f1_response->GetParameter(1) );
-    gr_response_vs_HV->SetPointError( i, 2. , f1_response->GetParError (1) );
-
 
     legend->AddEntry( h1, Form("%d V", iHV), "L" );
 
@@ -135,7 +128,7 @@ int main() {
   TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
   c2->cd();
 
-  float xMin_gr = 1700.;
+  float xMin_gr = 1701.;
   float xMax_gr = 1999.;
 
   TH2D* h2_axes_3 = new TH2D("axes3", "", 10, xMin_gr, xMax_gr, 10, 0.3, 0.8);
@@ -167,30 +160,6 @@ int main() {
   gPad->RedrawAxis();
 
   c2->SaveAs( Form("%s/Epeak_vsHV.pdf", outdir.c_str()) );
-
-  c2->Clear();
-  c2->cd();
-
-
-  TH2D* h2_axes_4 = new TH2D("axes4", "", 10, xMin_gr, xMax_gr, 10, 0., 0.5);
-  h2_axes_4->SetXTitle( "-#DeltaV(CNT-SDD) [V]" );
-  h2_axes_4->SetYTitle( "E / #DeltaV" );
-  h2_axes_4->Draw();
-
-  TF1* line2 = new TF1( "line2", "[0] + [1]*x", xMin_gr, xMax_gr );
-  line2->SetLineColor(46);
-  line2->SetLineWidth(2);
-  gr_response_vs_HV->Fit( line2, "XR" );
-  
-
-  gr_response_vs_HV->SetMarkerStyle(20);
-  gr_response_vs_HV->SetMarkerSize(1.6);
-  gr_response_vs_HV->SetMarkerColor(kGray+3);
-  gr_response_vs_HV->Draw("psame");
-
-  gPad->RedrawAxis();
-
-  c2->SaveAs( Form("%s/responsePeak_vsHV.pdf", outdir.c_str()) );
 
 
   delete c1;
