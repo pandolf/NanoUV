@@ -55,7 +55,9 @@ int main() {
   TCanvas* c1_response = new TCanvas( "c1_response", "", 600, 600 );
   c1_response->cd();
 
-  TH2D* h2_axes_response = new TH2D( "axes_response", "", 10, 0.2, 0.8, 10, 0., 0.1 );
+  float xMax_response = 0.8;
+
+  TH2D* h2_axes_response = new TH2D( "axes_response", "", 10, 0., xMax_response, 10, 0., 0.1 );
   h2_axes_response->SetXTitle( "Energy / #DeltaV" );
   h2_axes_response->SetYTitle( "Normalized to Unity" );
   h2_axes_response->Draw();
@@ -88,7 +90,7 @@ int main() {
     TTree* tree = (TTree*)file->Get("tree");
 
     TH1D* h1          = SDD::fillFromTree( tree, Form("h1_%d"         , iHV), varName, 300, 100, 0., xMax_keV );
-    TH1D* h1_response = SDD::fillFromTree( tree, Form("h1_response_%d", iHV), varName, 300, 100, 0., 0.8, 1000./((float)iHV) );
+    TH1D* h1_response = SDD::fillFromTree( tree, Form("h1_response_%d", iHV), varName, 300, 100, 0., xMax_response, 1000./((float)iHV) );
 
     c1->cd();
     h1->SetLineWidth(3);
@@ -108,7 +110,7 @@ int main() {
 
     TF1* f1_response = new TF1( Form("f1_response_%d", iHV), "gaus", 0.2, 0.4 );
     f1->SetParameter(1, h1_response->GetXaxis()->GetBinCenter(h1_response->GetMaximumBin()));
-    h1_response->Fit(f1, "0QR");
+    h1_response->Fit(f1_response, "0QR");
     gr_response_vs_HV->SetPoint     ( i, iHV, f1_response->GetParameter(1) );
     gr_response_vs_HV->SetPointError( i, 2. , f1_response->GetParError (1) );
 
@@ -155,6 +157,30 @@ int main() {
   gPad->RedrawAxis();
 
   c2->SaveAs( Form("%s/Epeak_vsHV.pdf", outdir.c_str()) );
+
+  c2->Clear();
+  c2->cd();
+
+
+  TH2D* h2_axes_4 = new TH2D("axes4", "", 10, xMin_gr, xMax_gr, 10, 0., 0.5);
+  h2_axes_4->SetXTitle( "-#DeltaV(CNT-SDD) [V]" );
+  h2_axes_4->SetYTitle( "E / #DeltaV" );
+  h2_axes_4->Draw();
+
+  TF1* line2 = new TF1( "line2", "[0] + [1]*x", xMin_gr, xMax_gr );
+  line2->SetLineColor(46);
+  line2->SetLineWidth(2);
+  gr_response_vs_HV->Fit( line2, "XR" );
+  
+
+  gr_response_vs_HV->SetMarkerStyle(20);
+  gr_response_vs_HV->SetMarkerSize(1.6);
+  gr_response_vs_HV->SetMarkerColor(kGray+3);
+  gr_response_vs_HV->Draw("psame");
+
+  gPad->RedrawAxis();
+
+  c2->SaveAs( Form("%s/responsePeak_vsHV.pdf", outdir.c_str()) );
 
 
   delete c1;
