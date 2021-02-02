@@ -30,7 +30,10 @@ int main() {
   triggers.push_back(0.7);
   triggers.push_back(0.8);
 
+  drawTrigThresh( outdir, 1750, triggers );
   drawTrigThresh( outdir, 1800, triggers );
+  drawTrigThresh( outdir, 1850, triggers );
+  drawTrigThresh( outdir, 1900, triggers );
 
   return 0;
 
@@ -79,7 +82,7 @@ void drawTrigThresh( const std::string& outdir, float hv, const std::vector<floa
     trig_tstr.ReplaceAll( ".", "p" );
     trig_str = trig_tstr;
 
-    TFile* file = TFile::Open( Form("data/HyperionSDD/Run_SDD_G300_HVcnt%.0f_L32_h17_trig%s_pressureOFF_20k_Measurements_Only_2_2_2021.root", hv, trig_str.c_str()) );
+    TFile* file = TFile::Open( Form("data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt%.0f_L32_h17_trig%s_pressureOFF_Measurements_Only_2_2_2021.root", hv, trig_str.c_str()) );
     TTree* tree = (TTree*)file->Get("tree");
 
     TH1D* h1 = SDD::fillFromTree( tree, Form("h%d", i), "vamp", 300 );
