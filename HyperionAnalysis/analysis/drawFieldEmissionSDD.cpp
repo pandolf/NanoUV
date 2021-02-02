@@ -55,7 +55,7 @@ int main() {
   TCanvas* c1_response = new TCanvas( "c1_response", "", 600, 600 );
   c1_response->cd();
 
-  TH2D* h2_axes_response = new TH2D( "axes_response", "", 10, 0.2, 0.8, 10, 0., 0.2 );
+  TH2D* h2_axes_response = new TH2D( "axes_response", "", 10, 0.2, 0.8, 10, 0., 0.1 );
   h2_axes_response->SetXTitle( "Energy / #DeltaV" );
   h2_axes_response->SetYTitle( "Normalized to Unity" );
   h2_axes_response->Draw();
@@ -88,7 +88,7 @@ int main() {
     TTree* tree = (TTree*)file->Get("tree");
 
     TH1D* h1          = SDD::fillFromTree( tree, Form("h1_%d"         , iHV), varName, 300, 100, 0., xMax_keV );
-    TH1D* h1_response = SDD::fillFromTree( tree, Form("h1_response_%d", iHV), varName, 300, 100, 0.2, 0.8, 1000./((float)iHV) );
+    TH1D* h1_response = SDD::fillFromTree( tree, Form("h1_response_%d", iHV), varName, 300, 100, 0., 0.8, 1000./((float)iHV) );
 
     c1->cd();
     h1->SetLineWidth(3);
@@ -106,6 +106,13 @@ int main() {
     h1_response->SetLineColor(colors[i]);
     h1_response->DrawNormalized("same");
 
+    TF1* f1_response = new TF1( Form("f1_response_%d", iHV), "gaus", 0.2, 0.4 );
+    f1->SetParameter(1, h1_response->GetXaxis()->GetBinCenter(h1_response->GetMaximumBin()));
+    h1_response->Fit(f1, "0QR");
+    gr_response_vs_HV->SetPoint     ( i, iHV, f1_response->GetParameter(1) );
+    gr_response_vs_HV->SetPointError( i, 2. , f1_response->GetParError (1) );
+
+
     legend->AddEntry( h1, Form("%d V", iHV), "L" );
 
     i++;
@@ -122,9 +129,40 @@ int main() {
   gPad->RedrawAxis();
   c1_response->SaveAs( Form("%s/%s_vsHV_response.pdf", outdir.c_str(), varName.c_str()) );
 
+
+  TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
+  c2->cd();
+
+  float xMin_gr = 1700.;
+  float xMax_gr = 1999.;
+
+  TH2D* h2_axes_3 = new TH2D("axes3", "", 10, xMin_gr, xMax_gr, 10, 0.3, 0.8);
+  h2_axes_3->SetXTitle( "-#DeltaV(CNT-SDD) [V]" );
+  h2_axes_3->SetYTitle( "E_{peak} [keV]" );
+  h2_axes_3->Draw();
+
+  TF1* line = new TF1( "line", "[0] + [1]*x", xMin_gr, xMax_gr );
+  line->SetLineColor(46);
+  line->SetLineWidth(2);
+  gr_peak_vs_HV->Fit( line, "XR" );
+  
+
+  gr_peak_vs_HV->SetMarkerStyle(20);
+  gr_peak_vs_HV->SetMarkerSize(1.6);
+  gr_peak_vs_HV->SetMarkerColor(kGray+3);
+  gr_peak_vs_HV->Draw("psame");
+
+  gPad->RedrawAxis();
+
+  c2->SaveAs( Form("%s/Epeak_vsHV.pdf", outdir.c_str()) );
+
+
   delete c1;
   delete h2_axes;
   delete c1_response;
   delete h2_axes_response;
+  delete c2;
+  delete h2_axes_3;
+
 
 }
