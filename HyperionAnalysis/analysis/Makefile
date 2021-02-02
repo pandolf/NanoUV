@@ -48,6 +48,9 @@ drawIapd_vs_CNThv_withLEDUV: drawIapd_vs_CNThv_withLEDUV.cpp NanoUVCommon.o Hype
 drawFieldEmissionSDD: drawFieldEmissionSDD.cpp NanoUVCommon.o HyperionData.o SDD.o
 	$(CC) -Wall $(INCLUDES) -o drawFieldEmissionSDD drawFieldEmissionSDD.cpp NanoUVCommon.o HyperionData.o SDD.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawTriggerThresholdSDD: drawTriggerThresholdSDD.cpp NanoUVCommon.o HyperionData.o SDD.o
+	$(CC) -Wall $(INCLUDES) -o drawTriggerThresholdSDD drawTriggerThresholdSDD.cpp NanoUVCommon.o HyperionData.o SDD.o $(ROOTFLAG) $(EXTRALIBS)
+
 drawLEDvsFrequency: drawLEDvsFrequency.cpp NanoUVCommon.o HyperionData.o SDD.o
 	$(CC) -Wall $(INCLUDES) -o drawLEDvsFrequency drawLEDvsFrequency.cpp NanoUVCommon.o HyperionData.o SDD.o $(ROOTFLAG) $(EXTRALIBS)
 
