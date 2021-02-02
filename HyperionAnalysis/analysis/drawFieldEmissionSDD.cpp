@@ -99,7 +99,7 @@ int main() {
 
     TF1* f1 = new TF1( Form("f1_%d", iHV), "gaus", 0.4, 0.8 );
     f1->SetParameter(1, h1->GetXaxis()->GetBinCenter(h1->GetMaximumBin()));
-    h1->Fit(f1, "0QR");
+    h1->Fit(f1, "0R");
     gr_peak_vs_HV->SetPoint     ( i, iHV, f1->GetParameter(1) );
     gr_peak_vs_HV->SetPointError( i, 2. , f1->GetParError (1) );
 
@@ -147,6 +147,16 @@ int main() {
   line->SetLineColor(46);
   line->SetLineWidth(2);
   gr_peak_vs_HV->Fit( line, "XR" );
+
+  TPaveText* label_fit = new TPaveText( 0.55, 0.2, 0.9, 0.5, "brNDC" );
+  label_fit->SetTextSize(0.035);
+  label_fit->SetTextColor(46);
+  label_fit->SetFillColor(0);
+  label_fit->AddText( "f(x) = m*x + q" );
+  label_fit->AddText( Form("m = %.2f#pm%.2f [keV/kV]", line->GetParameter(1)*1000., line->GetParError(1)*1000. ));
+  label_fit->AddText( Form("q = %.2f#pm%.2f keV", line->GetParameter(0), line->GetParError(0) ));
+  label_fit->AddText( Form("#chi^2 / NDF = %.2f / %d", line->GetChisquare(), line->GetNumberFreeParameters()) );
+  label_fit->Draw("same");
   
 
   gr_peak_vs_HV->SetMarkerStyle(20);
