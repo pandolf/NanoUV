@@ -76,7 +76,7 @@ int main() {
   c1->cd();
   c1->SetLogy();
 
-  float yMin = 10.;
+  float yMin = 20.;
   float yMax = 200000.;
 
   TH2D* h2_axes = new TH2D( "axes", "", 10, 0., xMax_keV, 10, yMin, yMax );
@@ -117,16 +117,25 @@ int main() {
 //TF1* bg = new TF1( "bg", "[0]*exp(-[1]*x)", 3., 5.2 );
 //h1->Fit( bg, "R");
 
-//float ele = f1->GetParameter(1);
+  float ele = f1->GetParameter(2);
+  float offset = f1->GetParameter(4);
 
-//for( int i=1; i<5; ++i ) {
+  for( int i=1; i<4; ++i ) {
 
-//  TLine* line = new TLine( ele*i, 0., ele*i, yMax );
-//  line->SetLineColor(kGray+3);
-//  line->SetLineStyle(2);
-//  line->Draw("same");
+    float thisx = offset+ele*i;
+    TLine* line = new TLine( offset+ele*i, 0., offset+ele*i, yMax );
+    line->SetLineColor(46);
+    line->SetLineStyle(2);
+    line->Draw("same");
 
-//}
+    TPaveText* label_ele = new TPaveText( 0.3+ele*i, yMax/2., 0.4+ele*i, yMax/2. );
+    label_ele->SetFillColor(0);
+    label_ele->SetTextSize(0.033);
+    label_ele->SetTextColor(46);
+    label_ele->AddText( Form("%de^{-}", i) );
+    label_ele->Draw("same");
+
+  }
 
   c1->cd();
   gPad->RedrawAxis();
