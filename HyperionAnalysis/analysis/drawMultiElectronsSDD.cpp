@@ -17,7 +17,7 @@ std::string outdir = "plots/FieldEmissCNT";
 std::string varName = "vcharge";
 
 
-int NORDERS = 5;
+int NORDERS = 10;
 
 
 Double_t fPhotoEle(Double_t *x, Double_t *par)
@@ -32,8 +32,10 @@ Double_t fPhotoEle(Double_t *x, Double_t *par)
    float xflex = par[5];
    float w = par[6];
    float alpha = par[7];
-   //float w2 = par[8];
-   //float alpha2 = par[9];
+   float w2 = par[8];
+   float alpha2 = par[9];
+   //float w3 = par[10];
+   //float alpha3 = par[11];
 
    float xx = x[0];
    double value = 0.;
@@ -47,7 +49,11 @@ Double_t fPhotoEle(Double_t *x, Double_t *par)
 
    }
 
-   value = value + TMath::Erf(-(xx-xflex))*w*TMath::Exp(-alpha*xx);
+   //value = value + TMath::Erf(-(xx-xflex))*w*TMath::Exp(-alpha*xx);
+   value = value + TMath::Erf(-(xx-xflex))*(w*TMath::Exp(-alpha*xx) + w2*TMath::Exp(-alpha2*xx));
+   //value = value + TMath::Erf(-(xx-xflex))*(w*TMath::Exp(-alpha*xx) + w2*TMath::Exp(-alpha2*xx) + w3*TMath::Exp(-alpha3*xx));
+
+   //old:
    //value = value + w*TMath::LogNormal( xx-xflex, alpha );
    //value = value + par[5] + par[6]*xx + par[7]*xx*xx;// + par[8]*xx*xx*xx;
    //value = value + TMath::Erf(-(xx-xflex))*(w*TMath::Exp(-alpha*xx) + w2*TMath::Exp(-alpha2*xx));
@@ -92,7 +98,7 @@ int main() {
   f0->SetParameter(1, h1->GetXaxis()->GetBinCenter(h1->GetMaximumBin()));
   h1->Fit(f0, "0R");
 
-  TF1* f1 = new TF1( "func", fPhotoEle, 0.45, 3., 8 );
+  TF1* f1 = new TF1( "func", fPhotoEle, 0.45, 4., 10 );
   f1->SetParameter( 0, f0->GetParameter(0) ); //normalization
   f1->SetParameter( 1, 1. ); //poiss mu
   f1->SetParameter( 2, f0->GetParameter(1) ); //gauss step
@@ -101,8 +107,8 @@ int main() {
   f1->SetParameter( 5, 1. ); //xflex
   f1->SetParameter( 6, 500. ); //w
   f1->SetParameter( 7, 1. ); //alpha
-  //f1->SetParameter( 8, 50. ); //w2
-  //f1->SetParameter( 9, 2. ); //alpha2
+  f1->SetParameter( 8, 50. ); //w2
+  f1->SetParameter( 9, 2. ); //alpha2
 
   //f1->FixParameter( 5, 0. ); //sigmaoffset
   //f1->FixParameter( 6, 0. ); //alpha
@@ -122,7 +128,6 @@ int main() {
 
   for( int i=1; i<4; ++i ) {
 
-    float thisx = offset+ele*i;
     TLine* line = new TLine( offset+ele*i, 0., offset+ele*i, yMax );
     line->SetLineColor(46);
     line->SetLineStyle(2);
