@@ -17,7 +17,7 @@ std::string outdir = "plots/FieldEmissCNT";
 std::string varName = "vcharge";
 
 
-int NORDERS = 2;
+int NORDERS = 6;
 
 
 Double_t fPhotoEle(Double_t *x, Double_t *par)
@@ -28,12 +28,17 @@ Double_t fPhotoEle(Double_t *x, Double_t *par)
    float Q1 = par[2];
    float sigma = par[3];
    float offset = par[4];
-   float sigmaoffset = par[5];
-   float alpha = par[6];
-   float w = par[7];
+   //float sigmaoffset = par[5];
+   float xflex = par[5];
+   float w = par[6];
+   float alpha = par[7];
+   //float w2 = par[8];
+   //float alpha2 = par[9];
 
    float xx = x[0];
    double value = 0.;
+
+  float sigmaoffset = 0.;
 
    for( unsigned i=1; i<NORDERS; ++i ) {
 
@@ -41,6 +46,13 @@ Double_t fPhotoEle(Double_t *x, Double_t *par)
      value = value + N*(TMath::Poisson( i, mu ) * TMath::Gaus( xx, (double)i*Q1 + offset, sigma_n) );
 
    }
+
+   value = value + TMath::Erf(-(xx-xflex))*w*TMath::Exp(-alpha*xx);
+   //value = value + w*TMath::LogNormal( xx-xflex, alpha );
+   //value = value + par[5] + par[6]*xx + par[7]*xx*xx;// + par[8]*xx*xx*xx;
+   //value = value + TMath::Erf(-(xx-xflex))*(w*TMath::Exp(-alpha*xx) + w2*TMath::Exp(-alpha2*xx));
+   //value = value + w*TMath::Erf(-(xx-xflex))*TMath::Exp(-alpha*xx);
+   //value = value + (w*TMath::Exp(-alpha*xx)+w2*TMath::Exp(-alpha2*xx))*TMath::Erf(-(xx-xflex));
 
    return value;
 
@@ -80,27 +92,30 @@ int main() {
   f0->SetParameter(1, h1->GetXaxis()->GetBinCenter(h1->GetMaximumBin()));
   h1->Fit(f0, "0R");
 
-  TF1* f1 = new TF1( "func", fPhotoEle, 0.4, 1.5, 8 );
-  //f1->SetParameter( 0, 500000 ); //normalization
+  TF1* f1 = new TF1( "func", fPhotoEle, 0.45, 3., 8 );
+  f1->SetParameter( 0, f0->GetParameter(0) ); //normalization
   f1->SetParameter( 1, 1. ); //poiss mu
   f1->SetParameter( 2, f0->GetParameter(1) ); //gauss step
   f1->SetParameter( 3, f0->GetParameter(2) ); //gauss sigma
   f1->SetParameter( 4, 0. ); //offset
-  //f1->SetParameter( 5, 3. ); //sigmaoffset
-  //f1->SetParameter( 6, 0.03 ); //alpha
-  //f1->SetParameter( 7, 0.4 ); //w
+  f1->SetParameter( 5, 1. ); //xflex
+  f1->SetParameter( 6, 500. ); //w
+  f1->SetParameter( 7, 1. ); //alpha
+  //f1->SetParameter( 8, 50. ); //w2
+  //f1->SetParameter( 9, 2. ); //alpha2
 
-  f1->FixParameter( 5, 0. ); //sigmaoffset
-  f1->FixParameter( 6, 0. ); //alpha
-  f1->FixParameter( 7, 0. ); //w
+  //f1->FixParameter( 5, 0. ); //sigmaoffset
+  //f1->FixParameter( 6, 0. ); //alpha
+  //f1->FixParameter( 7, 0. ); //w
 
-//f1->SetParLimits( 1, 0.5, 2.5 ); //poiss mu
-//f1->SetParLimits( 2, 10., 40. ); //gauss step
-//f1->SetParLimits( 3, 3., 12. ); //gauss sigma
+  f1->SetParLimits( 5, 0., 3.); //xflex
+  f1->SetParLimits( 7, 0.3, 2. );
 
   f1->SetLineColor(46); 
   h1->Fit( f1, "R" );
 
+//TF1* bg = new TF1( "bg", "[0]*exp(-[1]*x)", 3., 5.2 );
+//h1->Fit( bg, "R");
 
 //float ele = f1->GetParameter(1);
 
