@@ -17,7 +17,7 @@ std::string outdir = "plots/FieldEmissCNT";
 std::string varName = "vcharge";
 
 
-int NORDERS = 6;
+int NORDERS = 5;
 
 
 Double_t fPhotoEle(Double_t *x, Double_t *par)
@@ -38,9 +38,9 @@ Double_t fPhotoEle(Double_t *x, Double_t *par)
    float xx = x[0];
    double value = 0.;
 
-  float sigmaoffset = 0.;
+   float sigmaoffset = 0.;
 
-   for( unsigned i=1; i<NORDERS; ++i ) {
+   for( unsigned i=1; i<=NORDERS; ++i ) {
 
      double sigma_n = sqrt( (double)(i)*sigma*sigma + sigmaoffset*sigmaoffset);
      value = value + N*(TMath::Poisson( i, mu ) * TMath::Gaus( xx, (double)i*Q1 + offset, sigma_n) );
@@ -140,6 +140,7 @@ int main() {
   c1->cd();
   gPad->RedrawAxis();
   c1->SaveAs( Form("%s/multiele.pdf", outdir.c_str()) );
+  c1->SaveAs( Form("%s/multiele.eps", outdir.c_str()) );
 
   return 0;
 
