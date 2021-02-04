@@ -14,7 +14,7 @@
 
 std::string outdir = "plots/FieldEmissCNT";
 
-std::string varName = "vamp";
+std::string varName = "vcharge";
 
 
 int main() {
@@ -49,7 +49,7 @@ int main() {
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin_plot, xMax_plot, 10, 0., 0.1 );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin_plot, xMax_plot, 10, 0., 0.08 );
   h2_axes->SetXTitle( "Energy [keV]" );
   h2_axes->SetYTitle( "Normalized to Unity" );
   h2_axes->Draw();
