@@ -13,12 +13,22 @@ float SDD::volt2keV( int G, const std::string& var ) {
     if     ( G == 10  ) k = 60.3202;
     else if( G == 30  ) k = 19.7706;
     else if( G == 100 ) k = 6.39378;
+    else if( G == 300 ) k = 2.13; // this one is just the G=100 one divided by 3 (didn't take Fe55 data here)
+    else {
+      std::cout << "[SDD::calibration] Unknown gain: " << G << std::endl;
+      exit(1);
+    }
 
   } else if( var=="vcharge" ) {
 
     if     ( G == 10  ) k = 0.00431204;
     else if( G == 30  ) k = 0.00136046;
     else if( G == 100 ) k = 0.000433016;
+    else if( G == 300 ) k = 0.00010854; // this one is just the G=100 one divided by 3 (didn't take Fe55 data here)
+    else {
+      std::cout << "[SDD::calibration] Unknown gain: " << G << std::endl;
+      exit(1);
+    }
 
   } else {
 
@@ -58,3 +68,9 @@ TH1D* SDD::fillFromTree( TTree* tree, const std::string& histoName, const std::s
 }
 
 
+
+float SDD::d( float L, float h ) {
+
+  return (52.-L-h);
+
+}

@@ -16,6 +16,8 @@ class SDD {
 
   static TH1D* fillFromTree( TTree* tree, const std::string& histoName, const std::string& varName="vamp", int G=100, int nBins=200, float xMin=0., float xMax=4.5, float rescale=1. );
 
+  static float d( float L, float h);
+
  private:
 
 };
