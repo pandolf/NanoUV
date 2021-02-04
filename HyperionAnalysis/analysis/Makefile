@@ -54,6 +54,9 @@ drawTriggerThresholdSDD: drawTriggerThresholdSDD.cpp NanoUVCommon.o HyperionData
 drawMultiElectronsSDD: drawMultiElectronsSDD.cpp NanoUVCommon.o HyperionData.o SDD.o
 	$(CC) -Wall $(INCLUDES) -o drawMultiElectronsSDD drawMultiElectronsSDD.cpp NanoUVCommon.o HyperionData.o SDD.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawEnergyVsL: drawEnergyVsL.cpp NanoUVCommon.o HyperionData.o SDD.o
+	$(CC) -Wall $(INCLUDES) -o drawEnergyVsL drawEnergyVsL.cpp NanoUVCommon.o HyperionData.o SDD.o $(ROOTFLAG) $(EXTRALIBS)
+
 drawLEDvsFrequency: drawLEDvsFrequency.cpp NanoUVCommon.o HyperionData.o SDD.o
 	$(CC) -Wall $(INCLUDES) -o drawLEDvsFrequency drawLEDvsFrequency.cpp NanoUVCommon.o HyperionData.o SDD.o $(ROOTFLAG) $(EXTRALIBS)
 
