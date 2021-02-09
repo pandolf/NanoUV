@@ -14,7 +14,7 @@
 
 std::string outdir = "plots/FieldEmissCNT";
 
-std::string varName = "vamp";
+std::string varName = "vcharge";
 
 
 
@@ -44,7 +44,7 @@ int main() {
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
-  float xMax_keV = 2.;
+  float xMax_keV = 4.;
 
   TH2D* h2_axes = new TH2D( "axes", "", 10, 0., xMax_keV, 10, 0., 0.2 );
   h2_axes->SetXTitle( "Energy [keV]" );
@@ -55,7 +55,7 @@ int main() {
   TCanvas* c1_response = new TCanvas( "c1_response", "", 600, 600 );
   c1_response->cd();
 
-  float xMax_response = 0.8;
+  float xMax_response = 1.2;
 
   TH2D* h2_axes_response = new TH2D( "axes_response", "", 10, 0., xMax_response, 10, 0., 0.1 );
   h2_axes_response->SetXTitle( "Energy / #DeltaV" );
@@ -96,7 +96,7 @@ int main() {
     h1->SetLineColor(colors[i]);
     h1->DrawNormalized("same");
 
-    TF1* f1 = new TF1( Form("f1_%d", iHV), "gaus", 0.4, 0.8 );
+    TF1* f1 = new TF1( Form("f1_%d", iHV), "gaus", 0.8, 1.5 );
     f1->SetParameter(1, h1->GetXaxis()->GetBinCenter(h1->GetMaximumBin()));
     h1->Fit(f1, "0R");
     gr_peak_vs_HV->SetPoint     ( i, iHV, f1->GetParameter(1) );
@@ -118,11 +118,13 @@ int main() {
   legend->Draw("same");
   gPad->RedrawAxis();
   c1->SaveAs( Form("%s/%s_vsHV.pdf", outdir.c_str(), varName.c_str()) );
+  c1->SaveAs( Form("%s/%s_vsHV.eps", outdir.c_str(), varName.c_str()) );
 
   c1_response->cd();
   legend->Draw("same");
   gPad->RedrawAxis();
   c1_response->SaveAs( Form("%s/%s_vsHV_response.pdf", outdir.c_str(), varName.c_str()) );
+  c1_response->SaveAs( Form("%s/%s_vsHV_response.eps", outdir.c_str(), varName.c_str()) );
 
 
   TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
@@ -131,7 +133,7 @@ int main() {
   float xMin_gr = 1701.;
   float xMax_gr = 1999.;
 
-  TH2D* h2_axes_3 = new TH2D("axes3", "", 10, xMin_gr, xMax_gr, 10, 0.3, 0.8);
+  TH2D* h2_axes_3 = new TH2D("axes3", "", 10, xMin_gr, xMax_gr, 10, 0.0, 1.6);
   h2_axes_3->SetXTitle( "-#DeltaV(CNT-SDD) [V]" );
   h2_axes_3->SetYTitle( "E_{peak} [keV]" );
   h2_axes_3->Draw();
@@ -148,7 +150,7 @@ int main() {
   label_fit->AddText( "f(x) = m*x + q" );
   label_fit->AddText( Form("m = %.2f#pm%.2f [keV/kV]", line->GetParameter(1)*1000., line->GetParError(1)*1000. ));
   label_fit->AddText( Form("q = %.2f#pm%.2f keV", line->GetParameter(0), line->GetParError(0) ));
-  label_fit->AddText( Form("#chi^2 / NDF = %.2f / %d", line->GetChisquare(), line->GetNumberFreeParameters()) );
+  label_fit->AddText( Form("#chi^{2} / NDF = %.2f / %d", line->GetChisquare(), line->GetNumberFreeParameters()) );
   label_fit->Draw("same");
   
 
@@ -159,7 +161,8 @@ int main() {
 
   gPad->RedrawAxis();
 
-  c2->SaveAs( Form("%s/Epeak_vsHV.pdf", outdir.c_str()) );
+  c2->SaveAs( Form("%s/%speak_vsHV.pdf", outdir.c_str(), varName.c_str()) );
+  c2->SaveAs( Form("%s/%speak_vsHV.eps", outdir.c_str(), varName.c_str()) );
 
 
   delete c1;
