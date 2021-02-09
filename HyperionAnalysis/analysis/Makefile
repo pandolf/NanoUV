@@ -57,6 +57,9 @@ drawMultiElectronsSDD: drawMultiElectronsSDD.cpp NanoUVCommon.o HyperionData.o S
 drawEnergyVsL: drawEnergyVsL.cpp NanoUVCommon.o HyperionData.o SDD.o
 	$(CC) -Wall $(INCLUDES) -o drawEnergyVsL drawEnergyVsL.cpp NanoUVCommon.o HyperionData.o SDD.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawCompare: drawCompare.cpp NanoUVCommon.o HyperionData.o SDD.o
+	$(CC) -Wall $(INCLUDES) -o drawCompare drawCompare.cpp NanoUVCommon.o HyperionData.o SDD.o $(ROOTFLAG) $(EXTRALIBS)
+
 drawLEDvsFrequency: drawLEDvsFrequency.cpp NanoUVCommon.o HyperionData.o SDD.o
 	$(CC) -Wall $(INCLUDES) -o drawLEDvsFrequency drawLEDvsFrequency.cpp NanoUVCommon.o HyperionData.o SDD.o $(ROOTFLAG) $(EXTRALIBS)
 
