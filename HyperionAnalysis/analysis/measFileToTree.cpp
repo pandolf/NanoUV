@@ -13,12 +13,16 @@ bool isNumber(const std::string& s);
 
 int main( int argc, char* argv[] ) {
 
-  if( argc != 2 ) {
+  if( argc < 2 ) {
 
-    std::cout << "USAGE: ./measToTree [filename]" << std::endl;
+    std::cout << "USAGE: ./measToTree [filename] [channel=0]" << std::endl;
     exit(1);
 
   }
+
+  int channel = 0;
+  if( argc > 2 ) 
+    channel = atoi(argv[2]);
 
   std::string fileName(argv[1]);
 
@@ -37,6 +41,8 @@ int main( int argc, char* argv[] ) {
   }
 
   std::cout << "-> Opened measurements-only data file: " << fileName << std::endl;
+
+  std::cout << "-> Will read channel N." << channel << std::endl;
 
   size_t pos = 0;
   std::string outfileName;
@@ -108,7 +114,8 @@ int main( int argc, char* argv[] ) {
 
         wasReadingEvent = true;
 
-        if( atoi(words_cleaned[0].c_str())!=16 ) continue;  /// !!!!!!! Hardwiring Channel 16 !!!!!!!!!!!!!!!!!
+        if( atoi(words_cleaned[0].c_str())!=channel ) continue;  
+        //if( atoi(words_cleaned[0].c_str())!=16 ) continue;  /// !!!!!!! Hardwiring Channel 16 !!!!!!!!!!!!!!!!!
 
         ch      = atoi(words_cleaned[0].c_str());
         //ev      = atoi(words_cleaned[1].c_str());
