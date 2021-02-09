@@ -14,6 +14,9 @@
 
 std::string outdir = "plots/FieldEmissCNT";
 
+std::string varName = "vcharge";
+
+
 void drawTrigThresh( const std::string& outdir, float hv, const std::vector<float> triggers );
 
 
@@ -55,12 +58,12 @@ void drawTrigThresh( const std::string& outdir, float hv, const std::vector<floa
   legend->SetFillColor(0);
 
   float xMin_plot = 0.;
-  float xMax_plot = 1.5;
+  float xMax_plot = 3.;
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin_plot, xMax_plot, 10, 0., 0.2 );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin_plot, xMax_plot, 10, 0., 0.1 );
   h2_axes->SetXTitle( "Energy [keV]" );
   h2_axes->SetYTitle( "Normalized to Unity" );
   h2_axes->Draw();
@@ -85,7 +88,7 @@ void drawTrigThresh( const std::string& outdir, float hv, const std::vector<floa
     TFile* file = TFile::Open( Form("data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt%.0f_L32_h17_trig%s_pressureOFF_Measurements_Only_2_2_2021.root", hv, trig_str.c_str()) );
     TTree* tree = (TTree*)file->Get("tree");
 
-    TH1D* h1 = SDD::fillFromTree( tree, Form("h%d", i), "vamp", 300 );
+    TH1D* h1 = SDD::fillFromTree( tree, Form("h%d", i), varName.c_str(), 300 );
 
     h1->SetLineColor(colors[i]);
     h1->SetLineWidth(3);
@@ -112,17 +115,17 @@ void drawTrigThresh( const std::string& outdir, float hv, const std::vector<floa
   legend->Draw("same");
   label->Draw("same");
   gPad->RedrawAxis();
-  c1->SaveAs( Form("%s/trigger_hv%.0f.pdf", outdir.c_str(), hv) );
+  c1->SaveAs( Form("%s/trigger_%s_hv%.0f.pdf", outdir.c_str(), varName.c_str(), hv) );
 
   c1_log->cd();
   legend->Draw("same");
   label->Draw("same");
   gPad->RedrawAxis();
-  c1_log->SaveAs( Form("%s/trigger_hv%.0f_log.pdf", outdir.c_str(), hv) );
+  c1_log->SaveAs( Form("%s/trigger_%s_hv%.0f_log.pdf", outdir.c_str(), varName.c_str(), hv) );
 
-  
 
   delete c1;
+  delete c1_log;
 
 }
 
