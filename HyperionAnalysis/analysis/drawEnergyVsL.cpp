@@ -29,9 +29,13 @@ int main() {
   L.push_back(30);
 
   std::map< int, std::string > files;
-  files[32] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_2_2021.root";
-  files[31] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L31_h17_trig0p6_pressureOFF_Measurements_Only_4_2_2021.root";
-  files[30] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L30_h17_trig0p6_pressureOFF_Measurements_Only_4_2_2021.root";
+//files[32] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_2_2021.root";
+//files[31] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L31_h17_trig0p6_pressureOFF_Measurements_Only_4_2_2021.root";
+//files[30] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L30_h17_trig0p6_pressureOFF_Measurements_Only_4_2_2021.root";
+  
+  files[32] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_9_2021.root";
+  files[31] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L31_h17_trig0p6_pressureOFF_Measurements_Only_2_9_2021.root";
+  files[30] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L30_h17_trig0p6_pressureOFF_Measurements_Only_2_9_2021.root";
   
   std::vector<int> colors;
   colors.push_back(46);
@@ -58,7 +62,7 @@ int main() {
   c1_log->cd();
   c1_log->SetLogy();
 
-  TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, xMin_plot, xMax_plot, 10, 0.00001, 0.8 );
+  TH2D* h2_axes_log = new TH2D( "axes_log", "", 10, xMin_plot, xMax_plot, 10, 0.00003, 0.099 );
   h2_axes_log->SetXTitle( "Energy [keV]" );
   h2_axes_log->SetYTitle( "Normalized to Unity" );
   h2_axes_log->Draw();
