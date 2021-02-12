@@ -33,9 +33,9 @@ int main() {
 //files[31] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L31_h17_trig0p6_pressureOFF_Measurements_Only_4_2_2021.root";
 //files[30] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L30_h17_trig0p6_pressureOFF_Measurements_Only_4_2_2021.root";
   
-  files[32] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_9_2021.root";
-  files[31] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L31_h17_trig0p6_pressureOFF_Measurements_Only_2_9_2021.root";
-  files[30] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L30_h17_trig0p6_pressureOFF_Measurements_Only_2_9_2021.root";
+  files[32] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_Measurements_Only_9_2_2021.root";
+  files[31] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L31_h17_trig0p6_pressureOFF_Measurements_Only_9_2_2021.root";
+  files[30] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L30_h17_trig0p6_pressureOFF_Measurements_Only_9_2_2021.root";
   
   std::vector<int> colors;
   colors.push_back(46);
