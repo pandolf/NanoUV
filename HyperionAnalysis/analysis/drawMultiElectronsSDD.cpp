@@ -74,7 +74,10 @@ int main() {
 
   float xMax_keV = 5.5;
 
+  // d = 3mm:
   TFile* file = TFile::Open( "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_500k_Measurements_Only_2_2_2021.root" ); 
+  //// d = 4mm:
+  //TFile* file = TFile::Open( "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L31_h17_trig0p6_pressureOFF_500k_Measurements_Only_4_2_2021.root" );
   TTree* tree = (TTree*)file->Get("tree");
   TH1D* h1 = SDD::fillFromTree( tree, "h1", varName, 300, 100, 0., xMax_keV );
 
@@ -98,7 +101,32 @@ int main() {
   f0->SetParameter(1, h1->GetXaxis()->GetBinCenter(h1->GetMaximumBin()));
   h1->Fit(f0, "0R");
 
-  TF1* f1 = new TF1( "func", fPhotoEle, 0.45, 4., 10 );
+  TF1* f1 = new TF1( "func", fPhotoEle, 0.45, 3., 10 );
+
+//// d = 4 mm
+//f1->SetParameter( 0, f0->GetParameter(0) ); //normalization
+//f1->SetParameter( 1, 1. ); //poiss mu
+//f1->SetParameter( 2, f0->GetParameter(1) ); //gauss step
+//f1->SetParameter( 3, f0->GetParameter(2) ); //gauss sigma
+//f1->SetParameter( 4, 0. ); //offset
+//f1->SetParameter( 5, 1. ); //xflex
+//f1->SetParameter( 6, 500. ); //w
+//f1->SetParameter( 7, 1. ); //alpha
+////f1->SetParameter( 8, 50. ); //w2
+////f1->SetParameter( 9, 2. ); //alpha2
+
+////f1->FixParameter( 5, 0. ); //sigmaoffset
+////f1->FixParameter( 6, 0. ); //alpha
+////f1->FixParameter( 7, 0. ); //w
+//f1->FixParameter( 8, 0. ); //w2
+//f1->FixParameter( 9, 0. ); //alpha2
+
+//f1->SetParLimits( 5, 0., 3.); //xflex
+//f1->SetParLimits( 7, 0.3, 4. );
+
+
+
+  // d = 3 mm
   f1->SetParameter( 0, f0->GetParameter(0) ); //normalization
   f1->SetParameter( 1, 1. ); //poiss mu
   f1->SetParameter( 2, f0->GetParameter(1) ); //gauss step
@@ -117,8 +145,11 @@ int main() {
   f1->SetParLimits( 5, 0., 3.); //xflex
   f1->SetParLimits( 7, 0.3, 2. );
 
+
+
   f1->SetLineColor(46); 
   h1->Fit( f1, "R" );
+
 
 //TF1* bg = new TF1( "bg", "[0]*exp(-[1]*x)", 3., 5.2 );
 //h1->Fit( bg, "R");
