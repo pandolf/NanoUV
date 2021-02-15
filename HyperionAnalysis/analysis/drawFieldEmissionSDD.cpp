@@ -12,25 +12,54 @@
 
 
 
-std::string outdir = "plots/FieldEmissCNT";
 
 std::string varName = "vcharge";
 
 
 
-int main() {
+int main( int argc, char* argv[] ) {
+
+
+  std::string sample = "CNTPlasmaEtched";
+  if( argc>1 )
+    sample = std::string(argv[1]);
+
+
+  std::cout << "-> Sample: " << sample << std::endl;
+
 
   NanoUVCommon::setStyle();
 
-  system( Form("mkdir -p %s", outdir.c_str()) );
-
 
   std::map< int, std::string > files;
-  files[1750] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1750_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_2_2021.root";
-  files[1800] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_2_2021.root";
-  files[1850] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1850_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_2_2021.root";
-  files[1900] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1900_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_2_2021.root";
+
+  if( sample=="CNT50um_fusedITO_B" ) {
+
+    files[1750] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1750_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_2_2021.root";
+    files[1800] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_2_2021.root";
+    files[1850] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1850_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_2_2021.root";
+    files[1900] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1900_L32_h17_trig0p6_pressureOFF_Measurements_Only_2_2_2021.root";
   
+  } else if( sample=="CNTPlasmaEtched" ) {
+
+    files[1000] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1000_L29_h17_trig0p6_pressureOFF_Measurements_Only_12_2_2021.root";
+    files[1100] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1100_L28p5_h17_trig0p6_pressureOFF_Measurements_Only_12_2_2021.root";
+    files[1200] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1200_L28p4_h17_trig0p6_pressureOFF_Measurements_Only_12_2_2021.root";
+    files[1400] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1400_L26p5_h17_trig0p6_pressureOFF_Measurements_Only_12_2_2021.root";
+    files[1600] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1600_L25_h17_trig0p6_pressureOFF_Measurements_Only_12_2_2021.root";
+    files[1800] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1800_L23_h17_trig0p6_pressureOFF_Measurements_Only_12_2_2021.root";
+    files[2000] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt2000_L20_h17_trig0p6_pressureOFF_Measurements_Only_12_2_2021.root";
+
+  } else if( sample=="CNTPlasmaEtched2" ) {
+
+    files[1600] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1600_L25_h17_trig0p6_pressureOFF_2_Measurements_Only_2_12_2021.root";
+    files[1700] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1700_L25_h17_trig0p6_pressureOFF_Measurements_Only_2_12_2021.root";
+    files[1800] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1800_L25_h17_trig0p6_pressureOFF_Measurements_Only_2_12_2021.root";
+    files[1900] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1900_L25_h17_trig0p6_pressureOFF_Measurements_Only_2_12_2021.root";
+    files[2000] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt2000_L25_h17_trig0p6_pressureOFF_Measurements_Only_2_12_2021.root";
+
+  }
+  // old stuff:
   //files[1800] = "data/HyperionSDD/Run_SDD_G100_HVcnt1800_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
   //files[1650] = "data/HyperionSDD/Run_SDD_G100_HVcnt1650_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
   //files[1700] = "data/HyperionSDD/Run_SDD_G100_HVcnt1700_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
@@ -41,12 +70,16 @@ int main() {
   //files[2000] = "data/HyperionSDD/Run_SDD_G100_HVcnt2000_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
   
 
+  std::string outdir(Form("plots/FieldEmissCNT/%s", sample.c_str()));
+  system( Form("mkdir -p %s", outdir.c_str()) );
+
+
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
   float xMax_keV = 4.;
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, 0., xMax_keV, 10, 0., 0.2 );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, 0., xMax_keV, 10, 0., 0.11 );
   h2_axes->SetXTitle( "Energy [keV]" );
   h2_axes->SetYTitle( "Normalized to Unity" );
   h2_axes->Draw();
@@ -81,10 +114,14 @@ int main() {
   TGraphErrors* gr_peak_vs_HV = new TGraphErrors(0);
 
   int i=0;
+  float xMin_gr = 1701.;
+  float xMax_gr = 1999.;
 
-  for( unsigned iHV=1750; iHV<=1900; iHV+=50 ) {
+  for( std::map< int, std::string >::const_iterator ifile=files.begin(); ifile!=files.end(); ++ifile ) {
 
-    std::string fileName = files[iHV];
+    int iHV = ifile->first;
+    std::string fileName = ifile->second;
+
     TFile* file = TFile::Open(fileName.c_str());
     TTree* tree = (TTree*)file->Get("tree");
 
@@ -107,12 +144,17 @@ int main() {
     h1_response->SetLineColor(colors[i]);
     h1_response->DrawNormalized("same");
 
-
     legend->AddEntry( h1, Form("%d V", iHV), "L" );
+
+    if( iHV < xMin_gr ) xMin_gr = iHV;
+    if( iHV > xMax_gr ) xMax_gr = iHV;
 
     i++;
 
   }
+
+  xMin_gr -= 50.;
+  xMax_gr += 50.;
 
   c1->cd();
   legend->Draw("same");
@@ -130,8 +172,6 @@ int main() {
   TCanvas* c2 = new TCanvas( "c2", "", 600, 600 );
   c2->cd();
 
-  float xMin_gr = 1701.;
-  float xMax_gr = 1999.;
 
   TH2D* h2_axes_3 = new TH2D("axes3", "", 10, xMin_gr, xMax_gr, 10, 0.0, 1.6);
   h2_axes_3->SetXTitle( "-#DeltaV(CNT-SDD) [V]" );
