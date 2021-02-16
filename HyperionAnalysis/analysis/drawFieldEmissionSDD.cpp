@@ -71,7 +71,7 @@ int main( int argc, char* argv[] ) {
   
 
   std::string outdir(Form("plots/FieldEmissCNT/%s", sample.c_str()));
-  system( Form("mkdir -p %s", outdir.c_str()) );
+  system( Form("mkdir -p %s/fits", outdir.c_str()) );
 
 
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
@@ -114,8 +114,8 @@ int main( int argc, char* argv[] ) {
   TGraphErrors* gr_peak_vs_HV = new TGraphErrors(0);
 
   int i=0;
-  float xMin_gr = 1701.;
-  float xMax_gr = 1999.;
+  float xMin_gr = 1500.;
+  float xMax_gr = 2050.;
 
   for( std::map< int, std::string >::const_iterator ifile=files.begin(); ifile!=files.end(); ++ifile ) {
 
@@ -125,24 +125,37 @@ int main( int argc, char* argv[] ) {
     TFile* file = TFile::Open(fileName.c_str());
     TTree* tree = (TTree*)file->Get("tree");
 
-    TH1D* h1          = SDD::fillFromTree( tree, Form("h1_%d"         , iHV), varName, 300, 100, 0., xMax_keV );
-    TH1D* h1_response = SDD::fillFromTree( tree, Form("h1_response_%d", iHV), varName, 300, 100, 0., xMax_response, 1000./((float)iHV) );
+    int nBinsHisto = 100;
+    float xMinHisto = 0.0001;
+    TH1D* h1          = SDD::fillFromTree( tree, Form("h1_%d"         , iHV), varName, 300, nBinsHisto, xMinHisto, xMax_keV );
+    TH1D* h1_response = SDD::fillFromTree( tree, Form("h1_response_%d", iHV), varName, 300, nBinsHisto, xMinHisto, xMax_response, 1000./((float)iHV) );
+
+
+    float hMode = h1->GetXaxis()->GetBinCenter(h1->GetMaximumBin());
+    float hRMS = h1->GetRMS();
+    TF1* f1 = new TF1( Form("f1_%d", iHV), "gaus", hMode-0.5*hRMS, hMode+0.5*hRMS );
+    f1->SetParameter(1, hMode );
+    h1->Fit(f1, "R0");
+    gr_peak_vs_HV->SetPoint     ( i, iHV, f1->GetParameter(1) );
+    gr_peak_vs_HV->SetPointError( i, 2. , f1->GetParError (1) );
 
     c1->cd();
     h1->SetLineWidth(3);
     h1->SetLineColor(colors[i]);
     h1->DrawNormalized("same");
 
-    TF1* f1 = new TF1( Form("f1_%d", iHV), "gaus", 0.8, 1.5 );
-    f1->SetParameter(1, h1->GetXaxis()->GetBinCenter(h1->GetMaximumBin()));
-    h1->Fit(f1, "0R");
-    gr_peak_vs_HV->SetPoint     ( i, iHV, f1->GetParameter(1) );
-    gr_peak_vs_HV->SetPointError( i, 2. , f1->GetParError (1) );
-
     c1_response->cd();
-    h1_response->SetLineWidth(4);
+    h1_response->SetLineWidth(3);
     h1_response->SetLineColor(colors[i]);
     h1_response->DrawNormalized("same");
+
+    TCanvas* c1_fit = new TCanvas( "c1_fit", "", 600, 600 );
+    c1_fit->cd();
+    h1->Draw();
+    f1->Draw("same");
+    c1_fit->SaveAs( Form("%s/fits/fit_%dV.pdf", outdir.c_str(), iHV) );
+    delete c1_fit;
+    
 
     legend->AddEntry( h1, Form("%d V", iHV), "L" );
 
@@ -173,7 +186,7 @@ int main( int argc, char* argv[] ) {
   c2->cd();
 
 
-  TH2D* h2_axes_3 = new TH2D("axes3", "", 10, xMin_gr, xMax_gr, 10, 0.0, 1.6);
+  TH2D* h2_axes_3 = new TH2D("axes3", "", 10, xMin_gr, xMax_gr, 10, 0.0, 1.4);
   h2_axes_3->SetXTitle( "-#DeltaV(CNT-SDD) [V]" );
   h2_axes_3->SetYTitle( "E_{peak} [keV]" );
   h2_axes_3->Draw();
@@ -188,8 +201,8 @@ int main( int argc, char* argv[] ) {
   label_fit->SetTextColor(46);
   label_fit->SetFillColor(0);
   label_fit->AddText( "f(x) = m*x + q" );
-  label_fit->AddText( Form("m = %.2f#pm%.2f [keV/kV]", line->GetParameter(1)*1000., line->GetParError(1)*1000. ));
-  label_fit->AddText( Form("q = %.2f#pm%.2f keV", line->GetParameter(0), line->GetParError(0) ));
+  label_fit->AddText( Form("m = %.2f #pm %.2f [keV/kV]", line->GetParameter(1)*1000., line->GetParError(1)*1000. ));
+  label_fit->AddText( Form("q = %.2f #pm %.2f keV", line->GetParameter(0), line->GetParError(0) ));
   label_fit->AddText( Form("#chi^{2} / NDF = %.2f / %d", line->GetChisquare(), line->GetNumberFreeParameters()) );
   label_fit->Draw("same");
   
