@@ -28,8 +28,11 @@ int main() {
   //files["WC 8ch" ] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_WaveCatcher8ch_2_Measurements_Only_9_2_2021.root";
   //files["WC 64ch"] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_WaveCatcher24ch_Measurements_Only_9_2_2021.root";
 
-  files["Old 500k" ] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_500k_Measurements_Only_2_2_2021.root";
-  files["New"]       = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_Measurements_Only_9_2_2021.root";
+  //files["Old 500k" ] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_500k_Measurements_Only_2_2_2021.root";
+  //files["New"]       = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_Measurements_Only_9_2_2021.root";
+  
+  files["Old"] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_Measurements_Only_9_2_2021.root";
+  files["New"] = "data/HyperionSDD/CNT50um_fusedITO_B/Run_SDD_G300_HVcnt1800_L32_h17_trig0p6_pressureOFF_WaveCatcher64ch_Measurements_Only_9_2_2021.root";
   
   std::vector<int> colors;
   colors.push_back(46);
@@ -47,7 +50,7 @@ int main() {
   TCanvas* c1 = new TCanvas( "c1", "", 600, 600 );
   c1->cd();
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin_plot, xMax_plot, 10, 0., 0.08 );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin_plot, xMax_plot, 10, 0., 0.06 );
   h2_axes->SetXTitle( "Energy [keV]" );
   h2_axes->SetYTitle( "Normalized to Unity" );
   h2_axes->Draw();
