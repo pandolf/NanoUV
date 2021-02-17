@@ -17,6 +17,9 @@ std::string varName = "vcharge";
 
 
 
+TGraphErrors* drawFEE( const std::string& sample );
+
+
 int main( int argc, char* argv[] ) {
 
 
@@ -30,6 +33,55 @@ int main( int argc, char* argv[] ) {
 
   NanoUVCommon::setStyle();
 
+  std::vector<int> colors = NanoUVCommon::colors();
+  
+  TCanvas* c_tot = new TCanvas( "c_tot", "", 600, 600 );
+  c_tot->cd();
+
+
+  TH2D* h2_axes = new TH2D( "axes_tot", "", 10, 900, 2000, 10, 0., 2. );
+  h2_axes->SetXTitle( "-#DeltaV(CNT-SDD) [V]" );
+  h2_axes->SetYTitle( "E_{peak} [keV]" );
+  h2_axes->Draw();
+
+  TLegend* legend_tot = new TLegend( 0.2, 0.55, 0.55, 0.9 );
+  legend_tot->SetFillColor(0);
+  legend_tot->SetTextSize(0.035);
+
+
+  if( sample=="CNTPlasmaEtched_scanL" ) {
+
+    for( unsigned i=26; i<31; i++ ) {
+
+      TGraphErrors* graph = drawFEE( Form( "CNTPlasmaEtched_L%d", i ) );
+      graph->SetMarkerColor(colors[i-26]);
+      graph->SetLineColor  (colors[i-26]);
+      graph->SetMarkerSize(20);
+      graph->SetMarkerSize(1.5);
+      c_tot->cd();
+      graph->Draw("Psame");
+      legend_tot->AddEntry( graph, Form("d = %.0f mm", SDD::d(i, 17.)), "P" );
+
+    } // for
+
+  } else {
+
+    drawFEE( sample );
+
+  }
+
+  c_tot->cd();
+  legend_tot->Draw("same");
+  gPad->RedrawAxis();
+  c_tot->SaveAs( "plots/FieldEmissCNT/CNTPlasmaEtched_scanL.pdf" );
+
+  return 0;
+
+}
+
+
+
+TGraphErrors* drawFEE( const std::string& sample ) {
 
   std::map< int, std::string > files;
 
@@ -58,7 +110,52 @@ int main( int argc, char* argv[] ) {
     files[1900] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1900_L25_h17_trig0p6_pressureOFF_Measurements_Only_2_12_2021.root";
     files[2000] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt2000_L25_h17_trig0p6_pressureOFF_Measurements_Only_2_12_2021.root";
 
+  } else if( sample=="CNTPlasmaEtched_L30" ) {
+
+    files[1000] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1000_L30_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1050] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1050_L30_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1100] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1100_L30_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+
+  } else if( sample=="CNTPlasmaEtched_L29" ) {
+
+    files[1100] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1100_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1150] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1150_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1200] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1200_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1250] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1250_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1300] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1300_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1350] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1350_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1400] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1400_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1450] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1450_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+
+  } else if( sample=="CNTPlasmaEtched_L28" ) {
+
+    files[1350] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1350_L28_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1400] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1400_L28_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1450] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1450_L28_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1500] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1500_L28_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1550] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1550_L28_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1600] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1600_L28_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+
+  } else if( sample=="CNTPlasmaEtched_L27" ) {
+
+    files[1550] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1550_L27_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1600] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1600_L27_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1650] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1650_L27_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1700] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1700_L27_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1750] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1750_L27_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1800] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1800_L27_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+
+  } else if( sample=="CNTPlasmaEtched_L26" ) {
+
+    files[1700] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1700_L26_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1750] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1750_L26_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1800] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1800_L26_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1850] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1850_L26_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1900] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1900_L26_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    files[1950] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1950_L26_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+
   }
+
   // old stuff:
   //files[1800] = "data/HyperionSDD/Run_SDD_G100_HVcnt1800_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
   //files[1650] = "data/HyperionSDD/Run_SDD_G100_HVcnt1650_L32_trigINT_pressureOFF_Measurements_Only_12_4_2020.root";
@@ -194,7 +291,7 @@ int main( int argc, char* argv[] ) {
   TF1* line = new TF1( "line", "[0] + [1]*x", xMin_gr, xMax_gr );
   line->SetLineColor(46);
   line->SetLineWidth(2);
-  gr_peak_vs_HV->Fit( line, "XR" );
+  gr_peak_vs_HV->Fit( line, "XR0" );
 
   TPaveText* label_fit = new TPaveText( 0.55, 0.2, 0.9, 0.5, "brNDC" );
   label_fit->SetTextSize(0.035);
@@ -210,6 +307,7 @@ int main( int argc, char* argv[] ) {
   gr_peak_vs_HV->SetMarkerStyle(20);
   gr_peak_vs_HV->SetMarkerSize(1.6);
   gr_peak_vs_HV->SetMarkerColor(kGray+3);
+  line->Draw("same");
   gr_peak_vs_HV->Draw("psame");
 
   gPad->RedrawAxis();
@@ -225,5 +323,6 @@ int main( int argc, char* argv[] ) {
   delete c2;
   delete h2_axes_3;
 
+  return gr_peak_vs_HV;
 
 }
