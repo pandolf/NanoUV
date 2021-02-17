@@ -1,0 +1,59 @@
+=== DATA FILE SAVED WITH SOFTWARE VERSION: V2.9.8 ===
+=== WAVECATCHER SYSTEM OF TYPE 1 WITH 8 CHANNELS AND GAIN: 1.0 ===
+=== Rate coincidence masks (4 bits) for ch 0 to 7: 1 2 4 8 1 2 4 8 === Posttrig in ns for SamBlock 0 to 3: 1440 1440 1440 1440 ===
+=== Common: EventNumber UnixTime Date Time TDC ===
+=== Individual per channel: ChannelNb EventID MeasuredBaseline[Volts] Amplitude[Volts] Charge[pC] LeadingEdgeTime[ns] TrailingEdgeTime[ns] RateCounter[Hz]=== 
+=== Event 1 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9407032171 == Nb of channels = 1 ===
+0 1 -1.014202 0.437236 7323.586 485.300 1240.319       0.86
+=== Event 2 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9492185108 == Nb of channels = 1 ===
+0 2 -0.999947 0.422542 5270.654 567.867 1177.048       0.45
+=== Event 3 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9512116650 == Nb of channels = 1 ===
+0 3 -0.992102 2.243643 73596.094 906.649 2557.233       0.45
+=== Event 4 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9529390366 == Nb of channels = 1 ===
+0 4 -0.995995 0.456662 7033.219 628.795 1439.650       0.45
+=== Event 5 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9540692350 == Nb of channels = 1 ===
+0 5 -0.983461 0.398311 5065.719 578.242 1217.545       0.45
+=== Event 6 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9541616631 == Nb of channels = 1 ===
+0 6 -1.013037 0.473409 8721.085 553.756 1451.811       0.45
+=== Event 7 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9558258051 == Nb of channels = 1 ===
+0 7 -1.009967 0.474651 7539.392 632.176 1398.088       2.65
+=== Event 8 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9619344977 == Nb of channels = 1 ===
+0 8 -1.000172 0.553993 8785.981 696.289 1397.167       0.41
+=== Event 9 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9653946365 == Nb of channels = 1 ===
+0 9 -1.037701 0.467511 8820.766 543.862 1299.714       0.41
+=== Event 10 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9668980019 == Nb of channels = 1 ===
+0 10 -0.969030 0.507320 6207.737 708.109 1371.557       0.41
+=== Event 11 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9688488136 == Nb of channels = 1 ===
+0 11 -1.004073 0.425924 6660.320 520.467 1283.109       1.08
+=== Event 12 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9760764084 == Nb of channels = 1 ===
+0 12 -1.019633 0.444524 7897.514 545.318 1280.969       0.35
+=== Event 13 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9774010084 == Nb of channels = 1 ===
+0 13 -1.005842 0.426227 5947.296 536.862 1231.983       0.35
+=== Event 14 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9778193461 == Nb of channels = 1 ===
+0 14 -0.984046 0.442482 6155.795 610.636 1367.804       0.35
+=== Event 15 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9809111421 == Nb of channels = 1 ===
+0 15 -1.018508 0.521962 8503.177 667.085 1424.065       0.35
+=== Event 16 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9816294556 == Nb of channels = 1 ===
+0 16 -0.964176 0.377522 3807.758 545.328 1199.791       1.80
+=== Event 17 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9856776371 == Nb of channels = 1 ===
+0 17 -0.979606 0.443226 6561.082 595.890 1359.171       1.80
+=== Event 18 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9864610450 == Nb of channels = 1 ===
+0 18 -0.974508 0.422873 5136.557 623.712 1293.869       1.80
+=== Event 19 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9902295886 == Nb of channels = 1 ===
+0 19 -1.001228 0.558742 7710.287 716.678 1401.744       0.87
+=== Event 20 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9902499599 == Nb of channels = 1 ===
+0 20 -0.998986 0.512121 7746.694 663.221 1373.430       0.87
+=== Event 21 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9903018993 == Nb of channels = 1 ===
+0 21 -1.012262 0.472258 6470.734 615.084 1321.271       0.87
+=== Event 22 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9974714949 == Nb of channels = 1 ===
+0 22 -1.018974 0.498834 7646.781 639.439 1367.484       1.04
+=== Event 23 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9976998247 == Nb of channels = 1 ===
+0 23 -0.970843 0.477276 6259.498 682.493 1382.631       1.04
+=== Event 24 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9977610265 == Nb of channels = 1 ===
+0 24 -1.024792 0.928475 15652.674 840.286 1599.607       1.04
+=== Event 25 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9987445917 == Nb of channels = 1 ===
+0 25 -1.002987 0.441305 7336.730 596.612 1343.184       1.04
+=== Event 26 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9997747951 == Nb of channels = 1 ===
+0 26 -1.006078 0.509346 7830.597 670.208 1426.964       1.04
+=== Event 27 UnixTime =        0.000 date = 0.0.0 time = 0h.0m.0s.0ms == TDC = 9997747951 == Nb of channels = 1 ===
+0 26 -1.006078 0.509346 7830.597 670.208 1426.964       1.04
