@@ -22,7 +22,7 @@ std::vector<int> NanoUVCommon::colors() {
   colors.push_back( 46 );
   colors.push_back( 42 );
   //colors.push_back( kGray+1 );
-  colors.push_back( kBlack );
+  colors.push_back( kGray+3 );
   colors.push_back( kGreen );
 
   return colors;
