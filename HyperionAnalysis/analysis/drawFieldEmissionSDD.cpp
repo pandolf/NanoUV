@@ -118,7 +118,7 @@ TGraphErrors* drawFEE( const std::string& sample ) {
 
   } else if( sample=="CNTPlasmaEtched_L29" ) {
 
-    files[1100] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1100_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
+    //files[1100] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1100_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
     files[1150] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1150_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
     files[1200] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1200_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
     files[1250] = "data/HyperionSDD/CNTPlasmaEtched/Run_SDD_G300_HVcnt1250_L29_h17_trig0p6_pressureOFF_Measurements_Only_17_2_2021.root";
@@ -230,8 +230,11 @@ TGraphErrors* drawFEE( const std::string& sample ) {
 
     float hMode = h1->GetXaxis()->GetBinCenter(h1->GetMaximumBin());
     float hRMS = h1->GetRMS();
-    TF1* f1 = new TF1( Form("f1_%d", iHV), "gaus", hMode-0.5*hRMS, hMode+0.5*hRMS );
+    float RMSfrac = 0.8;
+    TF1* f1 = new TF1( Form("f1_%d", iHV), "gaus", hMode-RMSfrac*hRMS, hMode+RMSfrac*hRMS );
     f1->SetParameter(1, hMode );
+    h1->Fit(f1, "R0");
+    f1->SetRange( f1->GetParameter(1)-RMSfrac*f1->GetParameter(2), f1->GetParameter(1)+RMSfrac*f1->GetParameter(2) );
     h1->Fit(f1, "R0");
     gr_peak_vs_HV->SetPoint     ( i, iHV, f1->GetParameter(1) );
     gr_peak_vs_HV->SetPointError( i, 2. , f1->GetParError (1) );
