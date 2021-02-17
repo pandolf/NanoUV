@@ -39,23 +39,23 @@ int main( int argc, char* argv[] ) {
   c_tot->cd();
 
 
-  TH2D* h2_axes = new TH2D( "axes_tot", "", 10, 900, 2000, 10, 0., 2. );
+  TH2D* h2_axes = new TH2D( "axes_tot", "", 10, 900, 2000, 10, 0., 1.22 );
   h2_axes->SetXTitle( "-#DeltaV(CNT-SDD) [V]" );
   h2_axes->SetYTitle( "E_{peak} [keV]" );
   h2_axes->Draw();
 
-  TLegend* legend_tot = new TLegend( 0.2, 0.55, 0.55, 0.9 );
+  TLegend* legend_tot = new TLegend( 0.7, 0.2, 0.9, 0.5 );
   legend_tot->SetFillColor(0);
   legend_tot->SetTextSize(0.035);
 
 
   if( sample=="CNTPlasmaEtched_scanL" ) {
 
-    for( unsigned i=26; i<31; i++ ) {
+    for( unsigned i=30; i>25; i-- ) {
 
       TGraphErrors* graph = drawFEE( Form( "CNTPlasmaEtched_L%d", i ) );
-      graph->SetMarkerColor(colors[i-26]);
-      graph->SetLineColor  (colors[i-26]);
+      graph->SetMarkerColor(colors[30-i]);
+      graph->SetLineColor  (colors[30-i]);
       graph->SetMarkerSize(20);
       graph->SetMarkerSize(1.5);
       c_tot->cd();
