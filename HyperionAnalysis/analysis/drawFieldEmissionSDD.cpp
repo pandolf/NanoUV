@@ -38,29 +38,61 @@ int main( int argc, char* argv[] ) {
   TCanvas* c_tot = new TCanvas( "c_tot", "", 600, 600 );
   c_tot->cd();
 
-
   TH2D* h2_axes = new TH2D( "axes_tot", "", 10, 900, 2000, 10, 0., 1.22 );
   h2_axes->SetXTitle( "-#DeltaV(CNT-SDD) [V]" );
   h2_axes->SetYTitle( "E_{peak} [keV]" );
   h2_axes->Draw();
 
+  TCanvas* c_tot_response = new TCanvas( "c_tot_response", "", 600, 600 );
+  c_tot_response->cd();
+
+  TH2D* h2_axes_response = new TH2D( "axes_tot_response", "", 10, 0, 280, 10, 0., 1.22 );
+  h2_axes_response->SetXTitle( "E = #DeltaV / d [kV/mm]" );
+  h2_axes_response->SetYTitle( "R = K / #DeltaV [keV/kV]" );
+  h2_axes_response->Draw();
+
   TLegend* legend_tot = new TLegend( 0.7, 0.2, 0.9, 0.5 );
   legend_tot->SetFillColor(0);
   legend_tot->SetTextSize(0.035);
+
+  TLegend* legend_tot_response = new TLegend( 0.2, 0.2, 0.4, 0.5 );
+  legend_tot_response->SetFillColor(0);
+  legend_tot_response->SetTextSize(0.035);
 
 
   if( sample=="CNTPlasmaEtched_scanL" ) {
 
     for( unsigned i=30; i>25; i-- ) {
 
+      float d = SDD::d(i, 17.);
+
       TGraphErrors* graph = drawFEE( Form( "CNTPlasmaEtched_L%d", i ) );
       graph->SetMarkerColor(colors[30-i]);
       graph->SetLineColor  (colors[30-i]);
-      graph->SetMarkerSize(20);
+      graph->SetMarkerStyle(20);
       graph->SetMarkerSize(1.5);
       c_tot->cd();
       graph->Draw("Psame");
-      legend_tot->AddEntry( graph, Form("d = %.0f mm", SDD::d(i, 17.)), "P" );
+      legend_tot->AddEntry( graph, Form("d = %.0f mm", d), "P" );
+
+      TGraph* gr_response_vs_E = new TGraph(0);
+
+      for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+        double hv, K;
+        graph->GetPoint( iPoint, hv, K );
+        float response = K/hv*1000.;
+        float E = hv/d;
+        gr_response_vs_E->SetPoint( gr_response_vs_E->GetN(), E, response );
+      }
+
+      gr_response_vs_E->SetMarkerColor(colors[30-i]);
+      gr_response_vs_E->SetLineColor  (colors[30-i]);
+      gr_response_vs_E->SetMarkerStyle(20);
+      gr_response_vs_E->SetMarkerSize(1.5);
+      c_tot_response->cd();
+      gr_response_vs_E->Draw("Psame");
+      legend_tot_response->AddEntry( gr_response_vs_E, Form("d = %.0f mm", d), "P" );
+      
 
     } // for
 
@@ -74,6 +106,12 @@ int main( int argc, char* argv[] ) {
   legend_tot->Draw("same");
   gPad->RedrawAxis();
   c_tot->SaveAs( "plots/FieldEmissCNT/CNTPlasmaEtched_scanL.pdf" );
+
+  c_tot_response->cd();
+  legend_tot_response->Draw("same");
+  gPad->RedrawAxis();
+  c_tot_response->SaveAs( "plots/FieldEmissCNT/CNTPlasmaEtched_response_vs_E.pdf" );
+
 
   return 0;
 
