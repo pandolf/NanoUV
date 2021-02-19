@@ -51,6 +51,14 @@ int main( int argc, char* argv[] ) {
   h2_axes_response->SetYTitle( "R = K / #DeltaV [keV/kV]" );
   h2_axes_response->Draw();
 
+  TCanvas* c_tot_response2 = new TCanvas( "c_tot_response2", "", 600, 600 );
+  c_tot_response2->cd();
+
+  TH2D* h2_axes_response2 = new TH2D( "axes_tot_response2", "", 10, 0, 10, 10, 0., 1.22 );
+  h2_axes_response2->SetXTitle( "F ~ E / d^{2} [kV/mm^{3}]" );
+  h2_axes_response2->SetYTitle( "R = K / #DeltaV [keV/kV]" );
+  h2_axes_response2->Draw();
+
   TLegend* legend_tot = new TLegend( 0.7, 0.2, 0.9, 0.5 );
   legend_tot->SetFillColor(0);
   legend_tot->SetTextSize(0.035);
@@ -75,14 +83,16 @@ int main( int argc, char* argv[] ) {
       graph->Draw("Psame");
       legend_tot->AddEntry( graph, Form("d = %.0f mm", d), "P" );
 
-      TGraph* gr_response_vs_E = new TGraph(0);
+      TGraph* gr_response_vs_E    = new TGraph(0);
+      TGraph* gr_response_vs_flux = new TGraph(0);
 
       for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
         double hv, K;
         graph->GetPoint( iPoint, hv, K );
         float response = K/hv*1000.;
         float E = hv/d;
-        gr_response_vs_E->SetPoint( gr_response_vs_E->GetN(), E, response );
+        gr_response_vs_E   ->SetPoint( gr_response_vs_E   ->GetN(), E, response );
+        gr_response_vs_flux->SetPoint( gr_response_vs_flux->GetN(), E/(d*d), response );
       }
 
       gr_response_vs_E->SetMarkerColor(colors[30-i]);
@@ -93,6 +103,12 @@ int main( int argc, char* argv[] ) {
       gr_response_vs_E->Draw("Psame");
       legend_tot_response->AddEntry( gr_response_vs_E, Form("d = %.0f mm", d), "P" );
       
+      gr_response_vs_flux->SetMarkerColor(colors[30-i]);
+      gr_response_vs_flux->SetLineColor  (colors[30-i]);
+      gr_response_vs_flux->SetMarkerStyle(20);
+      gr_response_vs_flux->SetMarkerSize(1.5);
+      c_tot_response2->cd();
+      gr_response_vs_flux->Draw("Psame");
 
     } // for
 
@@ -111,6 +127,11 @@ int main( int argc, char* argv[] ) {
   legend_tot_response->Draw("same");
   gPad->RedrawAxis();
   c_tot_response->SaveAs( "plots/FieldEmissCNT/CNTPlasmaEtched_response_vs_E.pdf" );
+
+  c_tot_response2->cd();
+  legend_tot->Draw("same");
+  gPad->RedrawAxis();
+  c_tot_response2->SaveAs( "plots/FieldEmissCNT/CNTPlasmaEtched_response_vs_flux.pdf" );
 
 
   return 0;
