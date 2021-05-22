@@ -3,7 +3,7 @@
 
 
 #include "TGraphErrors.h"
-
+#include <fstream>
 
 class ScanFileReader {
 
@@ -12,6 +12,7 @@ class ScanFileReader {
   ScanFileReader( int scanNumber );
 
   void readFile( const std::string& fileName );
+  void readFile( std::ifstream& ifs );
 
   std::string scanType() const;
 
