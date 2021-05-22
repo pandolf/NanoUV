@@ -34,23 +34,60 @@ ScanFileReader::ScanFileReader( int scanNumber ) {
   else if( scanNumber_ < 10 ) // one digit, add three zeros
     suffix = "000" + suffix;
   
-  std::string fileName(Form("../data/file(1)%s.txt", suffix.c_str()));
+  std::string fileAver(Form("../data/file(aver)%s.txt", suffix.c_str()));
+  std::ifstream ifsAver(fileAver.c_str());
 
-  readFile(fileName);
+  if( ifsAver.good() ) {
+
+    std::cout << "[ScanFileReader::readFile] Found average, filem will use it." << std::endl;
+    readFile( ifsAver );
+
+  } else {
+
+    std::string fileOne(Form("../data/file(1)%s.txt", suffix.c_str()));
+    std::ifstream ifsOne(fileOne.c_str());
+
+    if( ifsOne.good() ) {
+
+      readFile( ifsOne );
+
+    } else {
+
+      std::cout << "[ScanFileReader::readFile] ERROR! File '" << fileOne << "' doesn't exist. Exiting." << std::endl;
+      exit(1);
+
+    } // if ifsOne
+
+  } // if ifsAver
+
 
   system("mkdir -p plots");
 
 }
 
 
+
+
 void ScanFileReader::readFile( const std::string& fileName ) {
 
   std::ifstream ifs(fileName.c_str());
 
-  if( !(ifs.good()) ) {
+  if( ifs.good() ) {
+
+    readFile( ifs );
+
+  } else {
+
     std::cout << "[ScanFileReader::readFile] ERROR! File '" << fileName << "' doesn't exist. Exiting." << std::endl;
     exit(1);
+
   }
+
+}
+
+
+
+void ScanFileReader::readFile( std::ifstream& ifs ) {
 
      
   std::string line;
@@ -152,7 +189,7 @@ void ScanFileReader::drawGraph( TGraphErrors* graph, const std::string& name, co
   TCanvas* c1 = new TCanvas( Form("c1_%s", graph->GetName()), "", 600, 600 );
   c1->cd();
 
-  float xMin(0.), xMax(-9999.), yMin(0.), yMax(0.);
+  float xMin(9999.), xMax(-9999.), yMin(0.), yMax(0.);
   findPlotRanges( graph, xMin, xMax, yMin, yMax );
 
   graph->SetMarkerSize(1.5); 
