@@ -13,8 +13,8 @@ ROOTFLAG = `${ROOTSYS}/bin/root-config --cflags --libs`
 EXTRALIBS := -L$(ROOTSYS)/lib -lHtml -lMathCore -lGenVector -lMinuit -lTreePlayer -lRooFitCore -lRooFit #-L$(ROOFIT_LIBDIR)/ 
 
 
-drawScan: drawScan.cpp ScanFileReader.o
-	$(CC) -Wall $(INCLUDES) -o drawScan drawScan.cpp ScanFileReader.o $(ROOTFLAG) $(EXTRALIBS)
+drawScan: drawScan.cpp ScanFileReader.o NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawScan drawScan.cpp ScanFileReader.o NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
 
 
