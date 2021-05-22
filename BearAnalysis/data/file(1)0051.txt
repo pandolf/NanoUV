@@ -1,0 +1,180 @@
+G:\BEAR_storage\User_Experiments\20210520_ruocco\file(1)0051.txt
+Ring Energy (GeV): 2
+Lifetime (hours): 22.0033
+Scan beginning: 5/21/2021	9:34:08 AM
+Ring current (mA): 309.11
+Source position: x (mm): -0.002 x' (mrad): -0.002 y (mm): -0.003 y' (mrad): 0.001
+Scan end: 5/21/2021	9:38:30 AM
+Ring current (mA): 309.38
+Source position: x (mm): -0.001 x' (mrad): -0.003 y (mm): -0.003 y' (mrad): 0.001
+
+SCAN TYPE: PHI_A
+
+FILE INFO: FILE INFO:
+
+SCAN PARAMETERS
+waiting time (ms): 2000
+Number of scans: 1
+Current scan number: 1
+DARK OFF 
+PREDARK OFF 
+
+SCAN PARAMETERS
+Initial Phi analyzer (degrees): 82.500000E+0
+Delta Phi analyzer (degrees): 500.000000E-3
+Final Phi analyzer (degrees): 90.000000E+0
+
+
+BEAR MONOCHROMATOR CONFIGURATION: 
+Current Grating Position:     64831.80
+Current Mirror Position: 217551.1
+Current Grating: G1200
+P2 phiz position:  0.0000
+Mono axis position: 25.0000
+Current Photon Energy (eV): 340.003
+Current Deviation Angle: 170.313
+Vertical Exit Slits (um): 100.000
+Exit slit y axis position: 1.3625
+Horizontal Exit Slits (um):  890.000
+Exit slit z axis position: 1.9250
+Mitutoyo position (mm): 
+
+Dose on sample (mJ/cm^2): NaN
+
+ENERGY CALIBRATION:
+offset grating G1200: yes
+Delta 0 order G1200:  -300.0
+offset grating G1800: not
+Delta 0 order G1800:  0.0
+offset grating GNIM: not
+Delta 0 order GNIM:  0.0
+ZERO ORDER POSITIONS:
+Grating G1200: Mirror position:  4938.0
+Grating position: -106855.0
+Grating G1800: 
+Mirror position:  4938.0
+Grating position: -106345.0
+Grating GNIM: 
+Mirror position:  10000.0
+Grating position: 227300.0
+
+Initial filter: Full Beam
+
+EXPERIMENTAL CHAMBER CONFIGURATION: 
+PsiC (deg):   89.997017
+Phi Analyzer (degrees): 82.401477
+Theta Manipulator (degrees): -10.138410
+Theta Analyzer (degrees): -99.999947
+PhiM (degrees): -0.007180
+XM (mm): -2.000012
+YM (mm): 14.182513
+ZM (mm): (Warning: for kinetic energy scans, 
+this parameter is given in the scan settings) 
+-3.750538
+TiltM (°): 0.000138
+
+ELECTRON ANALYZER CONFIGURATION: 
+Current Kinetik energy (eV): 49.4
+Mode: DE = COST
+Pass Energy (eV):  20.000
+CEM: ON
+Bias Front-Back CEM (V): 2600.062
+Bias Back-Collector CEM (V): 94.972
+Bias Retard-Front CEM: 100.070COIL VALUES
+Ix (amps):2.820
+Iy (amps): 5.379
+Iz (amps): 59.011
+
+POLARIZATION SELECTOR CONFIGURATION:
+Psi1 (rad): -0.000600026
+Psi2 (rad): 0.000599990
+Z min position (mm): 58.818900
+DZ position (mm): 40.219010
+Zmin 0 (mm): 65.700000
+DZ0 (mm): 54.000000
+
+BEAM SELECTOR CONFIGURATION:
+Zmin position (mm): NaN
+DZ position (mm): NaN
+Y+ position (mm): NaN
+Y- position (mm): NaN
+
+CHANNEL ELECTRON MULTIPLIER CONFIGURATION:
+CEM configured: OFF
+Bias CEM: 0.000000
+
+FLUORESCENCE DETECTOR CONFIGURATION:
+Not configured
+
+LUMINESCENCE MONOCHROMATOR CONFIGURATION:
+Optical fiber position (mm): 0.000000
+Optical fiber Switch inside: OFF
+Optical fiber Switch outside: ON
+Monochromator wavelength (A): 229000.000000
+Limit Switches: OFF
+
+I0 MONITOR PARAMETERS:
+I0 detector position(mm): NaN
+Lower switch: OFF
+Upper switch: OFF
+Valve status:unread
+
+PRESSURE PARAMETERS:
+Monitor chamber pressure (mbar): 2.279e-09
+Experimental chamber pressure -ION GAUGE-(mbar): 0.000000E+0
+
+XMCD PARAMETERS:
+Xmcd OFF
+Xmcd Direction -
+Xmcd current (A): 0.000000
+
+Gated scan off
+
+Instrument 1: AMMETER KEITHLEY 6517A B
+Measure type: Current
+range type: set range value
+range value (ampere):  20 nA
+Integration time:  set NPLC value
+NPLC value: 2.000
+Digital filter count: 10
+SAMPLE BIAS (V): 0.000
+Vsource: ON
+Output Voltage value: -0.000
+Vsource range: 1000 V
+
+Instrument 2: AMMETER KEITHLEY 6517A A
+Measure type: Current
+range type: set range value
+range value (ampere):  200 nA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+Vsource: OFF
+Output Voltage value: -0.000
+Vsource range: 100 V
+Trigger source: bus
+
+Instrument 3: COUNTER ORTEC 996Integration time (sec): 10.000
+
+
+________________________________________________________________________________
+
+RelativeTime (msec)	Number	Time (msec)	Phi Analyzer (°)	INSTR_1_Diode down_(ampere ) 	INSTR_2_Monitor IM_(ampere)  	INSTR_3_Ortec 996 counts_(counts)	I_BPM_sum (Amps)	
+________________________________________________________________________________
+
+1.40150000E+4	0.00000000E+0	-1.13511222E+9	8.24914496E+1	1.05109000E-9	1.10795000E-8	2.06572000E+5	8.91089456E-5
+3.17900000E+4	1.00000000E+0	-1.05941936E+9	8.29915068E+1	1.05082000E-9	1.10772000E-8	6.32600000E+3	8.96486657E-5
+4.82580000E+4	2.00000000E+0	-9.83727808E+8	8.34906170E+1	1.05083000E-9	1.10749000E-8	6.62700000E+3	8.94653725E-5
+6.46520000E+4	3.00000000E+0	-9.08036332E+8	8.39887801E+1	1.05086000E-9	1.10728000E-8	6.75400000E+3	8.94219595E-5
+8.10120000E+4	4.00000000E+0	-8.32344890E+8	8.44888373E+1	1.05064000E-9	1.10706000E-8	6.96500000E+3	8.94078838E-5
+9.73520000E+4	5.00000000E+0	-7.56653468E+8	8.49879475E+1	1.05025000E-9	1.10684000E-8	2.06532000E+5	8.96848398E-5
+1.13772000E+5	6.00000000E+0	-6.80961966E+8	8.54861105E+1	1.05023000E-9	1.10661000E-8	6.84100000E+3	8.95913469E-5
+1.30341000E+5	7.00000000E+0	-6.05270315E+8	8.59861678E+1	1.04985000E-9	1.10637000E-8	2.06628000E+5	8.94206958E-5
+1.46914000E+5	8.00000000E+0	-5.29578660E+8	8.64843309E+1	1.04958000E-9	1.10613000E-8	6.48600000E+3	8.96488416E-5
+1.63284000E+5	9.00000000E+0	-4.53887208E+8	8.69834410E+1	1.04955000E-9	1.10591000E-8	7.07700000E+3	8.98762244E-5
+1.79696000E+5	1.00000000E+1	-3.78195714E+8	8.74844453E+1	1.04960000E-9	1.10569000E-8	2.06605000E+5	8.92926084E-5
+1.96154000E+5	1.10000000E+1	-3.02504174E+8	8.79826084E+1	1.04924000E-9	1.10549000E-8	6.62500000E+3	8.94826012E-5
+2.12547000E+5	1.20000000E+1	-2.26812699E+8	8.84807715E+1	1.05353000E-9	1.10991000E-8	6.64100000E+3	9.01063520E-5
+2.28945000E+5	1.30000000E+1	-1.51121219E+8	8.89808287E+1	1.05395000E-9	1.10967000E-8	7.00600000E+3	9.01836592E-5
+2.45351000E+5	1.40000000E+1	-7.54297310E+7	8.94789918E+1	1.05339000E-9	1.10944000E-8	2.06705000E+5	8.96184492E-5
+2.61734000E+5	1.50000000E+1	2.61734000E+5	8.99781020E+1	1.05296000E-9	1.10921000E-8	6.45700000E+3	8.97485423E-5

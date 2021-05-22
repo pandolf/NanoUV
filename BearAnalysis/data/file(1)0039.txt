@@ -1,0 +1,151 @@
+G:\BEAR_storage\User_Experiments\20210520_ruocco\file(1)0039.txt
+Ring Energy (GeV): 2
+Lifetime (hours): 22.0556
+Scan beginning: 5/21/2021	2:08:07 AM
+Ring current (mA): 308.77
+Source position: x (mm): 0 x' (mrad): -0.003 y (mm): -0.004 y' (mrad): 0.002
+Scan end: 5/21/2021	2:08:22 AM
+Ring current (mA): 308.71
+Source position: x (mm): 0.001 x' (mrad): -0.003 y (mm): -0.004 y' (mrad): 0.001
+
+SCAN TYPE: PHI_A
+
+FILE INFO: FILE INFO:
+
+SCAN PARAMETERS
+waiting time (ms): 0
+Number of scans: 1
+Current scan number: 1
+DARK OFF 
+PREDARK OFF 
+
+SCAN PARAMETERS
+Initial Phi analyzer (degrees): 10.000000E+0
+Delta Phi analyzer (degrees): 500.000000E-3
+Final Phi analyzer (degrees): 97.000000E+0
+
+
+BEAR MONOCHROMATOR CONFIGURATION: 
+Current Grating Position:     55845.30
+Current Mirror Position: 209662.9
+Current Grating: G1200
+P2 phiz position:  0.0000
+Mono axis position: 25.0000
+Current Photon Energy (eV): 309.998
+Current Deviation Angle: 169.771
+Vertical Exit Slits (um): 100.000
+Exit slit y axis position: 1.3625
+Horizontal Exit Slits (um):  890.000
+Exit slit z axis position: 1.9250
+Mitutoyo position (mm): 
+
+Dose on sample (mJ/cm^2): NaN
+
+ENERGY CALIBRATION:
+offset grating G1200: yes
+Delta 0 order G1200:  -300.0
+offset grating G1800: not
+Delta 0 order G1800:  0.0
+offset grating GNIM: not
+Delta 0 order GNIM:  0.0
+ZERO ORDER POSITIONS:
+Grating G1200: Mirror position:  4938.0
+Grating position: -106855.0
+Grating G1800: 
+Mirror position:  4938.0
+Grating position: -106345.0
+Grating GNIM: 
+Mirror position:  10000.0
+Grating position: 227300.0
+
+Initial filter: Full Beam
+
+EXPERIMENTAL CHAMBER CONFIGURATION: 
+PsiC (deg):   89.997017
+Phi Analyzer (degrees): 9.992621
+Theta Manipulator (degrees): -10.138410
+Theta Analyzer (degrees): -99.999947
+PhiM (degrees): -0.007180
+XM (mm): -2.000012
+YM (mm): 6.939425
+ZM (mm): (Warning: for kinetic energy scans, 
+this parameter is given in the scan settings) 
+-2.750275
+TiltM (°): 0.000138
+
+ELECTRON ANALYZER CONFIGURATION: 
+Current Kinetik energy (eV): 24.0
+Mode: DE = COST
+Pass Energy (eV):  20.000
+CEM: ON
+Bias Front-Back CEM (V): 2600.062
+Bias Back-Collector CEM (V): 94.972
+Bias Retard-Front CEM: 100.070COIL VALUES
+Ix (amps):2.820
+Iy (amps): 5.379
+Iz (amps): 76.572
+
+POLARIZATION SELECTOR CONFIGURATION:
+Psi1 (rad): -0.000600026
+Psi2 (rad): 0.000599990
+Z min position (mm): 58.818900
+DZ position (mm): 40.219010
+Zmin 0 (mm): 65.700000
+DZ0 (mm): 54.000000
+
+BEAM SELECTOR CONFIGURATION:
+Zmin position (mm): NaN
+DZ position (mm): NaN
+Y+ position (mm): NaN
+Y- position (mm): NaN
+
+CHANNEL ELECTRON MULTIPLIER CONFIGURATION:
+CEM configured: OFF
+Bias CEM: 0.000000
+
+FLUORESCENCE DETECTOR CONFIGURATION:
+Not configured
+
+LUMINESCENCE MONOCHROMATOR CONFIGURATION:
+Optical fiber position (mm): 0.000000
+Optical fiber Switch inside: OFF
+Optical fiber Switch outside: ON
+Monochromator wavelength (A): 229000.000000
+Limit Switches: OFF
+
+I0 MONITOR PARAMETERS:
+I0 detector position(mm): NaN
+Lower switch: OFF
+Upper switch: OFF
+Valve status:unread
+
+PRESSURE PARAMETERS:
+Monitor chamber pressure (mbar): 2.353e-09
+Experimental chamber pressure -ION GAUGE-(mbar): 0.000000E+0
+
+XMCD PARAMETERS:
+Xmcd OFF
+Xmcd Direction -
+Xmcd current (A): 0.000000
+
+Gated scan off
+
+Instrument 1: AMMETER AH501 Channel 2
+Range:  RNG1: up to +/- 6.3 uA
+Integration time (sec): 0.501
+Number of samples: 1631
+
+Instrument 2: AMMETER AH501 Channel 3
+Range:  RNG1: up to +/- 6.3 uA
+Integration time (sec): 0.501
+Number of samples: 1631
+
+Instrument 3: COUNTER ORTEC 996Integration time (sec): 10.000
+
+
+________________________________________________________________________________
+
+RelativeTime (msec)	Number	Time (msec)	Phi Analyzer (°)	INSTR_1_Diode down_(ampere ) 	INSTR_2_Diode up_(ampere)  	INSTR_3_Ortec 996 counts_(counts)	I_BPM_sum (Amps)	
+________________________________________________________________________________
+
+1.25240000E+4	0.00000000E+0	1.25240000E+4	9.99546227E+0	2.30072055E-7	1.99617243E-7	1.31000000E+2	9.02997095E-5

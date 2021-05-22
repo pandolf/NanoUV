@@ -1,0 +1,188 @@
+G:\BEAR_storage\User_Experiments\20210520_ruocco\file(1)0065.txt
+Ring Energy (GeV): 2
+Lifetime (hours): 22.5161
+Scan beginning: 5/21/2021	2:43:50 PM
+Ring current (mA): 309.31
+Source position: x (mm): -0.003 x' (mrad): -0.001 y (mm): -0.002 y' (mrad): 0.001
+Scan end: 5/21/2021	2:44:19 PM
+Ring current (mA): 309.2
+Source position: x (mm): -0.002 x' (mrad): -0.003 y (mm): -0.002 y' (mrad): 0.001
+
+SCAN TYPE: TIME
+
+FILE INFO: FILE INFO:
+
+SCAN PARAMETERS
+waiting time (ms): 0
+Number of scans: 1
+Current scan number: 1
+DARK OFF 
+PREDARK OFF 
+
+SCAN PARAMETERS
+Number of points:  20
+
+BEAR MONOCHROMATOR CONFIGURATION: 
+Current Grating Position:     79655.40
+Current Mirror Position: 230631.3
+Current Grating: G1200
+P2 phiz position:  0.0000
+Mono axis position: 25.0000
+Current Photon Energy (eV): 400.007
+Current Deviation Angle: 171.209
+Vertical Exit Slits (um): 100.000
+Exit slit y axis position: 1.3625
+Horizontal Exit Slits (um):  890.000
+Exit slit z axis position: 1.9250
+Mitutoyo position (mm): 
+
+Dose on sample (mJ/cm^2): NaN
+
+ENERGY CALIBRATION:
+offset grating G1200: yes
+Delta 0 order G1200:  -300.0
+offset grating G1800: not
+Delta 0 order G1800:  0.0
+offset grating GNIM: not
+Delta 0 order GNIM:  0.0
+ZERO ORDER POSITIONS:
+Grating G1200: Mirror position:  4938.0
+Grating position: -106855.0
+Grating G1800: 
+Mirror position:  4938.0
+Grating position: -106345.0
+Grating GNIM: 
+Mirror position:  10000.0
+Grating position: 227300.0
+
+Initial filter: Full Beam
+
+EXPERIMENTAL CHAMBER CONFIGURATION: 
+PsiC (deg):   89.997017
+Phi Analyzer (degrees): -0.009471
+Theta Manipulator (degrees): -10.138410
+Theta Analyzer (degrees): -0.000055
+PhiM (degrees): -0.014360
+XM (mm): -1.999963
+YM (mm): 6.968625
+ZM (mm): (Warning: for kinetic energy scans, 
+this parameter is given in the scan settings) 
+-2.750550
+TiltM (°): 0.000138
+
+ELECTRON ANALYZER CONFIGURATION: 
+Current Kinetik energy (eV): 110.1
+Mode: DE = COST
+Pass Energy (eV):  20.000
+CEM: ON
+Bias Front-Back CEM (V): 2600.062
+Bias Back-Collector CEM (V): 94.972
+Bias Retard-Front CEM: 100.070COIL VALUES
+Ix (amps):2.820
+Iy (amps): 5.382
+Iz (amps): 70.222
+
+POLARIZATION SELECTOR CONFIGURATION:
+Psi1 (rad): -0.000600026
+Psi2 (rad): 0.000599990
+Z min position (mm): 58.818900
+DZ position (mm): 40.219010
+Zmin 0 (mm): 65.700000
+DZ0 (mm): 54.000000
+
+BEAM SELECTOR CONFIGURATION:
+Zmin position (mm): NaN
+DZ position (mm): NaN
+Y+ position (mm): NaN
+Y- position (mm): NaN
+
+CHANNEL ELECTRON MULTIPLIER CONFIGURATION:
+CEM configured: OFF
+Bias CEM: 0.000000
+
+FLUORESCENCE DETECTOR CONFIGURATION:
+Not configured
+
+LUMINESCENCE MONOCHROMATOR CONFIGURATION:
+Optical fiber position (mm): 252.999997
+Optical fiber Switch inside: OFF
+Optical fiber Switch outside: OFF
+Monochromator wavelength (A): 229000.000000
+Limit Switches: OFF
+
+I0 MONITOR PARAMETERS:
+I0 detector position(mm): NaN
+Lower switch: OFF
+Upper switch: OFF
+Valve status:unread
+
+PRESSURE PARAMETERS:
+Monitor chamber pressure (mbar): 2.269e-09
+Experimental chamber pressure -ION GAUGE-(mbar): 0.000000E+0
+
+XMCD PARAMETERS:
+Xmcd OFF
+Xmcd Direction -
+Xmcd current (A): 0.000000
+
+Gated scan off
+
+Instrument 1: AMMETER KEITHLEY 6517A B
+Measure type: Current
+range type: set range value
+range value (ampere):  20 nA
+Integration time:  set NPLC value
+NPLC value: 2.000
+Digital filter count: 10
+SAMPLE BIAS (V): 0.000
+Vsource: ON
+Output Voltage value: -0.000
+Vsource range: 1000 V
+
+Instrument 2: AMMETER KEITHLEY 6517A A
+Measure type: Current
+range type: set range value
+range value (ampere):  200 nA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+Vsource: OFF
+Output Voltage value: -0.000
+Vsource range: 100 V
+Trigger source: bus
+
+Instrument 3: AMMETER KEITHLEY 6517A C 
+Measure type: Current
+range type: set range value
+range value (ampere):  200 pA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+Vsource: OFF
+Output Voltage value: -0.000
+Vsource range: 100 V
+Trigger source: bus
+
+
+________________________________________________________________________________
+
+RelativeTime (msec)	Number	Absolute time (msec)	Relative time (msec)	INSTR_1_Diode down_(ampere ) 	INSTR_2_Monitor IM_(ampere)  	INSTR_3__(ampere)	I_BPM_sum (Amps)	
+________________________________________________________________________________
+
+1.46900000E+3	0.00000000E+0	9.42586080E+7	1.46900000E+3	5.54020000E-10	1.33554000E-8	7.58860000E-12	8.95296084E-5
+4.48400000E+3	1.00000000E+0	9.42616230E+7	4.48400000E+3	5.53720000E-10	1.33553000E-8	7.60910000E-12	8.92502683E-5
+6.16700000E+3	2.00000000E+0	9.42633060E+7	6.16700000E+3	5.54390000E-10	1.33550000E-8	7.58800000E-12	8.96493899E-5
+7.88700000E+3	3.00000000E+0	9.42650260E+7	7.88700000E+3	5.54630000E-10	1.33547000E-8	7.59380000E-12	8.90007989E-5
+9.62400000E+3	4.00000000E+0	9.42667630E+7	9.62400000E+3	5.54200000E-10	1.33544000E-8	7.60770000E-12	8.97055018E-5
+1.12470000E+4	5.00000000E+0	9.42683860E+7	1.12470000E+4	5.54480000E-10	1.33543000E-8	7.60250000E-12	8.93879043E-5
+1.28970000E+4	6.00000000E+0	9.42700360E+7	1.28970000E+4	5.54440000E-10	1.33542000E-8	7.60170000E-12	8.97970366E-5
+1.45610000E+4	7.00000000E+0	9.42717000E+7	1.45610000E+4	5.54200000E-10	1.33540000E-8	7.58710000E-12	8.96180856E-5
+1.61730000E+4	8.00000000E+0	9.42733120E+7	1.61730000E+4	5.54120000E-10	1.33536000E-8	7.59620000E-12	8.94613343E-5
+1.77910000E+4	9.00000000E+0	9.42749300E+7	1.77910000E+4	5.53860000E-10	1.33534000E-8	7.58920000E-12	9.04320884E-5
+1.94550000E+4	1.00000000E+1	9.42765940E+7	1.94550000E+4	5.53870000E-10	1.33533000E-8	7.59150000E-12	8.91499119E-5
+2.10860000E+4	1.10000000E+1	9.42782250E+7	2.10860000E+4	5.54060000E-10	1.33529000E-8	7.58590000E-12	8.94805598E-5
+2.27210000E+4	1.20000000E+1	9.42798600E+7	2.27210000E+4	5.54290000E-10	1.33525000E-8	7.59620000E-12	8.94223916E-5
+2.43310000E+4	1.30000000E+1	9.42814700E+7	2.43310000E+4	5.54080000E-10	1.33522000E-8	7.59830000E-12	8.93016147E-5
+2.59840000E+4	1.40000000E+1	9.42831230E+7	2.59840000E+4	5.54100000E-10	1.33519000E-8	7.60550000E-12	8.99652439E-5
+2.75950000E+4	1.50000000E+1	9.42847340E+7	2.75950000E+4	5.54170000E-10	1.33517000E-8	7.60500000E-12	9.00631982E-5
+2.92830000E+4	1.60000000E+1	9.42864220E+7	2.92830000E+4	5.54270000E-10	1.33515000E-8	7.60920000E-12	9.00076169E-5

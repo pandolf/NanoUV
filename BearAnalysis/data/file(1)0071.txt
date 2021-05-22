@@ -1,0 +1,181 @@
+G:\BEAR_storage\User_Experiments\20210520_ruocco\file(1)0071.txt
+Ring Energy (GeV): 2
+Lifetime (hours): 22.6411
+Scan beginning: 5/21/2021	3:24:29 PM
+Ring current (mA): 309.38
+Source position: x (mm): -0.003 x' (mrad): -0.002 y (mm): -0.003 y' (mrad): 0.001
+Scan end: 5/21/2021	3:25:05 PM
+Ring current (mA): 309.23
+Source position: x (mm): -0.004 x' (mrad): -0.002 y (mm): -0.001 y' (mrad): -0
+
+SCAN TYPE: TIME
+
+FILE INFO: FILE INFO:
+
+SCAN PARAMETERS
+waiting time (ms): 0
+Number of scans: 1
+Current scan number: 1
+DARK ON 
+PREDARK OFF 
+
+SCAN PARAMETERS
+Number of points:  10
+
+BEAR MONOCHROMATOR CONFIGURATION: 
+Current Grating Position:     -33245.10
+Current Mirror Position: 98723.0
+Current Grating: G1200
+P2 phiz position:  0.0000
+Mono axis position: 25.0000
+Current Photon Energy (eV): 304.998
+Current Deviation Angle: 162.000
+Vertical Exit Slits (um): 100.000
+Exit slit y axis position: 1.3625
+Horizontal Exit Slits (um):  890.000
+Exit slit z axis position: 1.9250
+Mitutoyo position (mm): 
+
+Dose on sample (mJ/cm^2): NaN
+
+ENERGY CALIBRATION:
+offset grating G1200: yes
+Delta 0 order G1200:  -300.0
+offset grating G1800: not
+Delta 0 order G1800:  0.0
+offset grating GNIM: not
+Delta 0 order GNIM:  0.0
+ZERO ORDER POSITIONS:
+Grating G1200: Mirror position:  4938.0
+Grating position: -106855.0
+Grating G1800: 
+Mirror position:  4938.0
+Grating position: -106345.0
+Grating GNIM: 
+Mirror position:  10000.0
+Grating position: 227300.0
+
+Initial filter: Ag filter 0.6 um
+
+EXPERIMENTAL CHAMBER CONFIGURATION: 
+PsiC (deg):   89.996832
+Phi Analyzer (degrees): -0.010418
+Theta Manipulator (degrees): -10.138410
+Theta Analyzer (degrees): -0.000055
+PhiM (degrees): -0.014360
+XM (mm): -1.999975
+YM (mm): 14.175438
+ZM (mm): (Warning: for kinetic energy scans, 
+this parameter is given in the scan settings) 
+-3.750563
+TiltM (°): 0.000138
+
+ELECTRON ANALYZER CONFIGURATION: 
+Current Kinetik energy (eV): 110.1
+Mode: DE = COST
+Pass Energy (eV):  20.000
+CEM: ON
+Bias Front-Back CEM (V): 2600.062
+Bias Back-Collector CEM (V): 94.972
+Bias Retard-Front CEM: 100.070COIL VALUES
+Ix (amps):2.820
+Iy (amps): 5.382
+Iz (amps): 70.222
+
+POLARIZATION SELECTOR CONFIGURATION:
+Psi1 (rad): -0.000600026
+Psi2 (rad): 0.000599990
+Z min position (mm): 58.818900
+DZ position (mm): 40.219010
+Zmin 0 (mm): 65.700000
+DZ0 (mm): 54.000000
+
+BEAM SELECTOR CONFIGURATION:
+Zmin position (mm): NaN
+DZ position (mm): NaN
+Y+ position (mm): NaN
+Y- position (mm): NaN
+
+CHANNEL ELECTRON MULTIPLIER CONFIGURATION:
+CEM configured: OFF
+Bias CEM: 0.000000
+
+FLUORESCENCE DETECTOR CONFIGURATION:
+Not configured
+
+LUMINESCENCE MONOCHROMATOR CONFIGURATION:
+Optical fiber position (mm): 252.999997
+Optical fiber Switch inside: OFF
+Optical fiber Switch outside: OFF
+Monochromator wavelength (A): 229000.000000
+Limit Switches: OFF
+
+I0 MONITOR PARAMETERS:
+I0 detector position(mm): NaN
+Lower switch: OFF
+Upper switch: OFF
+Valve status:unread
+
+PRESSURE PARAMETERS:
+Monitor chamber pressure (mbar): 2.257e-09
+Experimental chamber pressure -ION GAUGE-(mbar): 0.000000E+0
+
+XMCD PARAMETERS:
+Xmcd OFF
+Xmcd Direction -
+Xmcd current (A): 0.000000
+
+Gated scan off
+
+Instrument 1: AMMETER KEITHLEY 6517A B
+Measure type: Current
+range type: set range value
+range value (ampere):  200 pA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 5
+SAMPLE BIAS (V): -5.000
+Vsource: ON
+Output Voltage value: 5.000
+Vsource range: 100 V
+
+Instrument 2: AMMETER KEITHLEY 6517A A
+Measure type: Current
+range type: set range value
+range value (ampere):  200 pA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+Vsource: OFF
+Output Voltage value: -0.000
+Vsource range: 100 V
+Trigger source: immediate
+
+Instrument 3: AMMETER KEITHLEY 6517A C 
+Measure type: Current
+range type: set range value
+range value (ampere):  200 pA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 5
+Vsource: OFF
+Output Voltage value: -0.000
+Vsource range: 100 V
+Trigger source: bus
+
+
+________________________________________________________________________________
+
+RelativeTime (msec)	Number	Absolute time (msec)	Relative time (msec)	INSTR_1_Sample grounded_(ampere ) 	INSTR_2_Monitor IM_(ampere)  	INSTR_3_Diode A1_(ampere)	I_BPM_sum (Amps)	
+________________________________________________________________________________
+
+3.28900000E+3	0.00000000E+0	9.66999130E+7	3.28900000E+3	4.91400000E-13	-1.36700000E-13	-1.09120000E-12	8.96158415E-5
+8.49500000E+3	1.00000000E+0	9.67051190E+7	8.49500000E+3	4.79200000E-13	-1.29900000E-13	-1.09560000E-12	8.95740109E-5
+1.19020000E+4	2.00000000E+0	9.67085260E+7	1.19020000E+4	4.97900000E-13	-1.09800000E-13	-1.09490000E-12	8.90885936E-5
+1.53040000E+4	3.00000000E+0	9.67119280E+7	1.53040000E+4	5.06000000E-13	-1.03600000E-13	-1.07980000E-12	8.97008973E-5
+1.87440000E+4	4.00000000E+0	9.67153680E+7	1.87440000E+4	5.05300000E-13	-9.66000000E-14	-1.08330000E-12	9.01714343E-5
+2.22020000E+4	5.00000000E+0	9.67188260E+7	2.22020000E+4	5.07000000E-13	-8.99000000E-14	-1.09500000E-12	8.96291840E-5
+2.55870000E+4	6.00000000E+0	9.67222110E+7	2.55870000E+4	4.87700000E-13	-8.74000000E-14	-1.08320000E-12	8.98938852E-5
+2.89550000E+4	7.00000000E+0	9.67255790E+7	2.89550000E+4	4.97200000E-13	-8.42000000E-14	-1.08660000E-12	8.98081499E-5
+3.23570000E+4	8.00000000E+0	9.67289810E+7	3.23570000E+4	4.99000000E-13	-8.07000000E-14	-1.08620000E-12	8.99972844E-5
+3.56940000E+4	9.00000000E+0	9.67323180E+7	3.56940000E+4	4.77300000E-13	-8.05000000E-14	-1.08320000E-12	8.99140555E-5

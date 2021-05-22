@@ -1,0 +1,172 @@
+G:\BEAR_storage\User_Experiments\20210520_ruocco\file(2)0082.txt
+Ring Energy (GeV): 2
+Lifetime (hours): 22.72
+Scan beginning: 5/21/2021	6:11:07 PM
+Ring current (mA): 308.59
+Source position: x (mm): -0 x' (mrad): -0.002 y (mm): -0.002 y' (mrad): -0
+Scan end: 5/21/2021	6:11:22 PM
+Ring current (mA): 308.54
+Source position: x (mm): -0.002 x' (mrad): -0.001 y (mm): -0.003 y' (mrad): 0.001
+
+SCAN TYPE: Kinetic Energy Electron analyzer 
+
+FILE INFO: FILE INFO:
+
+SCAN PARAMETERS
+waiting time (ms): 0
+Number of scans: 10
+Current scan number: 1
+DARK OFF 
+PREDARK OFF 
+
+SCAN PARAMETERS
+Initial Kinetik Energy (eV): 1.000
+Final Kinetic Energy (eV): 18.000
+Delta Kinetic Energy (eV): 0.050
+Pass Energy (eV): 22.000
+Number of regions: 1.000
+Number of points: 341.00
+Initial Z manipulator: -3.750
+
+BEAR MONOCHROMATOR CONFIGURATION: 
+Current Grating Position:     168975.20
+Current Mirror Position: 10000.0
+Current Grating: GNIM
+P2 phiz position:  -0.0070
+Mono axis position: 73.5000
+Current Photon Energy (eV): 21.000
+Current Deviation Angle: 29.905
+Vertical Exit Slits (um): 200.000
+Exit slit y axis position: 1.6125
+Horizontal Exit Slits (um):  890.000
+Exit slit z axis position: 1.9250
+Mitutoyo position (mm): 
+
+Dose on sample (mJ/cm^2): NaN
+
+ENERGY CALIBRATION:
+offset grating G1200: yes
+Delta 0 order G1200:  -300.0
+offset grating G1800: not
+Delta 0 order G1800:  0.0
+offset grating GNIM: not
+Delta 0 order GNIM:  0.0
+ZERO ORDER POSITIONS:
+Grating G1200: Mirror position:  4938.0
+Grating position: -106855.0
+Grating G1800: 
+Mirror position:  4938.0
+Grating position: -106345.0
+Grating GNIM: 
+Mirror position:  10000.0
+Grating position: 227300.0
+
+Initial filter: Full Beam
+
+EXPERIMENTAL CHAMBER CONFIGURATION: 
+PsiC (deg):   89.996832
+Phi Analyzer (degrees): 89.990414
+Theta Manipulator (degrees): -10.138410
+Theta Analyzer (degrees): -99.999965
+PhiM (degrees): -0.014360
+XM (mm): -1.999988
+YM (mm): 14.163538
+ZM (mm): (Warning: for kinetic energy scans, 
+this parameter is given in the scan settings) 
+-3.750613
+TiltM (°): 0.000138
+
+ELECTRON ANALYZER CONFIGURATION: 
+Current Kinetik energy (eV): 9.2
+Mode: DE = COST
+Pass Energy (eV):  22.000
+CEM: ON
+Bias Front-Back CEM (V): 2600.062
+Bias Back-Collector CEM (V): 94.972
+Bias Retard-Front CEM: 100.070COIL VALUES
+Ix (amps):2.820
+Iy (amps): 5.382
+Iz (amps): 70.222
+
+POLARIZATION SELECTOR CONFIGURATION:
+Psi1 (rad): -0.000600026
+Psi2 (rad): 0.000599990
+Z min position (mm): 58.818900
+DZ position (mm): 40.219010
+Zmin 0 (mm): 65.700000
+DZ0 (mm): 54.000000
+
+BEAM SELECTOR CONFIGURATION:
+Zmin position (mm): NaN
+DZ position (mm): NaN
+Y+ position (mm): NaN
+Y- position (mm): NaN
+
+CHANNEL ELECTRON MULTIPLIER CONFIGURATION:
+CEM configured: OFF
+Bias CEM: 0.000000
+
+FLUORESCENCE DETECTOR CONFIGURATION:
+Not configured
+
+LUMINESCENCE MONOCHROMATOR CONFIGURATION:
+Optical fiber position (mm): -0.000000
+Optical fiber Switch inside: OFF
+Optical fiber Switch outside: ON
+Monochromator wavelength (A): 229000.000000
+Limit Switches: OFF
+
+I0 MONITOR PARAMETERS:
+I0 detector position(mm): NaN
+Lower switch: OFF
+Upper switch: OFF
+Valve status:unread
+
+PRESSURE PARAMETERS:
+Monitor chamber pressure (mbar): 2.223e-09
+Experimental chamber pressure -ION GAUGE-(mbar): 0.000000E+0
+
+XMCD PARAMETERS:
+Xmcd OFF
+Xmcd Direction -
+Xmcd current (A): 0.000000
+
+Gated scan off
+
+Instrument 1: AMMETER KEITHLEY 6517A B
+Measure type: Current
+range type: set range value
+range value (ampere):  20 nA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+SAMPLE BIAS (V): 0.000
+Vsource: ON
+Output Voltage value: -0.000
+Vsource range: 1000 V
+
+Instrument 2: AMMETER KEITHLEY 6517A A
+Measure type: Current
+range type: set range value
+range value (ampere):  200 pA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+Vsource: OFF
+Output Voltage value: -0.000
+Vsource range: 100 V
+Trigger source: bus
+
+Instrument 3: COUNTER ORTEC 996Integration time (sec): 1.000
+
+
+________________________________________________________________________________
+
+RelativeTime (msec)	Photon Energy (eV)	Time (msec)	Electron Analyzer Kinetic Energy (eV)	INSTR_1_Sample grounded_(ampere ) 	INSTR_2_Monitor IM_(ampere)  	INSTR_3_Ortec 996 counts_(counts)	I_BPM_sum (Amps)	
+________________________________________________________________________________
+
+2.51500000E+3	2.09997983E+1	1.06697101E+8	1.00000000E+0	3.01240000E-10	1.90955300E-10	1.13800000E+3	8.94960033E-5
+6.53900000E+3	2.09997983E+1	1.06701125E+8	1.05000000E+0	3.00880000E-10	1.90961800E-10	3.77300000E+3	8.95752090E-5
+9.13200000E+3	2.09997983E+1	1.06703718E+8	1.10000000E+0	3.00710000E-10	1.90959700E-10	4.89300000E+3	8.97603649E-5
+1.17300000E+4	2.09997983E+1	1.06706316E+8	1.15000000E+0	3.00760000E-10	1.90954500E-10	5.33900000E+3	8.93822031E-5
+1.43310000E+4	2.09997983E+1	1.06708917E+8	1.20000000E+0	3.00690000E-10	1.90940600E-10	7.71100000E+3	8.98460913E-5
