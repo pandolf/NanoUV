@@ -19,6 +19,9 @@ drawScan: drawScan.cpp ScanFileReader.o NanoUVCommon.o
 drawScanRegions: drawScanRegions.cpp ScanFileReader.o NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawScanRegions drawScanRegions.cpp ScanFileReader.o NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
+checkScanKeithley: checkScanKeithley.cpp 
+	$(CC) -Wall $(INCLUDES) -o checkScanKeithley checkScanKeithley.cpp $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 
