@@ -16,7 +16,7 @@ int main( int argc, char* argv[] ) {
   int scanNumber( atoi(argv[1]) );
 
   ScanFileReader sfr(scanNumber);
-
+  sfr.readSingleScan();
   sfr.drawGraphs();
 
   return 0;
