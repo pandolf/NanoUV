@@ -1,0 +1,171 @@
+G:\BEAR_storage\User_Experiments\20210520_ruocco\file(1)0130.txt
+Ring Energy (GeV): 2
+Lifetime (hours): 22.6895
+Scan beginning: 5/22/2021	10:35:12 AM
+Ring current (mA): 308.91
+Source position: x (mm): -0.001 x' (mrad): -0.002 y (mm): -0.005 y' (mrad): 0
+Scan end: 5/22/2021	10:35:52 AM
+Ring current (mA): 308.74
+Source position: x (mm): -0.001 x' (mrad): -0.003 y (mm): -0.004 y' (mrad): 0
+
+SCAN TYPE: TIME
+
+FILE INFO: FILE INFO:
+
+SCAN PARAMETERS
+waiting time (ms): 1000
+Number of scans: 1
+Current scan number: 1
+DARK ON 
+PREDARK OFF 
+
+SCAN PARAMETERS
+Number of points:  10
+
+BEAR MONOCHROMATOR CONFIGURATION: 
+Current Grating Position:     55845.80
+Current Mirror Position: 209662.9
+Current Grating: G1200
+P2 phiz position:  0.0000
+Mono axis position: 25.0000
+Current Photon Energy (eV): 310.002
+Current Deviation Angle: 169.771
+Vertical Exit Slits (um): 100.000
+Exit slit y axis position: 1.3625
+Horizontal Exit Slits (um):  890.000
+Exit slit z axis position: 1.9250
+Mitutoyo position (mm): 
+
+Dose on sample (mJ/cm^2): NaN
+
+ENERGY CALIBRATION:
+offset grating G1200: yes
+Delta 0 order G1200:  -300.0
+offset grating G1800: not
+Delta 0 order G1800:  0.0
+offset grating GNIM: not
+Delta 0 order GNIM:  0.0
+ZERO ORDER POSITIONS:
+Grating G1200: Mirror position:  4938.0
+Grating position: -106855.0
+Grating G1800: 
+Mirror position:  4938.0
+Grating position: -106345.0
+Grating GNIM: 
+Mirror position:  10000.0
+Grating position: 227300.0
+
+Initial filter: Ag filter 0.6 um
+
+EXPERIMENTAL CHAMBER CONFIGURATION: 
+PsiC (deg):   89.997946
+Phi Analyzer (degrees): 89.989467
+Theta Manipulator (degrees): -10.138410
+Theta Analyzer (degrees): -99.999965
+PhiM (degrees): -0.014360
+XM (mm): -2.000012
+YM (mm): 14.191463
+ZM (mm): (Warning: for kinetic energy scans, 
+this parameter is given in the scan settings) 
+-3.750350
+TiltM (°): 0.000138
+
+ELECTRON ANALYZER CONFIGURATION: 
+Current Kinetik energy (eV): 24.0
+Mode: DE = COST
+Pass Energy (eV):  20.000
+CEM: ON
+Bias Front-Back CEM (V): 2600.062
+Bias Back-Collector CEM (V): 94.972
+Bias Retard-Front CEM: 100.070COIL VALUES
+Ix (amps):2.820
+Iy (amps): 5.380
+Iz (amps): 63.093
+
+POLARIZATION SELECTOR CONFIGURATION:
+Psi1 (rad): -0.000600026
+Psi2 (rad): 0.000599990
+Z min position (mm): 58.818900
+DZ position (mm): 40.219010
+Zmin 0 (mm): 65.700000
+DZ0 (mm): 54.000000
+
+BEAM SELECTOR CONFIGURATION:
+Zmin position (mm): NaN
+DZ position (mm): NaN
+Y+ position (mm): NaN
+Y- position (mm): NaN
+
+CHANNEL ELECTRON MULTIPLIER CONFIGURATION:
+CEM configured: OFF
+Bias CEM: 0.000000
+
+FLUORESCENCE DETECTOR CONFIGURATION:
+Not configured
+
+LUMINESCENCE MONOCHROMATOR CONFIGURATION:
+Optical fiber position (mm): -0.000000
+Optical fiber Switch inside: OFF
+Optical fiber Switch outside: ON
+Monochromator wavelength (A): 229000.000000
+Limit Switches: OFF
+
+I0 MONITOR PARAMETERS:
+I0 detector position(mm): -0.000000E+0
+Lower switch: OFF
+Upper switch: OFF
+Valve status:closed
+
+PRESSURE PARAMETERS:
+Monitor chamber pressure (mbar): 2.219e-09
+Experimental chamber pressure -ION GAUGE-(mbar): 0.000000E+0
+
+XMCD PARAMETERS:
+Xmcd OFF
+Xmcd Direction -
+Xmcd current (A): 0.000000
+
+Gated scan off
+
+Instrument 1: AMMETER KEITHLEY 6517A B
+Measure type: Current
+range type: set range value
+range value (ampere):  200 pA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+SAMPLE BIAS (V): 0.000
+Vsource: ON
+Output Voltage value: -0.000
+Vsource range: 100 V
+
+Instrument 2: AMMETER KEITHLEY 6517A A
+Measure type: Current
+range type: set range value
+range value (ampere):  20 nA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+Vsource: OFF
+Output Voltage value: -0.000
+Vsource range: 100 V
+Trigger source: bus
+
+Instrument 3: COUNTER ORTEC 996Integration time (sec): 1.000
+
+
+________________________________________________________________________________
+
+RelativeTime (msec)	Number	Absolute time (msec)	Relative time (msec)	INSTR_1_Sample floating_(ampere ) 	INSTR_2_Monitor IM_(ampere)  	INSTR_3_Ortec 996 counts_(counts)	I_BPM_sum (Amps)	
+________________________________________________________________________________
+
+3.66900000E+3	0.00000000E+0	1.65743241E+8	3.66900000E+3	-1.36000000E-14	-1.20000000E-12	0.00000000E+0	8.99514365E-5
+9.14300000E+3	1.00000000E+0	1.65748715E+8	9.14300000E+3	-2.16000000E-14	-9.80000000E-13	0.00000000E+0	8.96947163E-5
+1.28860000E+4	2.00000000E+0	1.65752458E+8	1.28860000E+4	1.80000000E-14	-9.00000000E-13	0.00000000E+0	8.97689181E-5
+1.66490000E+4	3.00000000E+0	1.65756221E+8	1.66490000E+4	-2.90000000E-15	-8.10000000E-13	0.00000000E+0	8.91346471E-5
+2.03950000E+4	4.00000000E+0	1.65759967E+8	2.03950000E+4	-8.30000000E-15	-7.70000000E-13	0.00000000E+0	8.90785264E-5
+2.41530000E+4	5.00000000E+0	1.65763725E+8	2.41530000E+4	7.00000000E-16	-7.30000000E-13	0.00000000E+0	8.99827945E-5
+2.79270000E+4	6.00000000E+0	1.65767499E+8	2.79270000E+4	-7.30000000E-15	-6.90000000E-13	0.00000000E+0	8.91295450E-5
+3.16720000E+4	7.00000000E+0	1.65771244E+8	3.16720000E+4	-1.60000000E-15	-6.60000000E-13	0.00000000E+0	8.99068999E-5
+3.54340000E+4	8.00000000E+0	1.65775006E+8	3.54340000E+4	-9.50000000E-15	-6.20000000E-13	0.00000000E+0	8.93503474E-5
+3.91680000E+4	9.00000000E+0	1.65778740E+8	3.91680000E+4	-6.60000000E-15	-6.10000000E-13	0.00000000E+0	8.97706556E-5

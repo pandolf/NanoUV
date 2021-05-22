@@ -1,0 +1,178 @@
+G:\BEAR_storage\User_Experiments\20210520_ruocco\file(1)0148.txt
+Ring Energy (GeV): 2
+Lifetime (hours): 22.7611
+Scan beginning: 5/22/2021	1:36:25 PM
+Ring current (mA): 309.02
+Source position: x (mm): -0.002 x' (mrad): -0.003 y (mm): -0.004 y' (mrad): 0
+Scan end: 5/22/2021	1:38:09 PM
+Ring current (mA): 308.63
+Source position: x (mm): -0.002 x' (mrad): -0.002 y (mm): -0.004 y' (mrad): 0
+
+SCAN TYPE: Z_MANIPULATOR
+
+FILE INFO: FILE INFO:
+
+SCAN PARAMETERS
+waiting time (ms): 1000
+Number of scans: 1
+Current scan number: 1
+DARK OFF 
+PREDARK OFF 
+
+SCAN PARAMETERS
+Initial Z manipulator (mm): -4.900000E+0
+Delta Z manipulator (mm): 50.000000E-3
+Final Z manipulator (mm): 0.000000E+0
+
+
+BEAR MONOCHROMATOR CONFIGURATION: 
+Current Grating Position:     168975.70
+Current Mirror Position: 10000.0
+Current Grating: GNIM
+P2 phiz position:  -0.0070
+Mono axis position: 73.5000
+Current Photon Energy (eV): 21.000
+Current Deviation Angle: 29.905
+Vertical Exit Slits (um): 200.000
+Exit slit y axis position: 1.6125
+Horizontal Exit Slits (um):  890.000
+Exit slit z axis position: 1.9250
+Mitutoyo position (mm): 
+
+Dose on sample (mJ/cm^2): NaN
+
+ENERGY CALIBRATION:
+offset grating G1200: yes
+Delta 0 order G1200:  -300.0
+offset grating G1800: not
+Delta 0 order G1800:  0.0
+offset grating GNIM: not
+Delta 0 order GNIM:  0.0
+ZERO ORDER POSITIONS:
+Grating G1200: Mirror position:  4938.0
+Grating position: -106855.0
+Grating G1800: 
+Mirror position:  4938.0
+Grating position: -106345.0
+Grating GNIM: 
+Mirror position:  10000.0
+Grating position: 227300.0
+
+Initial filter: Full Beam
+
+EXPERIMENTAL CHAMBER CONFIGURATION: 
+PsiC (deg):   29.998882
+Phi Analyzer (degrees): 89.987573
+Theta Manipulator (degrees): -10.138410
+Theta Analyzer (degrees): -99.999947
+PhiM (degrees): -0.015386
+XM (mm): -2.000012
+YM (mm): 14.180800
+ZM (mm): (Warning: for kinetic energy scans, 
+this parameter is given in the scan settings) 
+-4.078238
+TiltM (°): 0.000138
+
+ELECTRON ANALYZER CONFIGURATION: 
+Current Kinetik energy (eV): 10.0
+Mode: DE = COST
+Pass Energy (eV):  22.000
+CEM: ON
+Bias Front-Back CEM (V): 2600.062
+Bias Back-Collector CEM (V): 94.972
+Bias Retard-Front CEM: 100.070COIL VALUES
+Ix (amps):2.820
+Iy (amps): 5.382
+Iz (amps): 62.925
+
+POLARIZATION SELECTOR CONFIGURATION:
+Psi1 (rad): -0.000600026
+Psi2 (rad): 0.000599990
+Z min position (mm): 58.818900
+DZ position (mm): 40.219010
+Zmin 0 (mm): 65.700000
+DZ0 (mm): 54.000000
+
+BEAM SELECTOR CONFIGURATION:
+Zmin position (mm): NaN
+DZ position (mm): NaN
+Y+ position (mm): NaN
+Y- position (mm): NaN
+
+CHANNEL ELECTRON MULTIPLIER CONFIGURATION:
+CEM configured: OFF
+Bias CEM: 0.000000
+
+FLUORESCENCE DETECTOR CONFIGURATION:
+Not configured
+
+LUMINESCENCE MONOCHROMATOR CONFIGURATION:
+Optical fiber position (mm): -0.000000
+Optical fiber Switch inside: OFF
+Optical fiber Switch outside: ON
+Monochromator wavelength (A): 229000.000000
+Limit Switches: OFF
+
+I0 MONITOR PARAMETERS:
+I0 detector position(mm): -0.000000E+0
+Lower switch: OFF
+Upper switch: OFF
+Valve status:closed
+
+PRESSURE PARAMETERS:
+Monitor chamber pressure (mbar): 2.217e-09
+Experimental chamber pressure -ION GAUGE-(mbar): 0.000000E+0
+
+XMCD PARAMETERS:
+Xmcd OFF
+Xmcd Direction -
+Xmcd current (A): 0.000000
+
+Gated scan off
+
+Instrument 1: AMMETER KEITHLEY 6517A B
+Measure type: Current
+range type: set range value
+range value (ampere):  20 nA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+SAMPLE BIAS (V): 0.000
+Vsource: ON
+Output Voltage value: -0.000
+Vsource range: 100 V
+
+Instrument 2: AMMETER KEITHLEY 6517A A
+Measure type: Current
+range type: set range value
+range value (ampere):  20 nA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+Vsource: OFF
+Output Voltage value: -0.000
+Vsource range: 100 V
+Trigger source: bus
+
+Instrument 3: COUNTER ORTEC 996Integration time (sec): 1.000
+
+
+________________________________________________________________________________
+
+RelativeTime (msec)	Number	Time (msec)	Z  manipulator (mm)	INSTR_1_Sample floating_(ampere ) 	INSTR_2_Monitor IM_(ampere)  	INSTR_3_Ortec 996 counts_(counts)	I_BPM_sum (Amps)	
+________________________________________________________________________________
+
+3.66600000E+3	0.00000000E+0	-2.11934608E+9	-4.90035000E+0	3.29540000E-10	1.91520000E-10	7.59500000E+3	9.01261050E-5
+1.28150000E+4	1.00000000E+0	-1.94272445E+9	-4.85035000E+0	3.28680000E-10	1.91510000E-10	1.03160000E+4	8.99702328E-5
+2.04780000E+4	2.00000000E+0	-1.76610431E+9	-4.80035000E+0	3.34990000E-10	1.91470000E-10	1.19000000E+4	9.03351683E-5
+2.80730000E+4	3.00000000E+0	-1.58948424E+9	-4.75035000E+0	3.43650000E-10	1.91450000E-10	1.27430000E+4	8.94183325E-5
+3.57270000E+4	4.00000000E+0	-1.41286411E+9	-4.70035000E+0	3.53530000E-10	1.91440000E-10	1.10950000E+4	8.93801468E-5
+4.34230000E+4	5.00000000E+0	-1.23624393E+9	-4.65035000E+0	3.61350000E-10	1.91430000E-10	7.83500000E+3	8.96674263E-5
+5.10620000E+4	6.00000000E+0	-1.05962381E+9	-4.60035000E+0	3.67250000E-10	1.91420000E-10	4.49800000E+3	8.95537275E-5
+5.86490000E+4	7.00000000E+0	-8.83003746E+8	-4.55035000E+0	3.71330000E-10	1.91400000E-10	2.23000000E+3	8.97498446E-5
+6.64840000E+4	8.00000000E+0	-7.06383432E+8	-4.50035000E+0	3.76610000E-10	1.91380000E-10	9.44000000E+2	8.88928460E-5
+7.43940000E+4	9.00000000E+0	-5.29763043E+8	-4.45035000E+0	3.79950000E-10	1.91370000E-10	4.52000000E+2	8.95252096E-5
+8.20330000E+4	1.00000000E+1	-3.53142925E+8	-4.40035000E+0	3.80520000E-10	1.91340000E-10	2.83000000E+2	8.97624063E-5
+8.96230000E+4	1.10000000E+1	-1.76522856E+8	-4.35035000E+0	3.72570000E-10	1.91310000E-10	2.43000000E+2	8.99558681E-5
+9.73330000E+4	1.20000000E+1	9.73330000E+4	-4.30035000E+0	3.54380000E-10	1.91340000E-10	1.76000000E+2	8.92907994E-5
+2.14748365E+9	1.30000000E+1	     NaN	     NaN	     NaN	     NaN	     NaN	8.85604547E-5
