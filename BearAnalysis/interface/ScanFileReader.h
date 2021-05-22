@@ -11,7 +11,7 @@ class ScanFileReader {
 
   ScanFileReader( int scanNumber );
 
-  void readFile( const std::string* fileName );
+  void readFile( const std::string& fileName );
 
   std::string scanType() const;
 
@@ -22,8 +22,8 @@ class ScanFileReader {
 
   std::string scanType_;
 
-  TGraphErrors* gr_mirrorCurrent_;
-  TGraphErrors* gr_drainCurrent_;
+  TGraphErrors* gr_mirror_;
+  TGraphErrors* gr_drain_;
   TGraphErrors* gr_scan_;
 
 
