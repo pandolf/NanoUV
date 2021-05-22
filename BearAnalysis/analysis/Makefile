@@ -16,6 +16,9 @@ EXTRALIBS := -L$(ROOTSYS)/lib -lHtml -lMathCore -lGenVector -lMinuit -lTreePlaye
 drawScan: drawScan.cpp ScanFileReader.o NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawScan drawScan.cpp ScanFileReader.o NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawScanRegions: drawScanRegions.cpp ScanFileReader.o NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawScanRegions drawScanRegions.cpp ScanFileReader.o NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 
