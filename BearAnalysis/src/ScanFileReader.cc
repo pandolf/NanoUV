@@ -38,7 +38,7 @@ ScanFileReader::ScanFileReader( int scanNumber ) {
 
   readFile(fileName);
 
-  drawGraphs();
+  system("mkdir -p plots");
 
 }
 
@@ -140,8 +140,8 @@ std::string ScanFileReader::getXtitle() const {
 void ScanFileReader::drawGraphs() const {
 
   drawGraph( gr_mirror_, "I0", "I_{0} [A]", this->getXtitle() );
-  drawGraph( gr_mirror_, "I0", "I_{0} [A]", this->getXtitle() );
-  drawGraph( gr_scan_  , "scan", "I_{A} [A]", this->getXtitle() );
+  drawGraph( gr_drain_ , "Idrain", "I_{drain} [A]", this->getXtitle() );
+  drawGraph( gr_scan_  , "scan", "Counts", this->getXtitle() );
 
 }
 
@@ -169,7 +169,7 @@ void ScanFileReader::drawGraph( TGraphErrors* graph, const std::string& name, co
 
   gPad->RedrawAxis();
 
-  std::string plotFileName(Form("%d_%s.pdf", scanNumber_, name.c_str()) );
+  std::string plotFileName(Form("plots/%d_%s.pdf", scanNumber_, name.c_str()) );
   c1->SaveAs( plotFileName.c_str() );
   if( name=="scan" ) system( Form("open %s", plotFileName.c_str()) );
 
