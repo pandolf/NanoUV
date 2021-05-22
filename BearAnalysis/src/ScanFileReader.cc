@@ -231,7 +231,10 @@ void ScanFileReader::drawGraph( TGraphErrors* graph, const std::string& name, co
   float xMin(9999.), xMax(-9999.), yMin(9999.), yMax(-9999.);
   findPlotRanges( graph, xMin, xMax, yMin, yMax );
 
-  if( yTitle=="Counts" ) yMin = 0;
+  if( yTitle=="Counts" ) {
+    yMin = 0;
+    yMax = 1.2*yMax;
+  }
 
   graph->SetMarkerSize(0.8);
   graph->SetMarkerStyle(20);
