@@ -17,6 +17,8 @@ int main( int argc, char* argv[] ) {
 
   ScanFileReader sfr(scanNumber);
 
+  sfr.drawGraphs();
+
   return 0;
 
 }
