@@ -91,6 +91,7 @@ void ScanFileReader::readFile( std::ifstream& ifs ) {
   std::string line;
   int foundLineLines = 0;
   bool readyToRead = false;
+  bool keithleyB = false;
 
   while( getline(ifs,line) ) {
 
@@ -116,6 +117,23 @@ void ScanFileReader::readFile( std::ifstream& ifs ) {
       if( thisLine=="SCAN TYPE: PHOTON ENERGY VS VAR_1 VS VAR_2"   ) scanType_ = "nexAFS";
 
       std::cout << "[ScanFileReader::readFile] Recognized scanType: " << scanType_ << std::endl;
+
+    } else if( thisLine=="Instrument 1: AMMETER KEITHLEY 6517A B" ) {
+
+      keithleyB = true;
+
+    } else if( thisLine=="Instrument 2: AMMETER KEITHLEY 6517A A" ) {
+
+      keithleyB = false;
+
+    } else if( keithleyB && thisLine=="Vsource: OFF" ) {
+
+      std::cout << "[ScanFileReader::readFile] WARNING!!! Seems like KEITHLEY B has Vsource OFF!!! Aborting!" << std::endl;
+      exit(13);
+
+    } else if( keithleyB && thisLine=="Vsource: ON" ) {
+
+      std::cout << "[ScanFileReader::readFile] Checked that KEITHLEY B has Vsource ON, as expected. Good." << std::endl;
 
     } else if( thisLine=="________________________________________________________________________________" ) {
 
@@ -215,17 +233,19 @@ void ScanFileReader::drawGraph( TGraphErrors* graph, const std::string& name, co
 
   if( yTitle=="Counts" ) yMin = 0;
 
-  graph->SetMarkerSize(1.3); 
+  graph->SetMarkerSize(0.8);
   graph->SetMarkerStyle(20);
   graph->SetMarkerColor(46);
   graph->SetLineColor(46);
 
-  TH2D* h2_axes = new TH2D( Form("axes_%s", graph->GetName()), "", 10, xMin, xMax, 10, yMin-0.1*fabs(yMin), yMax+0.2*fabs(yMax) );
+
+  TH2D* h2_axes = new TH2D( Form("axes_%s", graph->GetName()), "", 10, xMin, xMax, 10, yMin, yMax );
+  //TH2D* h2_axes = new TH2D( Form("axes_%s", graph->GetName()), "", 10, xMin, xMax, 10, yMin-0.1*fabs(yMin), yMax+0.2*fabs(yMax) );
   h2_axes->SetXTitle( xTitle.c_str() );
   h2_axes->SetYTitle( yTitle.c_str() );
   h2_axes->Draw();
 
-  graph->Draw("Psame");
+  graph->Draw("PLsame");
 
   gPad->RedrawAxis();
 
