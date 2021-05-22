@@ -8,6 +8,8 @@
 
 ScanFileReader::ScanFileReader( int scanNumber ) {
 
+  std::cout << "[ScanFileReader] Starting scan N." << scanNumber << std::endl;
+
   gr_mirrorCurrent_ = new TGraphErrors(0);
   gr_drainCurrent_ = new TGraphErrors(0);
   gr_scan_ = new TGraphErrors(0);
@@ -49,11 +51,6 @@ void ScanFileReader::readFile( const std::string& fileName ) {
 
     line.erase(std::remove(line.begin(), line.end(), '\n'), line.end());
     line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
-    //line.erase(std::remove_if(line.begin(), // remove special chars
-    //    line.end(),
-    //    [](char c) {
-    //        return !(isWordChar(c) || '-' == c || '\'' == c);
-    //    }), line.end());
     std::string thisLine = line;
 
     std::string delimiter = " ";
@@ -70,9 +67,8 @@ void ScanFileReader::readFile( const std::string& fileName ) {
 
     if( words[0]=="SCAN" && words[1]=="TYPE:" ) {
 
-std::cout << "line: '" << thisLine << "'" << std::endl;
       if( thisLine=="SCAN TYPE: Kinetic Energy Electron analyzer " ) scanType_ = "energyScan";
-      if( thisLine=="SCAN TYPE: THETAA " ) scanType_ = "energyScan";
+      if( thisLine=="SCAN TYPE: THETAA" ) scanType_ = "thetaScan";
 
       std::cout << "[ScanFileReader::readFile] Recognized scantype: " << scanType_ << std::endl;
 
