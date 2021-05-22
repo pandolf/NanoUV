@@ -6,7 +6,7 @@
 
 
 
-ScanFileReader::ScanfileReader( int scanNumber ) {
+ScanFileReader::ScanFileReader( int scanNumber ) {
 
   gr_mirrorCurrent_ = new TGraphErrors(0);
   gr_drainCurrent_ = new TGraphErrors(0);
@@ -26,7 +26,7 @@ ScanFileReader::ScanfileReader( int scanNumber ) {
   else if( scanNumber < 10 ) // one digit, add three zeros
     suffix = "000" + suffix;
   
-  std::string fileName(Form("file(1)%s.txt");
+  std::string fileName(Form("../data/file(1)%s.txt", suffix.c_str()));
 
   readFile(fileName);
 
@@ -43,11 +43,18 @@ void ScanFileReader::readFile( const std::string& fileName ) {
   }
 
      
-  std::string line
+  std::string line;
 
   while( getline(ifs,line) ) {
 
     line.erase(std::remove(line.begin(), line.end(), '\n'), line.end());
+    line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
+    //line.erase(std::remove_if(line.begin(), // remove special chars
+    //    line.end(),
+    //    [](char c) {
+    //        return !(isWordChar(c) || '-' == c || '\'' == c);
+    //    }), line.end());
+    std::string thisLine = line;
 
     std::string delimiter = " ";
     size_t pos = 0;
@@ -59,10 +66,13 @@ void ScanFileReader::readFile( const std::string& fileName ) {
       words.push_back(word);
     }
 
+    if( words.size() < 2 ) continue;
+
     if( words[0]=="SCAN" && words[1]=="TYPE:" ) {
 
-      if( line=="SCAN TYPE: Kinetic Energy Electron analyzer " ) scanType_ = "energyScan";
-      if( line=="SCAN TYPE: THETAA " ) scanType_ = "energyScan";
+std::cout << "line: '" << thisLine << "'" << std::endl;
+      if( thisLine=="SCAN TYPE: Kinetic Energy Electron analyzer " ) scanType_ = "energyScan";
+      if( thisLine=="SCAN TYPE: THETAA " ) scanType_ = "energyScan";
 
       std::cout << "[ScanFileReader::readFile] Recognized scantype: " << scanType_ << std::endl;
 
