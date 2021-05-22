@@ -5,12 +5,16 @@
 #include <iostream>
 
 #include "TFile.h"
+#include "TCanvas.h"
+#include "TH2D.h"
 
 
 
 ScanFileReader::ScanFileReader( int scanNumber ) {
 
-  std::cout << "[ScanFileReader] Starting scan N." << scanNumber << std::endl;
+  scanNumber_ = scanNumber;
+
+  std::cout << "[ScanFileReader] Starting scan N." << scanNumber_ << std::endl;
 
   gr_mirror_ = new TGraphErrors(0);
   gr_drain_ = new TGraphErrors(0);
@@ -21,18 +25,20 @@ ScanFileReader::ScanFileReader( int scanNumber ) {
   gr_scan_  ->SetName( Form("scan") );
 
 
-  std::string suffix(Form("%d", scanNumber));
+  std::string suffix(Form("%d", scanNumber_));
 
-  if( scanNumber < 1000 && scanNumber > 99 ) // three digits, add one zero
+  if( scanNumber_ < 1000 && scanNumber_ > 99 ) // three digits, add one zero
     suffix = "0" + suffix;
-  else if( scanNumber < 100 && scanNumber > 9 ) // two digits, add two zeros
+  else if( scanNumber_ < 100 && scanNumber_ > 9 ) // two digits, add two zeros
     suffix = "00" + suffix;
-  else if( scanNumber < 10 ) // one digit, add three zeros
+  else if( scanNumber_ < 10 ) // one digit, add three zeros
     suffix = "000" + suffix;
   
   std::string fileName(Form("../data/file(1)%s.txt", suffix.c_str()));
 
   readFile(fileName);
+
+  drawGraphs();
 
 }
 
@@ -113,13 +119,78 @@ void ScanFileReader::readFile( const std::string& fileName ) {
 
   } // while getLine
 
-  TFile* file = TFile::Open( "test.root", "recreate" );
-  file->cd();
-  gr_mirror_->Write();
-  gr_drain_ ->Write();
-  gr_scan_  ->Write();
-  file->Close();
-  
 
 }
 
+
+
+std::string ScanFileReader::getXtitle() const {
+
+  std::string xTitle;
+  if( scanType_=="thetaScan"  ) xTitle = "Analyzer #theta [deg]";
+  if( scanType_=="energyScan" ) xTitle = "Electron kinetic energy [eV]";
+
+  return xTitle;
+
+}
+
+
+
+
+void ScanFileReader::drawGraphs() const {
+
+  drawGraph( gr_mirror_, "I0", "I_{0} [A]", this->getXtitle() );
+  drawGraph( gr_mirror_, "I0", "I_{0} [A]", this->getXtitle() );
+  drawGraph( gr_scan_  , "scan", "I_{A} [A]", this->getXtitle() );
+
+}
+
+
+
+void ScanFileReader::drawGraph( TGraphErrors* graph, const std::string& name, const std::string& yTitle, const std::string& xTitle ) const {
+
+  TCanvas* c1 = new TCanvas( Form("c1_%s", graph->GetName()), "", 600, 600 );
+  c1->cd();
+
+  float xMin(0.), xMax(-9999.), yMin(0.), yMax(0.);
+  findPlotRanges( graph, xMin, xMax, yMin, yMax );
+
+  graph->SetMarkerSize(1.5); 
+  graph->SetMarkerStyle(20);
+  graph->SetMarkerColor(46);
+  graph->SetLineColor(46);
+
+  TH2D* h2_axes = new TH2D( Form("axes_%s", graph->GetName()), "", 10, xMin, xMax, 10, 0.9*yMin, 1.2*yMax );
+  h2_axes->SetXTitle( xTitle.c_str() );
+  h2_axes->SetYTitle( yTitle.c_str() );
+  h2_axes->Draw();
+
+  graph->Draw("Psame");
+
+  gPad->RedrawAxis();
+
+  std::string plotFileName(Form("%d_%s.pdf", scanNumber_, name.c_str()) );
+  c1->SaveAs( plotFileName.c_str() );
+  if( name=="scan" ) system( Form("open %s", plotFileName.c_str()) );
+
+  delete c1;
+  delete h2_axes;
+
+}
+
+
+void ScanFileReader::findPlotRanges( TGraph* graph, float& xMin, float& xMax, float& yMin, float& yMax ) const {
+
+  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+
+    double x, y;
+    graph->GetPoint( iPoint, x, y );
+
+    if( x<xMin ) xMin = x;
+    if( x>xMax ) xMax = x;
+    //if( y<yMin ) yMin = y; // keep yMin = 0
+    if( y>yMax ) yMax = y;
+
+  } // for points
+
+}
