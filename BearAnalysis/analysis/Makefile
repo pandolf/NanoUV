@@ -22,6 +22,11 @@ drawScanRatio: drawScanRatio.cpp BearScan.o NanoUVCommon.o
 drawThreeRatios: drawThreeRatios.cpp BearScan.o NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawThreeRatios drawThreeRatios.cpp BearScan.o NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawPsiC: drawPsiC.cpp BearScan.o NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawPsiC drawPsiC.cpp BearScan.o NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+
+
+
 checkScanKeithley: checkScanKeithley.cpp 
 	$(CC) -Wall $(INCLUDES) -o checkScanKeithley checkScanKeithley.cpp $(ROOTFLAG) $(EXTRALIBS)
 
