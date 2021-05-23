@@ -8,7 +8,7 @@
 
 
 
-void drawThreeRatios( const std::string& name, const std::string& label, float Egamma, 
+void drawThreeRatios( const std::string& name, const std::string& label,
                       const std::string& l1, int cnt1, int ac1, 
                       const std::string& l2, int cnt2, int ac2, 
                       const std::string& l3, int cnt3, int ac3 );
@@ -19,7 +19,9 @@ int main( int argc, char* argv[] ) {
   NanoUVCommon::setStyle();
 
 
-  drawThreeRatios( "polP_21eV", "Pol P", 21., "E_{k} = 3.3 eV", 99, 94, "E_{k} = 10 eV", 98, 95, "E_{k} = 13.5 eV", 97, 96 );
+  drawThreeRatios( "VB_PolP_thetaA"    , "VB, E = 21 eV, Pol P", "E_{k} = 3.3 eV", 99 , 94 , "E_{k} = 10 eV", 98 , 95 , "E_{k} = 13.5 eV", 97 , 96  );
+  drawThreeRatios( "VB_PolP_thetaA_ext", "VB, E = 21 eV, Pol P", "E_{k} = 3.3 eV", 170, 165, "E_{k} = 10 eV", 166, 163, "E_{k} = 13.5 eV", 169, 164 );
+  drawThreeRatios( "C1S_PolP_thetaA"   , "C1S, Pol P", "h#nu = 310 eV", 136, 138, "h#nu = 340 eV", 55, 56, "h#nu = 400 eV", 62, 64 );
 
   return 0;
 
@@ -27,7 +29,7 @@ int main( int argc, char* argv[] ) {
 
 
 
-void drawThreeRatios( const std::string& name, const std::string& label, float Egamma, 
+void drawThreeRatios( const std::string& name, const std::string& label,
                       const std::string& l1, int cnt1, int ac1, 
                       const std::string& l2, int cnt2, int ac2, 
                       const std::string& l3, int cnt3, int ac3 ) {
@@ -66,7 +68,9 @@ void drawThreeRatios( const std::string& name, const std::string& label, float E
   float xMin, xMax, yMin, yMax;
   NanoUVCommon::findGraphRanges( gr_ratio3, xMin, xMax, yMin, yMax );
 
-  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., 10. );
+  float yMaxPlot = (yMax>10.) ? 1.1*yMax : 10.;
+
+  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., yMaxPlot );
   h2_axes->SetYTitle( "CNT / aC" );
   h2_axes->SetXTitle( s_cnt1->getXtitle().c_str() );
   h2_axes->Draw("same");
@@ -78,7 +82,7 @@ void drawThreeRatios( const std::string& name, const std::string& label, float E
   gr_ratio2->Draw("PLSame");
   gr_ratio3->Draw("PLSame");
 
-  TLegend* legend = new TLegend( 0.2, 0.65, 0.55, 0.9, Form( "E(#gamma) = %.0f eV, Pol P", Egamma) );
+  TLegend* legend = new TLegend( 0.2, 0.65, 0.55, 0.9, label.c_str() );
   legend->SetFillColor(0);
   legend->SetTextSize( 0.038 );
   legend->AddEntry( gr_ratio1, l1.c_str(), "PL" );
@@ -89,6 +93,9 @@ void drawThreeRatios( const std::string& name, const std::string& label, float E
   gPad->RedrawAxis();
 
   c1->SaveAs( Form("plots/ratioAll_%s.pdf", name.c_str()) );
+
+  delete h2_axes;
+  delete c1;
 
 }
 
