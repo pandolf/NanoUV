@@ -158,7 +158,7 @@ void ScanFileReader::readFile( std::ifstream& ifs ) {
       if( numbers.size() > 5 ) {
 
         int x_index = scan_->x_index();
-        float x = atof( numbers[x_index].c_str() );
+        float x = (x_index>=0 ) ? atof( numbers[x_index].c_str() ) : gr_scan_->GetN();
 
         float y_mirror = atof( numbers[5].c_str() );
         float y_drain  = atof( numbers[4].c_str() );

@@ -64,6 +64,7 @@ std::string Scan::getXtitle() const {
   if( type_=="phiScan"    ) xTitle = "Analyzer #phi [deg]";
   if( type_=="energyScan" ) xTitle = "Electron kinetic energy [eV]";
   if( type_=="nexafs"     ) xTitle = "Photon energy [eV]";
+  if( type_=="time"       ) xTitle = "Time [au]";
 
   return xTitle;
 
@@ -78,6 +79,7 @@ std::string Scan::getYtitle() const {
   if( type_=="phiScan"    ) yTitle = "Counts";
   if( type_=="energyScan" ) yTitle = "Counts";
   if( type_=="nexafs"     ) yTitle = "I_{diode} [A]";
+  if( type_=="time"       ) yTitle = "I_{diode} [A]";
 
   return yTitle;
 
@@ -87,6 +89,7 @@ std::string Scan::getYtitle() const {
 int Scan::x_index() const {
 
   int x_index = (type_=="nexafs") ? 1 : 3;
+  if( type_=="time" ) x_index = -1;
 
   return x_index;
 
@@ -116,6 +119,7 @@ void Scan::recognizeScanType( const std::string& line ) {
   if( line=="SCAN TYPE: THETAA"                            ) type_ = "thetaScan";
   if( line=="SCAN TYPE: PHI_A"                             ) type_ = "phiScan";
   if( line=="SCAN TYPE: PHOTON ENERGY VS VAR_1 VS VAR_2"   ) type_ = "nexafs";
+  if( line=="SCAN TYPE: TIME"                              ) type_ = "time";
 
   if( type_!="" )
     std::cout << "[Scan::recognizeScanType] Recognized scanType: " << type_ << std::endl;
