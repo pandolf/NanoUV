@@ -23,7 +23,11 @@ int main( int argc, char* argv[] ) {
 
   drawThreeRatios( "VB_PolP_thetaA"    , "VB, E = 21 eV, Pol P", "E_{k} = 3.3 eV", BearScan(99) , BearScan(94) , "E_{k} = 10 eV", BearScan(98) , BearScan(95) , "E_{k} = 13.5 eV", BearScan(97) , BearScan(96 ) );
   drawThreeRatios( "VB_PolP_thetaA_ext", "VB, E = 21 eV, Pol P", "E_{k} = 3.3 eV", BearScan(170), BearScan(165), "E_{k} = 10 eV", BearScan(166), BearScan(163), "E_{k} = 13.5 eV", BearScan(169), BearScan(164) );
+
+  drawThreeRatios( "VB_PolP_phiA"      , "VB, E = 21 eV, Pol P", "E_{k} = 3.3 eV", BearScan::mergeScans(111,112), BearScan::mergeScans(118,119), "E_{k} = 10 eV", BearScan::mergeScans(106,107) , BearScan::mergeScans(114,115) , "E_{k} = 13.5 eV", BearScan::mergeScans(109,110) , BearScan::mergeScans(116,117) );
+
   drawThreeRatios( "C1S_PolP_thetaA"   , "C1S, Pol P"          , "h#nu = 310 eV" , BearScan(136), BearScan(138), "h#nu = 340 eV", BearScan(55) , BearScan(56) , "h#nu = 400 eV"  , BearScan(62) , BearScan(64 ) );
+
 
   return 0;
 
@@ -73,10 +77,6 @@ void drawThreeRatios( const std::string& name, const std::string& label,
   TLine* lineOne = new TLine( xMin, 1., xMax, 1. );
   lineOne->Draw("same");
 
-  gr_ratio1->Draw("PLSame");
-  gr_ratio2->Draw("PLSame");
-  gr_ratio3->Draw("PLSame");
-
   TLegend* legend = new TLegend( 0.2, 0.65, 0.55, 0.9, label.c_str() );
   legend->SetFillColor(0);
   legend->SetTextSize( 0.038 );
@@ -84,6 +84,10 @@ void drawThreeRatios( const std::string& name, const std::string& label,
   legend->AddEntry( gr_ratio2, l2.c_str(), "PL" );
   legend->AddEntry( gr_ratio3, l3.c_str(), "PL" );
   legend->Draw("same");
+
+  gr_ratio1->Draw("PLSame");
+  gr_ratio2->Draw("PLSame");
+  gr_ratio3->Draw("PLSame");
 
   gPad->RedrawAxis();
 
