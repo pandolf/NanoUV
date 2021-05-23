@@ -106,7 +106,7 @@ std::string BearScan::getXtitle() const {
   if( type_=="thetaScan"  ) xTitle = "Analyzer #theta [#circ]";
   if( type_=="phiScan"    ) xTitle = "Analyzer #phi [#circ]";
   if( type_=="energyScan" ) xTitle = "Electron kinetic energy [eV]";
-  if( type_=="psiC"       ) xTitle = "#Psi_{C} [#circ]";
+  if( type_=="psiC"       ) xTitle = "#psi_{C} [#circ]";
   if( type_=="nexafs"     ) xTitle = "Photon energy [eV]";
   if( type_=="time"       ) xTitle = "Time [au]";
 
