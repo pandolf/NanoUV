@@ -8,10 +8,12 @@
 
 
 
+
 void drawThreeRatios( const std::string& name, const std::string& label,
-                      const std::string& l1, int cnt1, int ac1, 
-                      const std::string& l2, int cnt2, int ac2, 
-                      const std::string& l3, int cnt3, int ac3 );
+                      const std::string& l1, BearScan s_cnt1, BearScan s_ac1, 
+                      const std::string& l2, BearScan s_cnt2, BearScan s_ac2,
+                      const std::string& l3, BearScan s_cnt3, BearScan s_ac3 );
+
 
 
 int main( int argc, char* argv[] ) {
@@ -19,9 +21,9 @@ int main( int argc, char* argv[] ) {
   NanoUVCommon::setStyle();
 
 
-  drawThreeRatios( "VB_PolP_thetaA"    , "VB, E = 21 eV, Pol P", "E_{k} = 3.3 eV", 99 , 94 , "E_{k} = 10 eV", 98 , 95 , "E_{k} = 13.5 eV", 97 , 96  );
-  drawThreeRatios( "VB_PolP_thetaA_ext", "VB, E = 21 eV, Pol P", "E_{k} = 3.3 eV", 170, 165, "E_{k} = 10 eV", 166, 163, "E_{k} = 13.5 eV", 169, 164 );
-  drawThreeRatios( "C1S_PolP_thetaA"   , "C1S, Pol P", "h#nu = 310 eV", 136, 138, "h#nu = 340 eV", 55, 56, "h#nu = 400 eV", 62, 64 );
+  drawThreeRatios( "VB_PolP_thetaA"    , "VB, E = 21 eV, Pol P", "E_{k} = 3.3 eV", BearScan(99) , BearScan(94) , "E_{k} = 10 eV", BearScan(98) , BearScan(95) , "E_{k} = 13.5 eV", BearScan(97) , BearScan(96 ) );
+  drawThreeRatios( "VB_PolP_thetaA_ext", "VB, E = 21 eV, Pol P", "E_{k} = 3.3 eV", BearScan(170), BearScan(165), "E_{k} = 10 eV", BearScan(166), BearScan(163), "E_{k} = 13.5 eV", BearScan(169), BearScan(164) );
+  drawThreeRatios( "C1S_PolP_thetaA"   , "C1S, Pol P"          , "h#nu = 310 eV" , BearScan(136), BearScan(138), "h#nu = 340 eV", BearScan(55) , BearScan(56) , "h#nu = 400 eV"  , BearScan(62) , BearScan(64 ) );
 
   return 0;
 
@@ -30,21 +32,14 @@ int main( int argc, char* argv[] ) {
 
 
 void drawThreeRatios( const std::string& name, const std::string& label,
-                      const std::string& l1, int cnt1, int ac1, 
-                      const std::string& l2, int cnt2, int ac2, 
-                      const std::string& l3, int cnt3, int ac3 ) {
+                      const std::string& l1, BearScan s_cnt1, BearScan s_ac1, 
+                      const std::string& l2, BearScan s_cnt2, BearScan s_ac2,
+                      const std::string& l3, BearScan s_cnt3, BearScan s_ac3 ) {
 
-  BearScan* s_cnt1 = new BearScan(cnt1);
-  BearScan* s_cnt2 = new BearScan(cnt2);
-  BearScan* s_cnt3 = new BearScan(cnt3);
 
-  BearScan* s_ac1  = new BearScan(ac1);
-  BearScan* s_ac2  = new BearScan(ac2);
-  BearScan* s_ac3  = new BearScan(ac3);
-
-  TGraphErrors* gr_ratio1 = BearScan::getRatio( s_cnt1, s_ac1 );
-  TGraphErrors* gr_ratio2 = BearScan::getRatio( s_cnt2, s_ac2 );
-  TGraphErrors* gr_ratio3 = BearScan::getRatio( s_cnt3, s_ac3 );
+  TGraphErrors* gr_ratio1 = BearScan::getRatio( &s_cnt1, &s_ac1 );
+  TGraphErrors* gr_ratio2 = BearScan::getRatio( &s_cnt2, &s_ac2 );
+  TGraphErrors* gr_ratio3 = BearScan::getRatio( &s_cnt3, &s_ac3 );
 
   gr_ratio1->SetMarkerStyle(20);
   gr_ratio1->SetMarkerSize(0.8);
@@ -72,7 +67,7 @@ void drawThreeRatios( const std::string& name, const std::string& label,
 
   TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., yMaxPlot );
   h2_axes->SetYTitle( "CNT / aC" );
-  h2_axes->SetXTitle( s_cnt1->getXtitle().c_str() );
+  h2_axes->SetXTitle( s_cnt1.getXtitle().c_str() );
   h2_axes->Draw("same");
 
   TLine* lineOne = new TLine( xMin, 1., xMax, 1. );
