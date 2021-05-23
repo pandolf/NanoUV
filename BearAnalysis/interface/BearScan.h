@@ -45,6 +45,7 @@ class BearScan {
   void expandGraphs( BearScan* s2 );
   static void expandGraph( TGraphErrors* gr1, TGraphErrors* gr2 );
 
+  TGraphErrors* averageSameX() const;
 
 
  private:
