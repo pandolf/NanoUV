@@ -1,4 +1,4 @@
-#include "../interface/ScanFileReader.h"
+#include "../interface/BearScan.h"
 #include "interface/NanoUVCommon.h"
 
 #include <iostream>
@@ -17,8 +17,8 @@ int main( int argc, char* argv[] ) {
   int firstRegion = (argc>2) ? atoi(argv[2]) : -1;
   int lastRegion  = (argc>3) ? atoi(argv[3]) : -1;
 
-  ScanFileReader sfr(scanNumber, firstRegion, lastRegion);
-  sfr.drawGraphs();
+  BearScan s(scanNumber, firstRegion, lastRegion);
+  s.drawGraphs();
 
   return 0;
 

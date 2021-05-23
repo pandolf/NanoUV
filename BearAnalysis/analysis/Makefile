@@ -13,8 +13,8 @@ ROOTFLAG = `${ROOTSYS}/bin/root-config --cflags --libs`
 EXTRALIBS := -L$(ROOTSYS)/lib -lHtml -lMathCore -lGenVector -lMinuit -lTreePlayer -lRooFitCore -lRooFit #-L$(ROOFIT_LIBDIR)/ 
 
 
-drawScan: drawScan.cpp Scan.o ScanFileReader.o NanoUVCommon.o
-	$(CC) -Wall $(INCLUDES) -o drawScan drawScan.cpp Scan.o ScanFileReader.o NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+drawScan: drawScan.cpp BearScan.o NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawScan drawScan.cpp BearScan.o NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
 checkScanKeithley: checkScanKeithley.cpp 
 	$(CC) -Wall $(INCLUDES) -o checkScanKeithley checkScanKeithley.cpp $(ROOTFLAG) $(EXTRALIBS)
@@ -22,11 +22,8 @@ checkScanKeithley: checkScanKeithley.cpp
 
 
 
-Scan.o: ../../BearAnalysis/src/Scan.cc 
-	$(CC) -Wall $(INCLUDES) -c ../../BearAnalysis/src/Scan.cc $(ROOTFLAG) $(EXTRALIBS)
-
-ScanFileReader.o: ../../BearAnalysis/src/ScanFileReader.cc Scan.o NanoUVCommon.o
-	$(CC) -Wall $(INCLUDES) -c ../../BearAnalysis/src/ScanFileReader.cc Scan.o NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+BearScan.o: ../../BearAnalysis/src/BearScan.cc NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -c ../../BearAnalysis/src/BearScan.cc $(ROOTFLAG) $(EXTRALIBS)
 
 NanoUVCommon.o: ../../CommonTools/src/NanoUVCommon.cc 
 	$(CC) -Wall $(INCLUDES) -c ../../CommonTools/src/NanoUVCommon.cc $(ROOTFLAG) $(EXTRALIBS)
