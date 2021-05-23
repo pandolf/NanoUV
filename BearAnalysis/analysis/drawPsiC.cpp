@@ -10,7 +10,7 @@
 
 
 
-void drawPsiC( const std::string& name, const std::string& label, int cnt, int ac );
+void drawPsiC( const std::string& name, const std::string& labelText, int cnt, int ac );
 
 
 int main( int argc, char* argv[] ) {
@@ -25,7 +25,7 @@ int main( int argc, char* argv[] ) {
 }
 
 
-void drawPsiC( const std::string& name, const std::string& label, int cnt, int ac ) {
+void drawPsiC( const std::string& name, const std::string& labelText, int cnt, int ac ) {
 
   BearScan s_cnt(cnt);
   BearScan s_ac (ac );
@@ -54,7 +54,7 @@ void drawPsiC( const std::string& name, const std::string& label, int cnt, int a
   gr_ac->SetMarkerColor(38);
   gr_ac->SetLineColor(38);
 
-  TLegend* legend = new TLegend( 0.2, 0.4, 0.55, 0.6, label.c_str() );
+  TLegend* legend = new TLegend( 0.2, 0.4, 0.55, 0.6, labelText.c_str() );
   legend->SetTextSize(0.038);
   legend->SetFillColor(0);
   legend->AddEntry( gr_cnt, "CNT", "PL" );
@@ -68,8 +68,32 @@ void drawPsiC( const std::string& name, const std::string& label, int cnt, int a
 
   c1->SaveAs( Form("plots/psiC_%s.pdf", name.c_str()) );
 
+  c1->Clear();
+
+  TH2D* h2_axes_ratio = new TH2D( "axes_ratio", "", 10, xMin, xMax, 10, 0., 8. );
+  h2_axes_ratio->SetXTitle( s_cnt.getXtitle().c_str() );
+  h2_axes_ratio->SetYTitle( "CNT / aC" );
+  h2_axes_ratio->Draw();
+
+  TGraphErrors* gr_ratio = NanoUVCommon::getGraphRatio( gr_cnt, gr_ac );
+  gr_ratio->SetMarkerStyle(20);
+  gr_ratio->SetMarkerSize(0.8);
+  gr_ratio->SetMarkerColor(46);
+  gr_ratio->SetLineColor(46);
+
+  gr_ratio->Draw("PLsame");
+
+  TPaveText* label = new TPaveText( 0.2, 0.8, 0.55, 0.9, "brNDC" );
+  label->SetTextSize(0.035);
+  label->SetFillColor(0);
+  label->AddText( labelText.c_str() );
+  label->Draw("same");
+
+  c1->SaveAs( Form("plots/psiC_ratio_%s.pdf", name.c_str()) );
+
   delete c1;
   delete h2_axes;
+  delete h2_axes_ratio;
 
 }
 
