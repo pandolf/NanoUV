@@ -34,6 +34,8 @@ class NanoUVCommon {
   static void plotWaveformGraph( TGraph* graph, const std::string& saveName );
   static TGraph* getGraphFromFile( const std::string& fileName );
 
+  static void findGraphRanges( TGraph* graph, float& xMin, float& xMax, float& yMin, float& yMax );
+
   static std::string scientific( float x, int decimals = 1 );
 
 };

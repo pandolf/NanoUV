@@ -392,3 +392,28 @@ void NanoUVCommon::setStyle() {
 
 }
 
+
+
+void NanoUVCommon::findGraphRanges( TGraph* graph, float& xMin, float& xMax, float& yMin, float& yMax ) {
+
+  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+
+    double x, y;
+    graph->GetPoint( iPoint, x, y );
+
+    if( iPoint==0 ) { // initialize
+      xMin = x;
+      xMax = x;
+      yMin = y;
+      yMax = y;
+    }
+
+    if( x<xMin ) xMin = x;
+    if( x>xMax ) xMax = x;
+    if( y<yMin ) yMin = y;
+    if( y>yMax ) yMax = y;
+
+  } // for points
+
+}
+
