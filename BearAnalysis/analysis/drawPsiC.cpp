@@ -17,7 +17,8 @@ int main( int argc, char* argv[] ) {
 
   NanoUVCommon::setStyle();
 
-  drawPsiC( "VB_theta30_Ek10", "VB, E_{k} = 10 eV, #theta_{A} = -30#circ", 153, 155 );
+  drawPsiC( "VB_theta30_Ek10 ", "VB, E_{k} = 10 eV, #theta_{A} = -30#circ" , 153, 155 );
+  drawPsiC( "VB_theta100_Ek10", "VB, E_{k} = 10 eV, #theta_{A} = -100#circ", 152, 154 );
 
 
   return 0;
@@ -70,24 +71,29 @@ void drawPsiC( const std::string& name, const std::string& labelText, int cnt, i
 
   c1->Clear();
 
-  TH2D* h2_axes_ratio = new TH2D( "axes_ratio", "", 10, xMin, xMax, 10, 0., 8. );
-  h2_axes_ratio->SetXTitle( s_cnt.getXtitle().c_str() );
-  h2_axes_ratio->SetYTitle( "CNT / aC" );
-  h2_axes_ratio->Draw();
-
   TGraphErrors* gr_ratio = NanoUVCommon::getGraphRatio( gr_cnt, gr_ac );
   gr_ratio->SetMarkerStyle(20);
   gr_ratio->SetMarkerSize(0.8);
   gr_ratio->SetMarkerColor(46);
   gr_ratio->SetLineColor(46);
 
+  float yMin_ratio, yMax_ratio;
+  NanoUVCommon::findGraphRanges( gr_ratio, xMin, xMax, yMin_ratio, yMax_ratio );
+
+  TH2D* h2_axes_ratio = new TH2D( "axes_ratio", "", 10, xMin, xMax, 10, 0., yMax_ratio*1.3 );
+  h2_axes_ratio->SetXTitle( s_cnt.getXtitle().c_str() );
+  h2_axes_ratio->SetYTitle( "CNT / aC" );
+  h2_axes_ratio->Draw();
+
   gr_ratio->Draw("PLsame");
 
-  TPaveText* label = new TPaveText( 0.2, 0.8, 0.55, 0.9, "brNDC" );
+  TPaveText* label = new TPaveText( 0.2, 0.8, 0.65, 0.9, "brNDC" );
   label->SetTextSize(0.035);
   label->SetFillColor(0);
   label->AddText( labelText.c_str() );
   label->Draw("same");
+
+  gPad->RedrawAxis();
 
   c1->SaveAs( Form("plots/psiC_ratio_%s.pdf", name.c_str()) );
 
