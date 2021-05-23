@@ -9,14 +9,15 @@ int main( int argc, char* argv[] ) {
   NanoUVCommon::setStyle();
 
   if( argc<2 ) {
-    std::cout << "USAGE: ./drawScan [scanNumber]" << std::endl;
+    std::cout << "USAGE: ./drawScan [scanNumber] [firstRegion=-1] [lastRegion=-1]" << std::endl;
     exit(1);
   }
 
   int scanNumber( atoi(argv[1]) );
+  int firstRegion = (argc>2) ? atoi(argv[2]) : -1;
+  int lastRegion  = (argc>3) ? atoi(argv[3]) : -1;
 
-  ScanFileReader sfr(scanNumber);
-  sfr.readSingleScan();
+  ScanFileReader sfr(scanNumber, firstRegion, lastRegion);
   sfr.drawGraphs();
 
   return 0;
