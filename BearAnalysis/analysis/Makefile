@@ -16,6 +16,9 @@ EXTRALIBS := -L$(ROOTSYS)/lib -lHtml -lMathCore -lGenVector -lMinuit -lTreePlaye
 drawScan: drawScan.cpp BearScan.o NanoUVCommon.o
 	$(CC) -Wall $(INCLUDES) -o drawScan drawScan.cpp BearScan.o NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawScanRatio: drawScanRatio.cpp BearScan.o NanoUVCommon.o
+	$(CC) -Wall $(INCLUDES) -o drawScanRatio drawScanRatio.cpp BearScan.o NanoUVCommon.o $(ROOTFLAG) $(EXTRALIBS)
+
 checkScanKeithley: checkScanKeithley.cpp 
 	$(CC) -Wall $(INCLUDES) -o checkScanKeithley checkScanKeithley.cpp $(ROOTFLAG) $(EXTRALIBS)
 
