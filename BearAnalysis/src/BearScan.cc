@@ -22,12 +22,12 @@ BearScan::BearScan( int number, int firstRegion, int lastRegion ) {
 
   type_ = "";
 
-  gr_mirror_ = new TGraphErrors(0);
-  gr_drain_ = new TGraphErrors(0);
+  gr_I0_ = new TGraphErrors(0);
+  gr_Idrain_ = new TGraphErrors(0);
   gr_scan_ = new TGraphErrors(0);
 
-  gr_mirror_->SetName( Form("mirror") );
-  gr_drain_ ->SetName( Form("drain") );
+  gr_I0_->SetName( Form("I0") );
+  gr_Idrain_ ->SetName( Form("Idrain") );
   gr_scan_  ->SetName( Form("scan") );
 
   if( firstRegion==-1 && lastRegion==-1 )
@@ -76,17 +76,17 @@ std::string BearScan::type() const {
 }
 
 
-TGraphErrors* BearScan::gr_mirror() const {
+TGraphErrors* BearScan::gr_I0() const {
 
-  return gr_mirror_;
+  return gr_I0_;
 
 }
 
 
 
-TGraphErrors* BearScan::gr_drain() const {
+TGraphErrors* BearScan::gr_Idrain() const {
 
-  return gr_drain_;
+  return gr_Idrain_;
 
 }
 
@@ -270,7 +270,7 @@ void BearScan::readFile( std::ifstream& ifs ) {
 
     } else if( keithleyB && thisLine=="Vsource: ON" ) {
 
-      std::cout << "[BearScan::readFile] Checked that KEITHLEY B has Vsource ON, as expected. Good." << std::endl;
+      std::cout << "[BearScan::readFile] Checked that KEITHLEY B has Vsource ON" << std::endl;
 
     } else if( thisLine=="________________________________________________________________________________" ) {
 
@@ -298,12 +298,12 @@ void BearScan::readFile( std::ifstream& ifs ) {
         int x_index = this->x_index();
         float x = (x_index>=0 ) ? atof( numbers[x_index].c_str() ) : gr_scan_->GetN();
 
-        float y_mirror = atof( numbers[5].c_str() );
-        float y_drain  = atof( numbers[4].c_str() );
+        float y_I0     = atof( numbers[5].c_str() );
+        float y_Idrain = atof( numbers[4].c_str() );
         float y_scan   = atof( numbers[6].c_str() );
 
-        gr_mirror_->SetPoint( gr_mirror_->GetN(), x, y_mirror );
-        gr_drain_ ->SetPoint( gr_drain_ ->GetN(), x, y_drain  );
+        gr_I0_->SetPoint( gr_I0_->GetN(), x, y_I0 );
+        gr_Idrain_ ->SetPoint( gr_Idrain_ ->GetN(), x, y_Idrain  );
         gr_scan_  ->SetPoint( gr_scan_  ->GetN(), x, y_scan   );
 
       } // if numbers size
@@ -336,9 +336,9 @@ void BearScan::readRegionsScan() {
 
 void BearScan::drawGraphs() const {
 
-  drawGraph( gr_mirror_, "I0"    , this->getXtitle(), "I_{0} [A]"       );
-  drawGraph( gr_drain_ , "Idrain", this->getXtitle(), "I_{drain} [A]"   );
-  drawGraph( gr_scan_  , "scan"  , this->getXtitle(), this->getYtitle() );
+  drawGraph( gr_I0_     , "I0"    , this->getXtitle(), "I_{0} [A]"       );
+  drawGraph( gr_Idrain_ , "Idrain", this->getXtitle(), "I_{drain} [A]"   );
+  drawGraph( gr_scan_   , "scan"  , this->getXtitle(), this->getYtitle() );
 
 }
 
@@ -422,3 +422,50 @@ TGraphErrors* BearScan::getRatio( BearScan* s1, BearScan* s2 ) {
   return gr_ratio;
 
 }
+
+
+
+
+BearScan BearScan::mergeScans( int scanNumber1, int scanNumber2 ) {
+
+  std::cout << "[BearScan::mergeScans] Merging scans " << scanNumber1 << " and " << scanNumber2 << " ... " << std::endl;
+  BearScan* s1 = new BearScan( scanNumber1 );
+  BearScan* s2 = new BearScan( scanNumber2 );
+
+  BearScan s_merge(*s1);
+
+  s_merge.expandGraphs( s2 );
+
+  return s_merge;
+
+}
+
+
+
+void BearScan::expandGraphs( BearScan* s2 ) {
+
+  expandGraph( gr_I0_    , s2->gr_I0()     );
+  expandGraph( gr_Idrain_, s2->gr_Idrain() );
+  expandGraph( gr_scan_  , s2->gr_scan()   );
+
+}
+
+
+void BearScan::expandGraph( TGraphErrors* gr1, TGraphErrors* gr2 ) {
+
+  float xMin, xMax, yMin, yMax;
+  NanoUVCommon::findGraphRanges( gr1, xMin, xMax, yMin, yMax );
+
+  for( unsigned iPoint=0; iPoint<gr2->GetN(); ++iPoint ) {
+
+    double thisx, thisy;
+    gr2->GetPoint( iPoint, thisx, thisy );
+
+    if( thisx>xMin && thisx<xMax ) continue;
+
+    gr1->SetPoint( gr1->GetN(), thisx, thisy );
+
+  } // for points
+
+}
+

@@ -18,8 +18,8 @@ class BearScan {
   int lastRegion() const;
   std::string type() const;
 
-  TGraphErrors* gr_mirror() const;
-  TGraphErrors* gr_drain() const;
+  TGraphErrors* gr_I0() const;
+  TGraphErrors* gr_Idrain() const;
   TGraphErrors* gr_scan() const;
 
   std::string getXtitle() const;
@@ -41,6 +41,10 @@ class BearScan {
   void drawGraph( TGraphErrors* graph, const std::string& name, const std::string& xTitle, const std::string& yTitle ) const;
 
   static TGraphErrors* getRatio( BearScan* s_num, BearScan* s_denom );
+  static BearScan mergeScans( int scanNumber1, int scanNumber2 );
+  void expandGraphs( BearScan* s2 );
+  static void expandGraph( TGraphErrors* gr1, TGraphErrors* gr2 );
+
 
 
  private:
@@ -50,8 +54,8 @@ class BearScan {
   int lastRegion_;
   std::string type_;
 
-  TGraphErrors* gr_mirror_;
-  TGraphErrors* gr_drain_;
+  TGraphErrors* gr_I0_;
+  TGraphErrors* gr_Idrain_;
   TGraphErrors* gr_scan_;
 
 };
