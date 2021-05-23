@@ -37,7 +37,16 @@ int main( int argc, char* argv[] ) {
 
   float xMin, xMax, yMin, yMax;
   NanoUVCommon::findGraphRanges( gr_ratio, xMin, xMax, yMin, yMax );
-  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, yMin, yMax );
+  TH2D* h2_axes = new TH2D( "axes", "", 10, xMin, xMax, 10, 0., 15. );
+  h2_axes->SetYTitle( "CNT / aC" );
+  h2_axes->SetXTitle( s1->getXtitle().c_str() );
+  h2_axes->Draw("same");
+
+  gr_ratio->Draw("PLSame");
+
+  c1->SaveAs( Form("plots/ratio_%d_%d.pdf", s1->number(), s2->number()) );
+
+  gPad->RedrawAxis();
 
   return 0;
 
