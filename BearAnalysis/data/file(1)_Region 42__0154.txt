@@ -1,0 +1,825 @@
+G:\BEAR_storage\User_Experiments\20210520_ruocco\file(1)_Region 42__0154.txt
+Ring Energy (GeV): 2
+Lifetime (hours): 22.5767
+Scan beginning: 5/22/2021	5:43:31 PM
+Ring current (mA): 309.3
+Source position: x (mm): -0.002 x' (mrad): -0.002 y (mm): -0.004 y' (mrad): 0
+Scan end: 5/22/2021	6:38:29 PM
+Ring current (mA): 309.51
+Source position: x (mm): -0.001 x' (mrad): -0.002 y (mm): -0.004 y' (mrad): 0
+
+SCAN TYPE: PHOTON ENERGY VS VAR_1 VS VAR_2
+
+FILE INFO: FILE INFO:
+
+SCAN PARAMETERS
+waiting time (ms): 100
+Number of scans: 1
+Current scan number: 1
+DARK OFF 
+PREDARK OFF 
+
+SCAN PARAMETERS
+Regions configuration: 
+number of regions: 46
+Mirror grating scan: off
+Timed acquisition: on - all points acquired
+Number of shots: 10
+Dark for Timed acquisition: on
+Number of shots dark: 0
+Region 1:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-4.086970
+Var_2: PsiC 0.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 2:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-4.084810
+Var_2: PsiC 2.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 3:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-4.080610
+Var_2: PsiC 4.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 4:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-4.074390
+Var_2: PsiC 6.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 5:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-4.066150
+Var_2: PsiC 8.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 6:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-4.055920
+Var_2: PsiC 10.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 7:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-4.043720
+Var_2: PsiC 12.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 8:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-4.029590
+Var_2: PsiC 14.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 9:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-4.013550
+Var_2: PsiC 16.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 10:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.995660
+Var_2: PsiC 18.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 11:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.975950
+Var_2: PsiC 20.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 12:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.954470
+Var_2: PsiC 22.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 13:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.931280
+Var_2: PsiC 24.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 14:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.906430
+Var_2: PsiC 26.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 15:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.879980
+Var_2: PsiC 28.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 16:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.852010
+Var_2: PsiC 30.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 17:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.822580
+Var_2: PsiC 32.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 18:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.791760
+Var_2: PsiC 34.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 19:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.759630
+Var_2: PsiC 36.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 20:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.726270
+Var_2: PsiC 38.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 21:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.691760
+Var_2: PsiC 40.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 22:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.656190
+Var_2: PsiC 42.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 23:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.619650
+Var_2: PsiC 44.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 24:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.582230
+Var_2: PsiC 46.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 25:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.544010
+Var_2: PsiC 48.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 26:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.505100
+Var_2: PsiC 50.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 27:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.465600
+Var_2: PsiC 52.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 28:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.425590
+Var_2: PsiC 54.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 29:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.385180
+Var_2: PsiC 56.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 30:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.344480
+Var_2: PsiC 58.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 31:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.303570
+Var_2: PsiC 60.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 32:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.262570
+Var_2: PsiC 62.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 33:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.221570
+Var_2: PsiC 64.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 34:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.180680
+Var_2: PsiC 66.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 35:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.139990
+Var_2: PsiC 68.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 36:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.099620
+Var_2: PsiC 70.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 37:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.059650
+Var_2: PsiC 72.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 38:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-3.020200
+Var_2: PsiC 74.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 39:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-2.981350
+Var_2: PsiC 76.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 40:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-2.943200
+Var_2: PsiC 78.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 41:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-2.905850
+Var_2: PsiC 80.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 42:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-2.869390
+Var_2: PsiC 82.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 43:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-2.833910
+Var_2: PsiC 84.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 44:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-2.799500
+Var_2: PsiC 86.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 45:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-2.766250
+Var_2: PsiC 88.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+Region 46:
+Energy (eV): 21.000000
+Deviation angle choice: Default High flux
+Deviation angle (°): 30.000000
+Full Beam
+GNIM channel
+range keithley B 20 nA
+range keithley C 200 pA
+range keithley A 20 nA
+Var_1: ZM-2.734240
+Var_2: PsiC 90.000000
+Bias CEM (V): 0.000000
+Bias Keithley B (V): 0.000000
+Name region: 
+
+BEAR MONOCHROMATOR CONFIGURATION: 
+Current Grating Position:     168976.10
+Current Mirror Position: 10000.1
+Current Grating: GNIM
+P2 phiz position:  -0.0070
+Mono axis position: 73.5000
+Current Photon Energy (eV): 21.000
+Current Deviation Angle: 29.905
+Vertical Exit Slits (um): 200.000
+Exit slit y axis position: 1.6125
+Horizontal Exit Slits (um):  890.000
+Exit slit z axis position: 1.9250
+Mitutoyo position (mm): 
+
+Dose on sample (mJ/cm^2): NaN
+
+ENERGY CALIBRATION:
+offset grating G1200: yes
+Delta 0 order G1200:  -300.0
+offset grating G1800: not
+Delta 0 order G1800:  0.0
+offset grating GNIM: not
+Delta 0 order GNIM:  0.0
+ZERO ORDER POSITIONS:
+Grating G1200: Mirror position:  4938.0
+Grating position: -106855.0
+Grating G1800: 
+Mirror position:  4938.0
+Grating position: -106345.0
+Grating GNIM: 
+Mirror position:  10000.0
+Grating position: 227300.0
+
+Initial filter: Full Beam
+
+EXPERIMENTAL CHAMBER CONFIGURATION: 
+PsiC (deg):   -0.002044
+Phi Analyzer (degrees): 89.987573
+Theta Manipulator (degrees): -10.138410
+Theta Analyzer (degrees): -99.999965
+PhiM (degrees): -0.015386
+XM (mm): -2.000000
+YM (mm): 6.999850
+ZM (mm): (Warning: for kinetic energy scans, 
+this parameter is given in the scan settings) 
+-5.000450
+TiltM (°): 0.000138
+
+ELECTRON ANALYZER CONFIGURATION: 
+Current Kinetik energy (eV): 10.0
+Mode: DE = COST
+Pass Energy (eV):  22.000
+CEM: ON
+Bias Front-Back CEM (V): 2600.062
+Bias Back-Collector CEM (V): 94.972
+Bias Retard-Front CEM: 100.070COIL VALUES
+Ix (amps):2.820
+Iy (amps): 5.382
+Iz (amps): 62.925
+
+POLARIZATION SELECTOR CONFIGURATION:
+Psi1 (rad): -0.000600026
+Psi2 (rad): 0.000599990
+Z min position (mm): 58.818900
+DZ position (mm): 40.219010
+Zmin 0 (mm): 65.700000
+DZ0 (mm): 54.000000
+
+BEAM SELECTOR CONFIGURATION:
+Zmin position (mm): NaN
+DZ position (mm): NaN
+Y+ position (mm): NaN
+Y- position (mm): NaN
+
+CHANNEL ELECTRON MULTIPLIER CONFIGURATION:
+CEM configured: OFF
+Bias CEM: 0.000000
+
+FLUORESCENCE DETECTOR CONFIGURATION:
+Not configured
+
+LUMINESCENCE MONOCHROMATOR CONFIGURATION:
+Optical fiber position (mm): -0.000000
+Optical fiber Switch inside: OFF
+Optical fiber Switch outside: ON
+Monochromator wavelength (A): 229000.000000
+Limit Switches: OFF
+
+I0 MONITOR PARAMETERS:
+I0 detector position(mm): -0.000000E+0
+Lower switch: OFF
+Upper switch: OFF
+Valve status:closed
+
+PRESSURE PARAMETERS:
+Monitor chamber pressure (mbar): 2.191e-09
+Experimental chamber pressure -ION GAUGE-(mbar): 0.000000E+0
+
+XMCD PARAMETERS:
+Xmcd OFF
+Xmcd Direction -
+Xmcd current (A): 0.000000
+
+Gated scan off
+
+Instrument 1: AMMETER KEITHLEY 6517A B
+Measure type: Current
+range type: set range value
+range value (ampere):  20 nA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+SAMPLE BIAS (V): 0.000
+Vsource: ON
+Output Voltage value: -0.000
+Vsource range: 100 V
+
+Instrument 2: AMMETER KEITHLEY 6517A A
+Measure type: Current
+range type: set range value
+range value (ampere):  20 nA
+Integration time:  set NPLC value
+NPLC value: 10.000
+Digital filter count: 2
+Vsource: OFF
+Output Voltage value: -0.000
+Vsource range: 100 V
+Trigger source: bus
+
+Range Keithley A changed to 20 pA
+
+Range Keithley A changed to 20 nA
+
+Instrument 3: COUNTER ORTEC 996Integration time (sec): 1.000
+
+
+________________________________________________________________________________
+
+RelativeTime (msec)	Photon Energy	Var_1	Var_2	INSTR_1_Sample floating_(ampere ) 	INSTR_2_Monitor IM_(ampere)  	INSTR_3_Ortec 996 counts_(counts)	I_BPM_sum (Amps)	
+________________________________________________________________________________
+
+3.21765200E+6	2.09999785E+1	-2.86939000E+0	8.20000000E+1	2.36030000E-10	1.91960000E-10	1.17370000E+4	8.96595436E-5
+3.22390900E+6	2.09999425E+1	-2.86939000E+0	8.20000000E+1	2.35970000E-10	1.91820000E-10	1.17810000E+4	8.98202824E-5
+3.22871300E+6	2.10000145E+1	-2.86939000E+0	8.20000000E+1	2.35930000E-10	1.91770000E-10	1.11460000E+4	8.97857684E-5
+3.23351300E+6	2.10000506E+1	-2.86939000E+0	8.20000000E+1	2.35880000E-10	1.91720000E-10	1.12440000E+4	8.92020988E-5
+3.23830300E+6	2.10000506E+1	-2.86939000E+0	8.20000000E+1	2.35900000E-10	1.91720000E-10	1.15960000E+4	8.97525030E-5
+3.24313700E+6	2.10000145E+1	-2.86939000E+0	8.20000000E+1	2.35650000E-10	1.91640000E-10	1.16320000E+4	8.89039056E-5
+3.24791000E+6	2.10000145E+1	-2.86939000E+0	8.20000000E+1	2.35780000E-10	1.91650000E-10	1.10990000E+4	8.93138724E-5
+3.25274700E+6	2.10000506E+1	-2.86939000E+0	8.20000000E+1	2.36210000E-10	1.92020000E-10	1.13870000E+4	8.98409563E-5
+3.25752100E+6	2.10000866E+1	-2.86939000E+0	8.20000000E+1	2.36690000E-10	1.92470000E-10	1.10550000E+4	8.94500779E-5
+3.26235800E+6	2.09999785E+1	-2.86939000E+0	8.20000000E+1	2.36620000E-10	1.92430000E-10	1.11070000E+4	9.00482732E-5
