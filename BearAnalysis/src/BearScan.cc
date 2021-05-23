@@ -484,6 +484,7 @@ TGraphErrors* BearScan::averageSameX() const {
 
       float rms = 0.;
       for( unsigned i=0; i<vec.size(); ++i ) rms += (vec[i]-ave)*(vec[i]-ave);
+      rms = rms / ((float)vec.size()-1);
       rms = sqrt(rms);
       rms /= sqrt((float)vec.size());
  
