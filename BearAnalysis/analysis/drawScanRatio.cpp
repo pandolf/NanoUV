@@ -44,9 +44,10 @@ int main( int argc, char* argv[] ) {
 
   gr_ratio->Draw("PLSame");
 
+  gPad->RedrawAxis();
+
   c1->SaveAs( Form("plots/ratio_%d_%d.pdf", s1->number(), s2->number()) );
 
-  gPad->RedrawAxis();
 
   return 0;
 
