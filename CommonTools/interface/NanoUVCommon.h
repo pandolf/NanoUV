@@ -3,7 +3,7 @@
 
 #include "TCanvas.h"
 #include "TPaveText.h"
-#include "TGraph.h"
+#include "TGraphErrors.h"
 
 
 #include <vector>
@@ -35,6 +35,8 @@ class NanoUVCommon {
   static TGraph* getGraphFromFile( const std::string& fileName );
 
   static void findGraphRanges( TGraph* graph, float& xMin, float& xMax, float& yMin, float& yMax );
+  static TGraphErrors* getGraphRatio( TGraphErrors* gr_num, TGraphErrors* gr_denom );
+
 
   static std::string scientific( float x, int decimals = 1 );
 

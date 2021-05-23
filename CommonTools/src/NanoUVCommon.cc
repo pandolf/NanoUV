@@ -417,3 +417,23 @@ void NanoUVCommon::findGraphRanges( TGraph* graph, float& xMin, float& xMax, flo
 
 }
 
+
+TGraphErrors* NanoUVCommon::getGraphRatio( TGraphErrors* gr1, TGraphErrors* gr2 ) {
+
+  TGraphErrors* gr_ratio = new TGraphErrors(0);
+
+  for( unsigned iPoint=0; iPoint<gr1->GetN(); ++iPoint ) {
+
+    double x1, y1;
+    gr1->GetPoint( iPoint, x1, y1 );
+
+    double x2, y2;
+    gr2->GetPoint( iPoint, x2, y2 );
+
+    gr_ratio->SetPoint( gr_ratio->GetN(), x1, y1/y2 );
+
+  }  // for points
+
+  return gr_ratio;
+
+}
