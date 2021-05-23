@@ -18,6 +18,10 @@ class BearScan {
   int lastRegion() const;
   std::string type() const;
 
+  TGraphErrors* gr_mirror() const;
+  TGraphErrors* gr_drain() const;
+  TGraphErrors* gr_scan() const;
+
   std::string getXtitle() const;
   std::string getYtitle() const;
 
@@ -36,7 +40,7 @@ class BearScan {
   void drawGraphs() const;
   void drawGraph( TGraphErrors* graph, const std::string& name, const std::string& xTitle, const std::string& yTitle ) const;
 
-  void findPlotRanges( TGraph* graph, float& xMin, float& xMax, float& yMin, float& yMax ) const;
+  static TGraphErrors* getRatio( BearScan* s_num, BearScan* s_denom );
 
 
  private:

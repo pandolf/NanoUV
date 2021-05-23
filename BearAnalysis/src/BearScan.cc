@@ -13,6 +13,8 @@ BearScan::BearScan( int number, int firstRegion, int lastRegion ) {
 
   std::cout << "[BearScan] Creating scan N." << number << std::endl;
 
+  system( "mkdir -p plots" );
+
   number_ = number;
 
   firstRegion_ = firstRegion;
@@ -70,6 +72,29 @@ int BearScan::lastRegion() const {
 std::string BearScan::type() const {
 
   return type_;
+
+}
+
+
+TGraphErrors* BearScan::gr_mirror() const {
+
+  return gr_mirror_;
+
+}
+
+
+
+TGraphErrors* BearScan::gr_drain() const {
+
+  return gr_drain_;
+
+}
+
+
+
+TGraphErrors* BearScan::gr_scan() const {
+
+  return gr_scan_;
 
 }
 
@@ -176,8 +201,6 @@ void BearScan::readSingleScan() {
 
   } // if ifsAver
 
-
-  system("mkdir -p plots");
 
 }
 
@@ -327,7 +350,7 @@ void BearScan::drawGraph( TGraphErrors* graph, const std::string& name, const st
   c1->cd();
 
   float xMin(9999.), xMax(-9999.), yMin(9999.), yMax(-9999.);
-  findPlotRanges( graph, xMin, xMax, yMin, yMax );
+  NanoUVCommon::findGraphRanges( graph, xMin, xMax, yMin, yMax );
 
   if( yTitle=="Counts" ) {
     yMin = 0;
@@ -357,8 +380,8 @@ void BearScan::drawGraph( TGraphErrors* graph, const std::string& name, const st
   std::string plotFileName(Form("plots/%d%s_%s.pdf", number_, regionText.c_str(), name.c_str()) );
   
   c1->SaveAs( plotFileName.c_str() );
-  system( "open ../plots/");
-  if( name=="scan" ) system( Form("open %s", plotFileName.c_str()) );
+  system( "open plots/");
+  //if( name=="scan" ) system( Form("open %s", plotFileName.c_str()) );
 
   delete c1;
   delete h2_axes;
@@ -366,27 +389,36 @@ void BearScan::drawGraph( TGraphErrors* graph, const std::string& name, const st
 }
 
 
-void BearScan::findPlotRanges( TGraph* graph, float& xMin, float& xMax, float& yMin, float& yMax ) const {
 
-  for( unsigned iPoint=0; iPoint<graph->GetN(); ++iPoint ) {
+TGraphErrors* BearScan::getRatio( BearScan* s1, BearScan* s2 ) {
 
-    double x, y;
-    graph->GetPoint( iPoint, x, y );
+  if( s1->type() != s2->type() ) {
 
-    if( iPoint==0 ) { // initialize
-      xMin = x;
-      xMax = x;
-      yMin = y;
-      yMax = y;
-    }
+    std::cout << "ERROR! Cannot make ratio of different scan types!" << std::endl;
+    std::cout << "(Scan1 type: " << s1->type() << ", scan2 type: " << s2->type() << std::endl;
+    exit(1);
 
-    if( x<xMin ) xMin = x;
-    if( x>xMax ) xMax = x;
-    if( y<yMin ) yMin = y;
-    if( y>yMax ) yMax = y;
+  }
 
-  } // for points
+
+  TGraphErrors* gr1 = s1->gr_scan();
+  TGraphErrors* gr2 = s2->gr_scan();
+
+  TGraphErrors* gr_ratio = new TGraphErrors(0);
+  gr_ratio->SetName( Form("gr_ratio_%d_%d", s1->number(), s2->number()) );
+
+  for( unsigned iPoint=0; iPoint<gr1->GetN(); ++iPoint ) {
+
+    double x1, y1;
+    gr1->GetPoint( iPoint, x1, y1 );
+
+    double x2, y2;
+    gr2->GetPoint( iPoint, x2, y2 );
+
+    gr_ratio->SetPoint( gr_ratio->GetN(), x1, y1/y2 );
+
+  }  // for points
+
+  return gr_ratio;
 
 }
-
-
