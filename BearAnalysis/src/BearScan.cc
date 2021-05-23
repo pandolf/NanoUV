@@ -103,9 +103,10 @@ TGraphErrors* BearScan::gr_scan() const {
 std::string BearScan::getXtitle() const {
 
   std::string xTitle = "";
-  if( type_=="thetaScan"  ) xTitle = "Analyzer #theta [deg]";
-  if( type_=="phiScan"    ) xTitle = "Analyzer #phi [deg]";
+  if( type_=="thetaScan"  ) xTitle = "Analyzer #theta [#circ]";
+  if( type_=="phiScan"    ) xTitle = "Analyzer #phi [#circ]";
   if( type_=="energyScan" ) xTitle = "Electron kinetic energy [eV]";
+  if( type_=="psiC"       ) xTitle = "#Psi_{C} [#circ]";
   if( type_=="nexafs"     ) xTitle = "Photon energy [eV]";
   if( type_=="time"       ) xTitle = "Time [au]";
 
@@ -121,6 +122,7 @@ std::string BearScan::getYtitle() const {
   if( type_=="thetaScan"  ) yTitle = "Counts";
   if( type_=="phiScan"    ) yTitle = "Counts";
   if( type_=="energyScan" ) yTitle = "Counts";
+  if( type_=="psiC"       ) yTitle = "Counts";
   if( type_=="nexafs"     ) yTitle = "I_{diode} [A]";
   if( type_=="time"       ) yTitle = "I_{diode} [A]";
 
@@ -161,7 +163,7 @@ void BearScan::recognizeScanType( const std::string& line ) {
   if( line=="SCAN TYPE: Kinetic Energy Electron analyzer " ) type_ = "energyScan";
   if( line=="SCAN TYPE: THETAA"                            ) type_ = "thetaScan";
   if( line=="SCAN TYPE: PHI_A"                             ) type_ = "phiScan";
-  if( line=="SCAN TYPE: PHOTON ENERGY VS VAR_1 VS VAR_2"   ) type_ = "nexafs";
+  if( line=="SCAN TYPE: PHOTON ENERGY VS VAR_1 VS VAR_2"   ) type_ = "psiC"; // could still be nexafs (see later in parsing file)
   if( line=="SCAN TYPE: TIME"                              ) type_ = "time";
 
   if( type_!="" )
@@ -262,6 +264,11 @@ void BearScan::readFile( std::ifstream& ifs ) {
     } else if( thisLine=="Instrument 2: AMMETER KEITHLEY 6517A A" ) {
 
       keithleyB = false;
+
+    } else if( keithleyB && thisLine=="SAMPLE BIAS (V): -5.000" ) {
+
+      type_ = "nexafs";
+      std::cout << "[BearScan::readFile] Found bias = -5 V: switching to type = naxafs" << std::endl;
 
     } else if( keithleyB && thisLine=="Vsource: OFF" ) {
 
@@ -400,24 +407,8 @@ TGraphErrors* BearScan::getRatio( BearScan* s1, BearScan* s2 ) {
 
   }
 
-
-  TGraphErrors* gr1 = s1->gr_scan();
-  TGraphErrors* gr2 = s2->gr_scan();
-
-  TGraphErrors* gr_ratio = new TGraphErrors(0);
+  TGraphErrors* gr_ratio = NanoUVCommon::getGraphRatio( s1->gr_scan(), s2->gr_scan() );
   gr_ratio->SetName( Form("gr_ratio_%d_%d", s1->number(), s2->number()) );
-
-  for( unsigned iPoint=0; iPoint<gr1->GetN(); ++iPoint ) {
-
-    double x1, y1;
-    gr1->GetPoint( iPoint, x1, y1 );
-
-    double x2, y2;
-    gr2->GetPoint( iPoint, x2, y2 );
-
-    gr_ratio->SetPoint( gr_ratio->GetN(), x1, y1/y2 );
-
-  }  // for points
 
   return gr_ratio;
 
@@ -469,3 +460,48 @@ void BearScan::expandGraph( TGraphErrors* gr1, TGraphErrors* gr2 ) {
 
 }
 
+
+
+TGraphErrors* BearScan::averageSameX() const {
+
+  TGraphErrors* gr_aveX = new TGraphErrors(0);
+
+  double oldX;
+  std::vector<double> vec;
+
+  for( unsigned iPoint=0; iPoint<gr_scan_->GetN(); ++iPoint ) {
+
+    double thisX, thisY;
+    gr_scan_->GetPoint( iPoint, thisX, thisY );
+
+    if( iPoint==0 ) oldX = thisX;
+
+    if( thisX != oldX ) {
+
+      float ave = 0.;
+      for( unsigned i=0; i<vec.size(); ++i ) ave += vec[i];
+      ave /= vec.size();
+
+      float rms = 0.;
+      for( unsigned i=0; i<vec.size(); ++i ) rms += (vec[i]-ave)*(vec[i]-ave);
+      rms = sqrt(rms);
+      rms /= sqrt((float)vec.size());
+ 
+
+      int thisPoint = gr_aveX->GetN();
+      gr_aveX->SetPoint     ( thisPoint, oldX, ave );
+      gr_aveX->SetPointError( thisPoint, 0.  , rms );
+
+      vec.clear();
+
+      oldX = thisX;
+
+    }
+
+    vec.push_back( thisY );
+
+  } // for points
+
+  return gr_aveX;
+
+}
