@@ -10,7 +10,7 @@
 
 
 
-ScanFileReader::ScanFileReader( int scanNumber ) {
+ScanFileReader::ScanFileReader( int scanNumber, int firstRegion, int lastRegion ) {
 
   scanNumber_ = scanNumber;
 
@@ -24,8 +24,15 @@ ScanFileReader::ScanFileReader( int scanNumber ) {
   gr_drain_ ->SetName( Form("drain") );
   gr_scan_  ->SetName( Form("scan") );
 
-  firstRegion_ = -1;
-  lastRegion_  = -1;
+  scanType_ = "";
+
+  firstRegion_ = firstRegion;
+  lastRegion_  = lastRegion;
+
+  if( firstRegion_==-1 && lastRegion_==-1 )
+    this->readSingleScan();
+  else
+    this->readRegionsScan();
 
 }
 
@@ -37,12 +44,13 @@ void ScanFileReader::readSingleScan() {
 
   if( ifsAver.good() ) {
 
-    std::cout << "[ScanFileReader::readFile] Found average, filem will use it." << std::endl;
+    std::cout << "[ScanFileReader::readSingleScan] Found average file: " << fileAver << std::endl;
     readFile( ifsAver );
 
   } else {
 
     std::string fileOne(Form("../data/file(1)%s.txt", this->scanNumberText().c_str()));
+    std::cout << "[ScanFileReader::readSingleScan] Reading file: " << fileOne << std::endl;
     std::ifstream ifsOne(fileOne.c_str());
 
     if( ifsOne.good() ) {
@@ -114,9 +122,12 @@ void ScanFileReader::readFile( std::ifstream& ifs ) {
 
       if( thisLine=="SCAN TYPE: Kinetic Energy Electron analyzer " ) scanType_ = "energyScan";
       if( thisLine=="SCAN TYPE: THETAA"                            ) scanType_ = "thetaScan";
-      if( thisLine=="SCAN TYPE: PHOTON ENERGY VS VAR_1 VS VAR_2"   ) scanType_ = "nexAFS";
+      if( thisLine=="SCAN TYPE: PHOTON ENERGY VS VAR_1 VS VAR_2"   ) scanType_ = "nexafs";
 
-      std::cout << "[ScanFileReader::readFile] Recognized scanType: " << scanType_ << std::endl;
+      if( scanType_!="" )
+        std::cout << "[ScanFileReader::readFile] Recognized scanType: " << scanType_ << std::endl;
+      else
+        std::cout << "[ScanFileReader::readFile] WARNING! No idea what type of scan this is!" << std::endl;
 
     } else if( thisLine=="Instrument 1: AMMETER KEITHLEY 6517A B" ) {
 
@@ -158,7 +169,7 @@ void ScanFileReader::readFile( std::ifstream& ifs ) {
 
       if( numbers.size() > 5 ) {
 
-        int x_index = (scanType_=="nexAFS") ? 1 : 3;
+        int x_index = (scanType_=="nexafs") ? 1 : 3;
         float x = atof( numbers[x_index].c_str() );
 
         float y_mirror = atof( numbers[5].c_str() );
@@ -180,10 +191,7 @@ void ScanFileReader::readFile( std::ifstream& ifs ) {
 
 
 
-void ScanFileReader::readRegionsScan( int firstRegion, int lastRegion ) {
-
-  firstRegion_ = firstRegion;
-  lastRegion_  = lastRegion;
+void ScanFileReader::readRegionsScan() {
 
   std::cout << std::endl;
 
@@ -204,7 +212,7 @@ std::string ScanFileReader::getXtitle() const {
   std::string xTitle;
   if( scanType_=="thetaScan"  ) xTitle = "Analyzer #theta [deg]";
   if( scanType_=="energyScan" ) xTitle = "Electron kinetic energy [eV]";
-  if( scanType_=="nexAFS"     ) xTitle = "Photon energy [eV]";
+  if( scanType_=="nexafs"     ) xTitle = "Photon energy [eV]";
 
   return xTitle;
 
@@ -212,18 +220,31 @@ std::string ScanFileReader::getXtitle() const {
 
 
 
+std::string ScanFileReader::getYtitle() const {
 
-void ScanFileReader::drawGraphs( const std::string& yAxisName ) const {
+  std::string yTitle;
+  if( scanType_=="thetaScan"  ) yTitle = "Counts";
+  if( scanType_=="energyScan" ) yTitle = "Counts";
+  if( scanType_=="nexafs"     ) yTitle = "I_{diode} [A]";
 
-  drawGraph( gr_mirror_, "I0", "I_{0} [A]", this->getXtitle() );
-  drawGraph( gr_drain_ , "Idrain", "I_{drain} [A]", this->getXtitle() );
-  drawGraph( gr_scan_  , "scan", yAxisName, this->getXtitle() );
+  return yTitle;
 
 }
 
 
 
-void ScanFileReader::drawGraph( TGraphErrors* graph, const std::string& name, const std::string& yTitle, const std::string& xTitle ) const {
+
+void ScanFileReader::drawGraphs() const {
+
+  drawGraph( gr_mirror_, "I0"    , this->getXtitle(), "I_{0} [A]"       );
+  drawGraph( gr_drain_ , "Idrain", this->getXtitle(), "I_{drain} [A]"   );
+  drawGraph( gr_scan_  , "scan"  , this->getXtitle(), this->getYtitle() );
+
+}
+
+
+
+void ScanFileReader::drawGraph( TGraphErrors* graph, const std::string& name, const std::string& xTitle, const std::string& yTitle ) const {
 
   TCanvas* c1 = new TCanvas( Form("c1_%s", graph->GetName()), "", 600, 600 );
   c1->cd();
@@ -259,6 +280,7 @@ void ScanFileReader::drawGraph( TGraphErrors* graph, const std::string& name, co
   std::string plotFileName(Form("plots/%d%s_%s.pdf", scanNumber_, regionText.c_str(), name.c_str()) );
   
   c1->SaveAs( plotFileName.c_str() );
+  system( "open ../plots/");
   if( name=="scan" ) system( Form("open %s", plotFileName.c_str()) );
 
   delete c1;
