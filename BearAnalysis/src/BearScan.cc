@@ -261,7 +261,7 @@ void BearScan::readFile( std::ifstream& ifs ) {
 
       keithleyB = true;
 
-    } else if( thisLine=="Instrument 2: AMMETER KEITHLEY 6517A A" ) {
+    } else if( thisLine=="Instrument 2: AMMETER KEITHLEY 6517A A" || thisLine=="Instrument 2: COUNTER ORTEC 996Integration time (sec): 1.000" ) {
 
       keithleyB = false;
 
@@ -305,9 +305,12 @@ void BearScan::readFile( std::ifstream& ifs ) {
         int x_index = this->x_index();
         float x = (x_index>=0 ) ? atof( numbers[x_index].c_str() ) : gr_scan_->GetN();
 
-        float y_I0     = atof( numbers[5].c_str() );
+        int i0_index   = (number_<=230) ? 5 : 6;
+        int scan_index = (number_<=230) ? 6 : 5;
+
+        float y_I0     = atof( numbers[i0_index].c_str() );
         float y_Idrain = atof( numbers[4].c_str() );
-        float y_scan   = atof( numbers[6].c_str() );
+        float y_scan   = atof( numbers[scan_index].c_str() );
 
         gr_I0_->SetPoint( gr_I0_->GetN(), x, y_I0 );
         gr_Idrain_ ->SetPoint( gr_Idrain_ ->GetN(), x, y_Idrain  );
